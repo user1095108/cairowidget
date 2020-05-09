@@ -109,8 +109,8 @@ void CairoWidget::draw()
       auto const wh(h());
 
       cairo_rectangle(cr, 0, 0, ww, wh);
-      cairo_clip(cr);
       cairo_fill(cr);
+      cairo_clip(cr);
 
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
