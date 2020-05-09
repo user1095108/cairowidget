@@ -29,34 +29,12 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   cairo_pattern_add_color_stop_rgba(linpat, 0.75,  0, 0, 1, 0.5);
   cairo_pattern_add_color_stop_rgba(linpat, 1.00,  1, 1, 1, 0);
 
-  cairo_rectangle(cr, 0.0, 0.0, 1, 1);
+  cairo_rectangle(cr, .0, .0, 1., 1.);
   cairo_set_source(cr, linpat);
   cairo_fill(cr);
 
   cairo_pattern_destroy(linpat);
   cairo_pattern_destroy(radpat);
-
-/*
-  cairo_set_source_rgb(cr, 0, 0, 0);
-  cairo_move_to(cr, 0, 0);
-  cairo_line_to(cr, 1, 1);
-  cairo_move_to(cr, 1, 0);
-  cairo_line_to(cr, 0, 1);
-  cairo_set_line_width(cr, .2);
-  cairo_stroke(cr);
-
-  cairo_rectangle(cr, 0, 0, .5, .5);
-  cairo_set_source_rgba(cr, 1, 0, 0, .8);
-  cairo_fill(cr);
-
-  cairo_rectangle(cr, 0, .5, .5, .5);
-  cairo_set_source_rgba(cr, 0, 1, 0, .6);
-  cairo_fill(cr);
-
-  cairo_rectangle(cr, .5, 0, .5, .5);
-  cairo_set_source_rgba(cr, 0, 0, 1, .4);
-  cairo_fill(cr);
-*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
