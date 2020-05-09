@@ -79,10 +79,6 @@ void CairoWidget::draw()
         wi->w = ww;
         wi->h = wh;
       }
-      else
-      {
-        assert(0);
-      }
     }
   }
 
