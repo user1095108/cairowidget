@@ -19,12 +19,27 @@
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
+struct CairoWidget::S
+{
+  static void free_cairo_resources(win_info* const wi) noexcept
+  {
+    cairo_surface_destroy(wi->surf);
+    cairo_destroy(wi->cr);
+  }
+};
+
+//////////////////////////////////////////////////////////////////////////////
 CairoWidget::~CairoWidget()
 {
   if (auto const win(window()); win)
   {
-    delete static_cast<win_info*>(win->user_data());
-    win->user_data({});
+    if (auto const wi = static_cast<win_info*>(win->user_data()))
+    {
+      S::free_cairo_resources(wi);
+      delete wi;
+
+      win->user_data({});
+    }
   }
 }
 
@@ -46,15 +61,7 @@ void CairoWidget::draw()
     }
     else
     {
-      if (wi)
-      {
-        cairo_surface_destroy(wi->surf);
-        cairo_destroy(wi->cr);
-      }
-      else
-      {
-        win->user_data(wi = new win_info);
-      }
+      wi ? S::free_cairo_resources(wi) : win->user_data(wi = new win_info);
 
 #if defined(CAIRO_HAS_XLIB_SURFACE)
       if (auto const surf = cairo_xlib_surface_create(fl_display,

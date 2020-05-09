@@ -8,6 +8,8 @@
 
 class CairoWidget : public Fl_Widget
 {
+  struct S;
+
   struct win_info
   {
     cairo_t* cr;
