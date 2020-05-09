@@ -80,7 +80,8 @@ void CairoWidget::draw()
       }
       else
       {
-        cr = {};
+        // fill out wi
+        wi->surf = {}, wi->cr = cr = {};
       }
     }
   }
