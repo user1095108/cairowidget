@@ -74,8 +74,7 @@ void CairoWidget::draw()
       {
         wi->cr = cr = cairo_create(wi->surf = surf);
 
-        wi->w = ww;
-        wi->h = wh;
+        wi->w = ww, wi->h = wh;
       }
     }
   }
@@ -99,8 +98,7 @@ void CairoWidget::draw()
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
-      auto const ww(w());
-      auto const wh(h());
+      auto const ww(w()), wh(h());
 
       cairo_rectangle(cr, 0, 0, ww, wh);
 
