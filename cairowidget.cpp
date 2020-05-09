@@ -116,7 +116,7 @@ void CairoWidget::draw()
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
-      // assuming that d_ is set
+      // assuming d_ is set
       d_(cr, ww, wh);
     }
 
