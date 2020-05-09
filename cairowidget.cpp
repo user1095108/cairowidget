@@ -44,7 +44,7 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  cairo_t* cr{};
+  cairo_t* cr;
 
   {
     auto const win(window());
@@ -59,6 +59,7 @@ void CairoWidget::draw()
     }
     else
     {
+      // obtain a valid pointer to win_info
       wi ? S::free_cairo_resources(wi) : win->user_data(wi = new win_info);
 
 #if defined(CAIRO_HAS_XLIB_SURFACE)
@@ -72,9 +73,14 @@ void CairoWidget::draw()
         static_cast<CGContext*>(fl_gc), ww, wh))
 #endif
       {
+        // fill out wi
         wi->cr = cr = cairo_create(wi->surf = surf);
 
         wi->w = ww, wi->h = wh;
+      }
+      else
+      {
+        cr = {};
       }
     }
   }
