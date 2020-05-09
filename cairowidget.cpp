@@ -89,7 +89,7 @@ void CairoWidget::draw()
       uchar r, g, b;
       Fl::get_color(color(), r, g, b);
 
-      cairo_set_source_rgb(cr, r / 255.0, g / 255.0, b / 255.0);
+      cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
     }
 
     {
