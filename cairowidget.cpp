@@ -36,7 +36,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w,
 {
   assert(window());
 
-  if (auto const win(window()); !win->user_data())
+  if (auto const win(top_window()); !win->user_data())
   {
     win->user_data(new win_info);
   }
@@ -45,7 +45,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w,
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::~CairoWidget()
 {
-  auto const win(window());
+  auto const win(top_window());
   assert(win);
 
   if (auto const wi(static_cast<win_info*>(win->user_data())); wi->cr)
@@ -60,7 +60,7 @@ void CairoWidget::draw()
   cairo_t* cr;
 
   {
-    auto const win(window());
+    auto const win(top_window());
     assert(win);
 
     auto wi(static_cast<win_info*>(win->user_data()));
