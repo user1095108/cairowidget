@@ -1,0 +1,32 @@
+import pch ;
+
+project fchart
+  : requirements
+    <include>./
+    <variant>release:<define>NDEBUG
+    <variant>release:<cflags>"-Ofast -fno-plt -Wall -Wextra -g"
+    <variant>release:<cxxflags>"-std=c++2a -fno-exceptions -fno-rtti -fno-stack-protector"
+    <variant>release:<linkflags>"-fuse-ld=gold"
+    <variant>debug:<cflags>"-Wall -Wextra -fno-omit-frame-pointer -fsanitize=address,undefined"
+    <variant>debug:<cxxflags>"-std=c++2a -fno-rtti -fno-stack-protector"
+    <variant>debug:<linkflags>"-fsanitize=address,undefined -fuse-ld=gold"
+    <threading>multi
+  : default-build debug
+  : build-dir .build
+  ;
+
+lib cairo : ;
+
+lib fltk : ;
+
+lib fltk_images : ;
+
+exe example
+  : cairowidget.cpp
+    example.cpp
+    cairo/<link>shared
+    fltk/<link>shared
+    fltk_images/<link>shared
+  : <link>static
+    <threading>multi
+  ;
