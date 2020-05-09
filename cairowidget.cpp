@@ -34,7 +34,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w,
   int const h, const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
-  assert(window());
+  assert(top_window());
 
   if (auto const win(top_window()); !win->user_data())
   {
