@@ -6,7 +6,7 @@
 
 #include <memory>
 
-class ExampleWidget : public CairoWidget
+class ExampleWidget final : public CairoWidget
 {
 public:
   using CairoWidget::CairoWidget;
