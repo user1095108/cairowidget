@@ -46,7 +46,7 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  cairo_t* cr;
+  cairo_t* cr{};
 
   {
     auto const win(window());
