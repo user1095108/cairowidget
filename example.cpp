@@ -12,22 +12,22 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   cairo_scale(cr, w, h);
 
   // code from https://www.cairographics.org/tutorial/
-  auto const radpat(cairo_pattern_create_radial(0.25, 0.25, 0.1,  0.5, 0.5, 0.5));
-  cairo_pattern_add_color_stop_rgb(radpat, 0,  1.0, 0.8, 0.8);
-  cairo_pattern_add_color_stop_rgb(radpat, 1,  0.9, 0.0, 0.0);
+  auto const radpat(cairo_pattern_create_radial(.25, .25, .1, .5, .5, .5));
+  cairo_pattern_add_color_stop_rgb(radpat, 0,  1., .8, .8);
+  cairo_pattern_add_color_stop_rgb(radpat, 1,  .9, .0, .0);
 
   for (int i=1; i!=10; ++i)
       for (int j=1; j!=10; ++j)
-          cairo_rectangle(cr, i/10.0 - 0.04, j/10.0 - 0.04, 0.08, 0.08);
+          cairo_rectangle(cr, i/10.0 - .04, j/10.0 - .04, .08, .08);
   cairo_set_source(cr, radpat);
   cairo_fill(cr);
 
-  auto const linpat(cairo_pattern_create_linear(0.25, 0.35, 0.75, 0.65));
-  cairo_pattern_add_color_stop_rgba(linpat, 0.00,  1, 1, 1, 0);
-  cairo_pattern_add_color_stop_rgba(linpat, 0.25,  0, 1, 0, 0.5);
-  cairo_pattern_add_color_stop_rgba(linpat, 0.50,  1, 1, 1, 0);
-  cairo_pattern_add_color_stop_rgba(linpat, 0.75,  0, 0, 1, 0.5);
-  cairo_pattern_add_color_stop_rgba(linpat, 1.00,  1, 1, 1, 0);
+  auto const linpat(cairo_pattern_create_linear(.25, .35, .75, .65));
+  cairo_pattern_add_color_stop_rgba(linpat, .0,  1, 1, 1, 0);
+  cairo_pattern_add_color_stop_rgba(linpat, .25, 0, 1, 0, .5);
+  cairo_pattern_add_color_stop_rgba(linpat, .50, 1, 1, 1, 0);
+  cairo_pattern_add_color_stop_rgba(linpat, .75, 0, 0, 1, .5);
+  cairo_pattern_add_color_stop_rgba(linpat, 1.,1, 1, 1, 0);
 
   cairo_rectangle(cr, .0, .0, 1., 1.);
   cairo_set_source(cr, linpat);
