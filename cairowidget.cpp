@@ -62,6 +62,7 @@ void CairoWidget::draw()
       // obtain a valid pointer to win_info
       wi ? S::free_cairo_resources(wi) : win->user_data(wi = new win_info);
 
+      // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
       if (auto const surf = cairo_xlib_surface_create(fl_display,
         fl_window, fl_visual->visual, ww, wh))
