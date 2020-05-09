@@ -97,10 +97,10 @@ void CairoWidget::draw()
     }
 
     {
+      cairo_translate(cr, x(), y());
+
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-      cairo_translate(cr, x(), y());
 
       auto const ww(w());
       auto const wh(h());
@@ -113,8 +113,8 @@ void CairoWidget::draw()
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
-      //
-      draw(cr, ww, wh);
+      // assuming that d_ is set
+      d_(cr, ww, wh);
     }
 
     cairo_restore(cr);

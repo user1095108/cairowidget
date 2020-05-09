@@ -6,8 +6,14 @@
 
 #include "Fl/Fl_Widget.h"
 
-class CairoWidget : public Fl_Widget
+#include <functional>
+
+class CairoWidget final: public Fl_Widget
 {
+public:
+  using func_t = std::function<void(cairo_t*, int, int)>;
+
+private:
   struct S;
 
   struct win_info
@@ -20,21 +26,34 @@ class CairoWidget : public Fl_Widget
     cairo_surface_t* surf;
   };
 
+  func_t d_;
+
+  void draw();
+
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);
   ~CairoWidget();
 
-  virtual void draw(cairo_t*, int, int) noexcept = 0;
-
-private:
-  void draw() final;
+  void draw(func_t const&) noexcept;
+  auto& draw() const noexcept;
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline CairoWidget::CairoWidget(int const x, int const y,
-  int const w, int const h, const char* const l) :
+inline CairoWidget::CairoWidget(int const x, int const y, int const w,
+  int const h, const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
+}
+
+//////////////////////////////////////////////////////////////////////////////
+inline void CairoWidget::draw(func_t const& d) noexcept
+{
+  d_ = d;
+}
+
+inline auto& CairoWidget::draw() const noexcept
+{
+  return d_;
 }
 
 #endif // CAIROWIDGET_HPP
