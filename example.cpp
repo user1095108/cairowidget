@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
 
-  auto const ex(std::make_unique<ExampleWidget>(0, 0, 724, 700));
+  auto const ex(std::make_unique<ExampleWidget>(0, 0, win->w(), win->h()));
 
   win->end();
 
