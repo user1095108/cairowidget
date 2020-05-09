@@ -37,6 +37,7 @@ public:
   }
 };
 
+//////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
