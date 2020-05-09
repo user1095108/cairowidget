@@ -6,6 +6,7 @@
 
 #include <memory>
 
+//////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
   // we need this
