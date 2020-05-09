@@ -92,8 +92,6 @@ void CairoWidget::draw()
   {
     cairo_save(cr);
 
-    cairo_translate(cr, x(), y());
-
     {
       uchar r, g, b;
       Fl::get_color(color(), r, g, b);
@@ -105,12 +103,14 @@ void CairoWidget::draw()
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
+      cairo_translate(cr, x(), y());
+
       auto const ww(w());
       auto const wh(h());
 
       cairo_rectangle(cr, 0, 0, ww, wh);
-      cairo_fill(cr);
       cairo_clip(cr);
+      cairo_fill(cr);
 
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
