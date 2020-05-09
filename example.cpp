@@ -23,6 +23,8 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   cairo_set_source(cr, radpat);
   cairo_fill(cr);
 
+  cairo_pattern_destroy(radpat);
+
   auto const linpat(cairo_pattern_create_linear(.25, .35, .75, .65));
 
   cairo_pattern_add_color_stop_rgba(linpat, .00,  1, 1, 1, 0);
@@ -36,7 +38,6 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   cairo_fill(cr);
 
   cairo_pattern_destroy(linpat);
-  cairo_pattern_destroy(radpat);
 }
 
 //////////////////////////////////////////////////////////////////////////////
