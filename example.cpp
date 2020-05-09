@@ -11,7 +11,7 @@ class ExampleWidget : public CairoWidget
 public:
   using CairoWidget::CairoWidget;
 
-  void draw(cairo_t* const cr, int const w, int const h)
+  void draw(cairo_t* const cr, int const w, int const h) noexcept
   {
     cairo_scale(cr, w, h);
 
