@@ -13,8 +13,10 @@ public:
 
   void draw(cairo_t* const cr, int const w, int const h) noexcept
   {
+    // we need this
     cairo_scale(cr, w, h);
 
+    // code from https://www.cairographics.org/tutorial/
     int i, j;
     cairo_pattern_t *radpat, *linpat;
 
