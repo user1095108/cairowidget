@@ -34,8 +34,8 @@ public:
   CairoWidget(int, int, int, int, const char* = nullptr);
   ~CairoWidget();
 
-  void draw(func_t const&) noexcept;
   auto& draw() const noexcept;
+  void draw(func_t const&);
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ inline CairoWidget::CairoWidget(int const x, int const y, int const w,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline void CairoWidget::draw(func_t const& d) noexcept
+inline void CairoWidget::draw(func_t const& d)
 {
   d_ = d;
 }
