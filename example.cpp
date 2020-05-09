@@ -16,8 +16,8 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   cairo_pattern_add_color_stop_rgb(radpat, 0,  1.0, 0.8, 0.8);
   cairo_pattern_add_color_stop_rgb(radpat, 1,  0.9, 0.0, 0.0);
 
-  for (int i=1; i<10; i++)
-      for (int j=1; j<10; j++)
+  for (int i=1; i!=10; ++i)
+      for (int j=1; j!=10; ++j)
           cairo_rectangle(cr, i/10.0 - 0.04, j/10.0 - 0.04, 0.08, 0.08);
   cairo_set_source(cr, radpat);
   cairo_fill(cr);
