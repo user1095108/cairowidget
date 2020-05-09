@@ -74,14 +74,14 @@ void CairoWidget::draw()
         static_cast<CGContext*>(fl_gc), ww, wh))
 #endif
       {
-        // fill out wi
+        // fill out wi and set cr
         wi->cr = cr = cairo_create(wi->surf = surf);
 
         wi->w = ww, wi->h = wh;
       }
       else
       {
-        // fill out wi
+        // fill out wi and set cr
         wi->surf = {}, wi->cr = cr = {};
       }
     }
