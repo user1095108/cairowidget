@@ -1,7 +1,6 @@
 #include "cairo/cairo-features.h"
 
 #if defined(CAIRO_HAS_XLIB_SURFACE)
-#  include <FL/x.H>
 #  include "cairo/cairo-xlib.h"
 #elif defined(CAIRO_HAS_WIN32_SURFACE)
 #  include "cairo/cairo-win32.h"
@@ -10,9 +9,10 @@
 #endif
 
 #include "Fl/Fl.h"
-#include "Fl/fl_draw.h"
 
 #include "Fl/Fl_Window.h"
+
+#include "Fl/fl_draw.h"
 
 #include <cassert>
 
