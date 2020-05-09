@@ -18,7 +18,7 @@ private:
 
   struct win_info
   {
-    cairo_t* cr;
+    cairo_t* cr{};
 
     int w;
     int h;
@@ -37,13 +37,6 @@ public:
   auto& draw() const noexcept;
   void draw(func_t const&);
 };
-
-//////////////////////////////////////////////////////////////////////////////
-inline CairoWidget::CairoWidget(int const x, int const y, int const w,
-  int const h, const char* const l) :
-  Fl_Widget(x, y, w, h, l)
-{
-}
 
 //////////////////////////////////////////////////////////////////////////////
 inline void CairoWidget::draw(func_t const& d)

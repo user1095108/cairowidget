@@ -30,15 +30,26 @@ struct CairoWidget::S
 };
 
 //////////////////////////////////////////////////////////////////////////////
+CairoWidget::CairoWidget(int const x, int const y, int const w,
+  int const h, const char* const l) :
+  Fl_Widget(x, y, w, h, l)
+{
+  assert(window());
+
+  if (auto const win(window()); !win->user_data())
+  {
+    win->user_data(new win_info);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 CairoWidget::~CairoWidget()
 {
-  if (auto const win(window()); win)
-  {
-    if (auto const wi = static_cast<win_info*>(win->user_data()))
-    {
-      S::free_cairo_resources(wi), delete wi, win->user_data({});
-    }
-  }
+  auto const win(window());
+  assert(win);
+
+  auto const wi(static_cast<win_info*>(win->user_data()));
+  S::free_cairo_resources(wi), delete wi, win->user_data({});
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,16 +62,19 @@ void CairoWidget::draw()
     assert(win);
 
     auto wi(static_cast<win_info*>(win->user_data()));
+    assert(wi);
 
-    if (auto const ww(win->w()), wh(win->h());
-      wi && (ww == wi->w) && (wh == wi->h))
+    if (auto const ww(win->w()), wh(win->h()); (ww == wi->w) && (wh == wi->h))
     {
       cr = wi->cr;
     }
     else
     {
       // obtain a valid pointer to win_info
-      wi ? S::free_cairo_resources(wi) : win->user_data(wi = new win_info);
+      if (wi->cr)
+      {
+        S::free_cairo_resources(wi);
+      }
 
       // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
