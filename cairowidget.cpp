@@ -61,7 +61,6 @@ void CairoWidget::draw()
     }
     else
     {
-      // obtain a valid pointer to win_info
       S::free_cairo_resources(wi);
 
       // generate a cairo context
