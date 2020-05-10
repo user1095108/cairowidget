@@ -73,10 +73,7 @@ void CairoWidget::draw()
     else
     {
       // obtain a valid pointer to win_info
-      if (wi->cr)
-      {
-        S::free_cairo_resources(wi);
-      }
+      S::free_cairo_resources(wi);
 
       // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
@@ -124,7 +121,7 @@ void CairoWidget::draw()
 
       auto const ww(w()), wh(h());
 
-      cairo_rectangle(cr, 0, 0, ww, wh);
+      cairo_rectangle(cr, 0., 0., ww, wh);
 
       cairo_fill_preserve(cr);
       cairo_clip(cr);
