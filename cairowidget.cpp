@@ -46,7 +46,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
       c(w, ud);
     },
-    new win_info{.c = win->callback(), .ud = win->user_data()}
+    new win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
   );
 }
 
