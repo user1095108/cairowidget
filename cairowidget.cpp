@@ -39,11 +39,11 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
         auto const wi(static_cast<win_info*>(d));
 
         S::free_cairo_resources(wi);
-        wi->c(w, d);
+        wi->c(w, wi->ud);
 
         delete wi;
       },
-      new win_info{.c = win->callback()}
+      new win_info{.c = win->callback(), .ud = win->user_data()}
     );
   }
 }
