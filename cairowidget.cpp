@@ -63,6 +63,7 @@ void CairoWidget::draw()
     }
     else
     {
+      // cr invalidated or not existing
       S::free_cairo_resources(wi);
 
       // generate a cairo context
