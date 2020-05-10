@@ -27,8 +27,8 @@ struct CairoWidget::S
 };
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWidget::CairoWidget(int const x, int const y, int const w,
-  int const h, const char* const l) :
+CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
+  const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
   // latch onto top window, if possible
