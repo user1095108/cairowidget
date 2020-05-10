@@ -48,10 +48,8 @@ CairoWidget::~CairoWidget()
   auto const win(top_window());
   assert(win);
 
-  if (auto const wi(static_cast<win_info*>(win->user_data())); wi->cr)
-  {
-    S::free_cairo_resources(wi), delete wi, win->user_data({});
-  }
+  auto const wi(static_cast<win_info*>(win->user_data()));
+  S::free_cairo_resources(wi), delete wi, win->user_data({});
 }
 
 //////////////////////////////////////////////////////////////////////////////
