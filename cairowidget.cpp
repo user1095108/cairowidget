@@ -32,7 +32,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   Fl_Widget(x, y, w, h, l)
 {
   // latch onto top window, if possible
-  if (auto const win(top_window()), !win->user_data())
+  if (auto const win(top_window()); !win->user_data())
   {
     win->callback([](Fl_Widget* const w, void* const d)
       {
