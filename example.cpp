@@ -50,13 +50,13 @@ int main(int argc, char* argv[])
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
 
-  auto const ex(std::make_unique<CairoWidget>(0, 0, win->w(), win->h()));
+  auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
 
   ex->draw(example);
 
   win->end();
 
-  win->resizable(ex.get());
+  win->resizable(ex);
 
   win->show(argc, argv);
 

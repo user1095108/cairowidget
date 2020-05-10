@@ -33,17 +33,19 @@ CairoWidget::CairoWidget(int const x, int const y, int const w,
 {
   if (auto const win(top_window()); !win->user_data())
   {
-    win->user_data(new win_info{});
+    win->callback([](Fl_Widget* const w, void* const d)
+      {
+        auto const wi(static_cast<win_info*>(d));
+
+        S::free_cairo_resources(wi);
+
+        wi->c(w, d);
+
+        delete wi;
+      },
+      new win_info{.c = win->callback()}
+    );
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-CairoWidget::~CairoWidget()
-{
-  auto const win(top_window());
-  auto const wi(static_cast<win_info*>(win->user_data()));
-
-  S::free_cairo_resources(wi), delete wi, win->user_data({});
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -82,7 +84,6 @@ void CairoWidget::draw()
       }
       else
       {
-        // fill out wi and set cr
         wi->surf = {}, wi->cr = cr = {};
       }
     }

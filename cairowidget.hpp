@@ -24,6 +24,8 @@ private:
     int h;
 
     cairo_surface_t* surf;
+
+    Fl_Callback* c;
   };
 
   func_t d_;
@@ -32,7 +34,6 @@ private:
 
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);
-  ~CairoWidget();
 
   auto& draw() const noexcept;
   void draw(func_t const&);
