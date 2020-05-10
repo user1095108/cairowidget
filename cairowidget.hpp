@@ -11,7 +11,7 @@
 class CairoWidget final: public Fl_Widget
 {
 public:
-  using func_t = std::function<void(cairo_t*, int, int)>;
+  using draw_t = std::function<void(cairo_t*, int, int)>;
 
 private:
   struct S;
@@ -28,7 +28,7 @@ private:
     Fl_Callback* c;
   };
 
-  func_t d_;
+  draw_t d_;
 
   void draw();
 
@@ -36,11 +36,11 @@ public:
   CairoWidget(int, int, int, int, const char* = nullptr);
 
   auto& draw() const noexcept;
-  void draw(func_t const&);
+  void draw(draw_t const&);
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline void CairoWidget::draw(func_t const& d)
+inline void CairoWidget::draw(draw_t const& d)
 {
   d_ = d;
 }
