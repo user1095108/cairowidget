@@ -18,12 +18,12 @@ private:
 
   struct win_info
   {
-    cairo_t* cr{};
+    cairo_t* cr;
 
-    int w{};
-    int h{};
+    int w;
+    int h;
 
-    cairo_surface_t* surf{};
+    cairo_surface_t* surf;
   };
 
   func_t d_;

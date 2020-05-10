@@ -38,7 +38,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w,
 
   if (auto const win(top_window()); !win->user_data())
   {
-    win->user_data(new win_info);
+    win->user_data(new win_info{});
   }
 }
 
