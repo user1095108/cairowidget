@@ -31,24 +31,24 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
-  // latch onto top window
-  auto const win(top_window());
+  // latch onto top window, if possible
+  if (auto const win(top_window()), !win->user_data())
+  {
+    win->callback([](Fl_Widget* const w, void* const d)
+      {
+        auto const wi(static_cast<win_info*>(d));
 
-  win->callback([](Fl_Widget* const w, void* const d)
-    {
-      auto const wi(static_cast<win_info*>(d));
+        S::free_cairo_resources(wi);
 
-      S::free_cairo_resources(wi);
+        auto const c(wi->c);
 
-      auto const c(wi->c);
-      auto const ud(wi->ud);
+        delete wi;
 
-      delete wi;
-
-      c(w, ud);
-    },
-    new win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
-  );
+        c(w, d);
+      },
+      new win_info{{}, {}, {}, {}, win->callback()}
+    );
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////

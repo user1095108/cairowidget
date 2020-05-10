@@ -26,7 +26,6 @@ private:
     cairo_surface_t* surf;
 
     Fl_Callback* c;
-    void* ud;
   };
 
   draw_t d_;
