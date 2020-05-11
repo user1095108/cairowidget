@@ -49,14 +49,13 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 int main(int argc, char* argv[])
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
+  win->resizable(win.get());
 
   auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
 
   ex->draw(example);
 
   win->end();
-
-  win->resizable(ex);
 
   win->show(argc, argv);
 
