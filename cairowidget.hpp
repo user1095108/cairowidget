@@ -30,7 +30,7 @@ private:
 
   draw_t d_;
 
-  void draw() override;
+  void draw() final;
 
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);

@@ -49,6 +49,10 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
       new win_info{{}, {}, {}, {}, win->callback()}
     );
   }
+  else
+  {
+    Fl::fatal("cannot latch onto the top window");
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
