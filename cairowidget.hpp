@@ -8,7 +8,7 @@
 
 #include <functional>
 
-class CairoWidget final: public Fl_Widget
+class CairoWidget: public Fl_Widget
 {
 public:
   using draw_t = std::function<void(cairo_t*, int, int)>;
@@ -30,7 +30,7 @@ private:
 
   draw_t d_;
 
-  void draw();
+  void draw() override;
 
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);
