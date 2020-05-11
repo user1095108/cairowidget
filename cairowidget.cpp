@@ -34,7 +34,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   // latch onto top window
   auto const win(top_window());
 
-  win->callback([](Fl_Widget* const w, void* const d)
+  win->callback([](auto const w, void* const d)
     {
       auto const wi(static_cast<win_info*>(d));
 
