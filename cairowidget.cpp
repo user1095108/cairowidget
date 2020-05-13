@@ -14,8 +14,6 @@
 
 #include "Fl/fl_draw.h"
 
-#include <cassert>
-
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -33,10 +31,8 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
-  assert(top_window());
-
   // latch onto top window
-  if (auto const win(top_window()); !win->user_data())
+  if (auto const win(top_window()); win && !win->user_data())
   {
     win->callback([](auto const w, void* const d)
       {
