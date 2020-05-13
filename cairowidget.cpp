@@ -122,8 +122,10 @@ void CairoWidget::draw()
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
-      // assuming d_ is set
-      d_(cr, ww, wh);
+      if (d_)
+      {
+        d_(cr, ww, wh);
+      }
     }
 
     cairo_restore(cr);
