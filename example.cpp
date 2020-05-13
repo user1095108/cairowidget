@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
 
   auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
 
-  ex->draw(example);
-
   win->end();
+
+  ex->draw(example);
 
   win->show(argc, argv);
 
