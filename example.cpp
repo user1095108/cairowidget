@@ -2,8 +2,6 @@
 
 #include "FL/Fl_Double_Window.h"
 
-#include "cairo/cairo-svg.h"
-
 #include "cairowidget.hpp"
 
 #include <memory>
