@@ -4,6 +4,8 @@
 
 #include "cairowidget.hpp"
 
+#include "cairo/cairo-pdf.h"
+
 #include <memory>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -46,6 +48,17 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
+void pdf_capture(CairoWidget const& wi, char const* const filename)
+{
+  auto const w(wi.w()), h(wi.h());
+  auto const surf(cairo_pdf_surface_create(filename, w, h));
+  auto const cr(cairo_create(surf));
+  wi.draw()(cr, w, h);
+  cairo_surface_destroy(surf);
+  cairo_destroy(cr);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 void png_capture(CairoWidget const& wi, char const* const filename)
 {
   auto const w(wi.w()), h(wi.h());
@@ -69,6 +82,7 @@ int main(int argc, char* argv[])
 
   ex->draw(example);
 
+  pdf_capture(*ex, "example.pdf");
   png_capture(*ex, "example.png");
 
   win->show(argc, argv);
