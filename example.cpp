@@ -2,6 +2,8 @@
 
 #include "FL/Fl_Double_Window.h"
 
+#include "cairo/cairo-svg.h"
+
 #include "cairowidget.hpp"
 
 #include <memory>
@@ -46,6 +48,18 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
+void png_capture(CairoWidget const& wi, char const* const filename)
+{
+  auto const w(wi.w()), h(wi.h());
+  auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
+  auto const cr(cairo_create(surf));
+  wi.draw()(cr, w, h);
+  cairo_surface_write_to_png(surf, filename);
+  cairo_surface_destroy(surf);
+  cairo_destroy(cr);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
@@ -56,6 +70,8 @@ int main(int argc, char* argv[])
   win->end();
 
   ex->draw(example);
+
+  png_capture(*ex, "example.png");
 
   win->show(argc, argv);
 

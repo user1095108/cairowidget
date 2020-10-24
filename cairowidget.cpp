@@ -40,14 +40,13 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         S::free_cairo_resources(wi);
 
-        auto const c(wi->c);
-        auto const ud(wi->ud);
+        auto const p(std::make_pair(wi->c, wi->ud));
 
-        w->user_data(ud);
+        w->user_data(p.second);
 
         delete wi;
 
-        c(w, ud);
+        p.first(w, p.second);
       },
       new win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
     );
