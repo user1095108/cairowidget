@@ -70,8 +70,8 @@ void pdf_capture(CairoWidget const& wi, char const* const filename)
   wi.draw()(cr, w, h);
 
   {
-    cairo_surface_destroy(surf);
     cairo_destroy(cr);
+    cairo_surface_destroy(surf);
   }
 }
 
@@ -98,8 +98,8 @@ void png_capture(CairoWidget const& wi, char const* const filename)
   cairo_surface_write_to_png(surf, filename);
 
   {
-    cairo_surface_destroy(surf);
     cairo_destroy(cr);
+    cairo_surface_destroy(surf);
   }
 }
 
@@ -125,8 +125,8 @@ void svg_capture(CairoWidget const& wi, char const* const filename)
   wi.draw()(cr, w, h);
 
   {
-    cairo_surface_destroy(surf);
     cairo_destroy(cr);
+    cairo_surface_destroy(surf);
   }
 }
 

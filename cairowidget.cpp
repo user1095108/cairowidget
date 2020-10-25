@@ -21,8 +21,8 @@ struct CairoWidget::S
 {
   static void free_cairo_resources(win_info* const wi) noexcept
   {
-    cairo_surface_destroy(wi->surf);
     cairo_destroy(wi->cr);
+    cairo_surface_destroy(wi->surf);
   }
 };
 
