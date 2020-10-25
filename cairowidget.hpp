@@ -29,7 +29,7 @@ private:
     void* ud;
   };
 
-  draw_t d_;
+  draw_t d_{[](cairo_t*, int, int)noexcept{}};
 
   void draw() final;
 
