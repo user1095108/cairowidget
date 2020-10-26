@@ -30,3 +30,13 @@ exe example
   : <link>static
     <threading>multi
   ;
+
+exe example2
+  : cairoportablewidget.cpp
+    example.cpp
+    cairo/<link>shared
+    fltk/<link>shared
+    fltk_images/<link>shared
+  : <link>static
+    <threading>multi
+  ;

@@ -9,16 +9,28 @@
 #endif
 
 #include "Fl/Fl.h"
+#include "Fl/fl_draw.h"
 
 #include "Fl/Fl_Window.h"
-
-#include "Fl/fl_draw.h"
 
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 struct CairoWidget::S
 {
+  struct win_info
+  {
+    cairo_t* cr;
+
+    int w;
+    int h;
+
+    cairo_surface_t* surf;
+
+    Fl_Callback* c;
+    void* ud;
+  };
+
   static void free_cairo_resources(win_info* const wi) noexcept
   {
     cairo_destroy(wi->cr);
@@ -36,7 +48,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   {
     win->callback([](auto const w, void* const d)
       {
-        auto const wi(static_cast<win_info*>(d));
+        auto const wi(static_cast<S::win_info*>(d));
 
         S::free_cairo_resources(wi);
 
@@ -48,9 +60,14 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         p.first(w, p.second);
       },
-      new win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
+      new S::win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
     );
   }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+CairoWidget::~CairoWidget()
+{
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -60,7 +77,7 @@ void CairoWidget::draw()
 
   {
     auto const win(top_window());
-    auto const wi(static_cast<win_info*>(win->user_data()));
+    auto const wi(static_cast<S::win_info*>(win->user_data()));
 
     if (auto const ww(win->w()), wh(win->h()); (ww == wi->w) && (wh == wi->h))
     {

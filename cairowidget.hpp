@@ -10,31 +10,16 @@
 
 class CairoWidget: public Fl_Widget
 {
-public:
-  using draw_t = std::function<void(cairo_t*, int, int)>;
-
-private:
   struct S;
 
-  struct win_info
-  {
-    cairo_t* cr;
-
-    int w;
-    int h;
-
-    cairo_surface_t* surf;
-
-    Fl_Callback* c;
-    void* ud;
-  };
-
-  draw_t d_{[](cairo_t*, int, int)noexcept{}};
+  using draw_t = std::function<void(cairo_t*, int, int)>;
+  draw_t d_{[](cairo_t*, int, int) noexcept {}};
 
   void draw() final;
 
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);
+  ~CairoWidget();
 
   auto& draw() const noexcept;
   void draw(draw_t const&);
