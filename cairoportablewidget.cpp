@@ -3,8 +3,19 @@
 
 #include <cstdint>
 #include <cstring>
+#include <type_traits>
 
 #include "cairowidget.hpp"
+
+template <class To, class From>
+static To bit_cast(From const* const src) noexcept
+{
+  static_assert(std::is_trivially_constructible_v<To>);
+
+  To dst;
+  std::memcpy(&dst, src, sizeof(To));
+  return dst;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
@@ -22,10 +33,10 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
+  auto const wx(x()), wy(y()), ww(w()), wh(h());
+
   auto cr(static_cast<cairo_t*>(user_data()));
   auto surf(cr ? cairo_get_target(cr) : nullptr);
-
-  auto const wx(x()), wy(y()), ww(w()), wh(h());
 
   if (!surf ||
     (cairo_image_surface_get_width(surf) != ww) ||
@@ -70,21 +81,22 @@ void CairoWidget::draw()
 
     cairo_restore(cr);
 
+    //
     cairo_surface_flush(surf);
 
     auto const converter([](void* const s, int const x, int const y,
-      int w, uchar* const buf) noexcept
+      int w, uchar* buf) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
-
-        auto const data(cairo_image_surface_get_data(surf));
         auto const width(cairo_image_surface_get_width(surf));
 
-        for (auto src(reinterpret_cast<std::uint32_t*>(data) +
-          (y * width) + x), dst(reinterpret_cast<std::uint32_t*>(buf));
-          w; --w)
+        auto data(cairo_image_surface_get_data(surf) + (y * width + x) * 4);
+
+        for (; w; buf += 4, data += 4, --w)
         {
-          *dst++ = __builtin_bswap32(*src++ << 8);
+          auto const tmp(__builtin_bswap32(
+            bit_cast<std::uint32_t>(data) << 8));
+          std::memcpy(buf, &tmp, sizeof(tmp));
         }
       }
     );
