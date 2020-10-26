@@ -53,10 +53,10 @@ void CairoWidget::draw()
   auto const wx(x()), wy(y()), ww(w()), wh(h());
 
   auto cr(static_cast<cairo_t*>(user_data()));
-  auto surf(cr ? cairo_get_target(cr) : nullptr);
+  cairo_surface_t* surf;
 
-  if (!surf ||
-    (cairo_image_surface_get_width(surf) != ww) ||
+  if (!cr ||
+    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != ww) ||
     (cairo_image_surface_get_height(surf) != wh))
   {
     // cr invalidated or not existing
@@ -105,9 +105,9 @@ void CairoWidget::draw()
       int w, uchar* buf) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
-        auto const width(cairo_image_surface_get_width(surf));
 
-        auto data(cairo_image_surface_get_data(surf) + (y * width + x) * 4);
+        auto data(cairo_image_surface_get_data(surf) +
+          (y * cairo_image_surface_get_width(surf) + x) * 4);
 
         for (; w; buf += 4, data += 4, --w)
         {
