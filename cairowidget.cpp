@@ -22,6 +22,11 @@ struct win_info
   int w;
   int h;
 
+  cairo_t* wcr;
+
+  int ww;
+  int wh;
+
   Fl_Callback* c;
   void* ud;
 };
@@ -37,7 +42,9 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
     win->callback([](auto const w, void* const d)
       {
         auto const wi(static_cast<win_info*>(d));
+
         cairo_destroy(wi->cr);
+        cairo_destroy(wi->wcr);
 
         auto const p(std::make_pair(wi->c, wi->ud));
 
@@ -47,7 +54,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         p.first(w, p.second);
       },
-      new win_info{{}, {}, {}, win->callback(), win->user_data()}
+      new win_info{{}, {}, {}, {}, {}, {}, win->callback(), win->user_data()}
     );
   }
 }
@@ -60,42 +67,53 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
+  auto const ww(w()), wh(h());
+
   cairo_t* cr;
 
   {
     auto const win(top_window());
-    auto const wi(static_cast<win_info*>(win->user_data()));
+    auto& wi(*static_cast<win_info*>(win->user_data()));
 
-    if (auto const ww(win->w()), wh(win->h()); (ww == wi->w) && (wh == wi->h))
+    if (auto const w(win->w()), h(win->h()); (w == wi.w) && (h == wi.h))
     {
-      cr = wi->cr;
+      cr = wi.cr;
     }
     else
     {
       // cr invalidated or not existing
-      cairo_destroy(wi->cr);
+      cairo_destroy(wi.cr);
 
       // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
       if (auto const surf = cairo_xlib_surface_create(fl_display,
-        fl_window, fl_visual->visual, ww, wh))
+        fl_window, fl_visual->visual, w, h))
 #elif defined(CAIRO_HAS_WIN32_SURFACE)
-      if (auto const surf = cairo_win32_surface_create(
-        static_cast<HDC>(fl_gc)))
+      if (auto const surf = cairo_win32_surface_create(static_cast<HDC>(fl_gc)))
 #elif defined(CAIRO_HAS_QUARTZ_SURFACE)
       if (auto const surf = cairo_quartz_surface_create_for_cg_context(
-        static_cast<CGContext*>(fl_gc), ww, wh))
+        static_cast<CGContext*>(fl_gc), w, h))
 #endif
       {
-        wi->cr = cr = cairo_create(surf);
+        wi.w = w, wi.h = h;
+        wi.cr = cr = cairo_create(surf);
         cairo_surface_destroy(surf);
-
-        wi->w = ww, wi->h = wh;
       }
       else
       {
-        wi->cr = cr = {};
+        wi.cr = {};
       }
+    }
+
+    if (cr && ((wi.ww != ww) || (wi.wh != wh)))
+    {
+      cairo_destroy(wi.wcr);
+
+      wi.ww = ww, wi.wh = wh;
+      auto const surf(cairo_surface_create_for_rectangle(cairo_get_target(cr),
+        x(), y(), ww, wh));
+      wi.wcr = cr = cairo_create(surf);
+      cairo_surface_destroy(surf);
     }
   }
 
@@ -111,19 +129,10 @@ void CairoWidget::draw()
     }
 
     {
-      cairo_translate(cr, x(), y());
-
-      //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
-      auto const ww(w()), wh(h());
+      cairo_paint(cr);
 
-      cairo_rectangle(cr, 0., 0., ww, wh);
-
-      cairo_fill_preserve(cr);
-      cairo_clip(cr);
-
-      //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
       d_(cr, ww, wh);

@@ -80,13 +80,10 @@ void CairoWidget::draw()
     }
 
     {
-      //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
-      cairo_rectangle(cr, 0., 0., ww, wh);
-      cairo_fill(cr);
+      cairo_paint(cr);
 
-      //
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
       d_(cr, ww, wh);
