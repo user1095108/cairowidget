@@ -35,8 +35,7 @@ void CairoWidget::draw()
   auto cr(static_cast<cairo_t*>(user_data()));
   auto surf(cr ? cairo_get_target(cr) : nullptr);
 
-  if (auto const ww(w()), wh(h());
-    !surf ||
+  if (auto const ww(w()), wh(h()); !surf ||
     ((cairo_image_surface_get_width(surf) != ww) &&
     (cairo_image_surface_get_height(surf) != wh)))
   {
@@ -69,7 +68,7 @@ void CairoWidget::draw()
     auto const wx(x()), wy(y()), ww(w()), wh(h());
 
     {
-      cairo_translate(cr, x(), y());
+      cairo_translate(cr, wx, wy);
 
       //
       cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
@@ -87,8 +86,8 @@ void CairoWidget::draw()
 
     cairo_restore(cr);
 
-    auto const converter([](void* const s, int x, int y, int w,
-      uchar* buf) noexcept
+    auto const converter([](void* const s, int const x, int const y,
+      int w, uchar* const buf) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
 
@@ -96,10 +95,10 @@ void CairoWidget::draw()
         auto const width(cairo_image_surface_get_width(surf));
 
         for (auto src(reinterpret_cast<std::uint32_t*>(data) +
-          (y * width) + x), dst(reinterpret_cast<std::uint32_t*>(buf)); w;
-          --w, ++src, ++dst)
+          (y * width) + x), dst(reinterpret_cast<std::uint32_t*>(buf));
+          w; --w)
         {
-          *dst = __builtin_bswap32(*src << 8);
+          *dst++ = __builtin_bswap32(*src++ << 8);
         }
       }
     );
