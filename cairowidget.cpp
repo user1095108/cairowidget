@@ -25,8 +25,6 @@ struct CairoWidget::S
     int w;
     int h;
 
-    cairo_surface_t* surf;
-
     Fl_Callback* c;
     void* ud;
   };
@@ -34,7 +32,6 @@ struct CairoWidget::S
   static void free_cairo_resources(win_info* const wi) noexcept
   {
     cairo_destroy(wi->cr);
-    cairo_surface_destroy(wi->surf);
   }
 };
 
@@ -60,7 +57,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         p.first(w, p.second);
       },
-      new S::win_info{{}, {}, {}, {}, win->callback(), win->user_data()}
+      new S::win_info{{}, {}, {}, win->callback(), win->user_data()}
     );
   }
 }
@@ -101,13 +98,14 @@ void CairoWidget::draw()
 #endif
       {
         // fill out wi and set cr
-        wi->cr = cr = cairo_create(wi->surf = surf);
+        wi->cr = cr = cairo_create(surf);
+        cairo_surface_destroy(surf);
 
         wi->w = ww, wi->h = wh;
       }
       else
       {
-        wi->surf = {}, wi->cr = cr = {};
+        wi->cr = cr = {};
       }
     }
   }

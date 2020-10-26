@@ -11,7 +11,6 @@ struct CairoWidget::S
 {
   static void free_cairo_resources(cairo_t* const cr) noexcept
   {
-    cairo_surface_destroy(cr ? cairo_get_target(cr) : nullptr);
     cairo_destroy(cr);
   }
 };
@@ -35,23 +34,19 @@ void CairoWidget::draw()
   auto cr(static_cast<cairo_t*>(user_data()));
   auto surf(cr ? cairo_get_target(cr) : nullptr);
 
-  if (auto const ww(w()), wh(h()); !surf ||
-    ((cairo_image_surface_get_width(surf) != ww) &&
-    (cairo_image_surface_get_height(surf) != wh)))
+  auto const wx(x()), wy(y()), ww(w()), wh(h());
+
+  if (!surf ||
+    (cairo_image_surface_get_width(surf) != ww) ||
+    (cairo_image_surface_get_height(surf) != wh))
   {
     // cr invalidated or not existing
     S::free_cairo_resources(cr);
 
     // generate a cairo context
-    if ((surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh)))
-    {
-      // fill out wi and set cr
-      user_data(cr = cairo_create(surf));
-    }
-    else
-    {
-      user_data(cr = {});
-    }
+    surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh);
+    user_data(cr = cairo_create(surf));
+    cairo_surface_destroy(surf);
   }
 
   if (cr)
@@ -64,8 +59,6 @@ void CairoWidget::draw()
 
       cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
     }
-
-    auto const wx(x()), wy(y()), ww(w()), wh(h());
 
     {
       cairo_translate(cr, wx, wy);
@@ -86,6 +79,8 @@ void CairoWidget::draw()
 
     cairo_restore(cr);
 
+    cairo_surface_flush(surf);
+
     auto const converter([](void* const s, int const x, int const y,
       int w, uchar* const buf) noexcept
       {
@@ -103,7 +98,6 @@ void CairoWidget::draw()
       }
     );
 
-    cairo_surface_flush(surf);
     fl_draw_image(converter, surf, wx, wy, ww, wh, 4);
   }
 }
