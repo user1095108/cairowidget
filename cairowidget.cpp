@@ -104,8 +104,15 @@ void CairoWidget::draw()
         wi.cr = {};
       }
     }
+  }
 
-    if (cr && ((wi.ww != ww) || (wi.wh != wh)))
+  if (cr)
+  {
+    if ((wi.ww == ww) && (wi.wh == wh))
+    {
+      cr = wi.wcr;
+    }
+    else
     {
       cairo_destroy(wi.wcr);
 
@@ -115,10 +122,7 @@ void CairoWidget::draw()
       wi.wcr = cr = cairo_create(surf);
       cairo_surface_destroy(surf);
     }
-  }
 
-  if (cr)
-  {
     cairo_save(cr);
 
     {
