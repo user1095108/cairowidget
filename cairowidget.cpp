@@ -19,13 +19,11 @@ struct win_info
 {
   cairo_t* cr;
 
-  int w;
-  int h;
+  int w, h;
 
   cairo_t* wcr;
 
-  int ww;
-  int wh;
+  int wx, wy, ww, wh;
 
   Fl_Callback* c;
   void* ud;
@@ -54,7 +52,8 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         p.first(w, p.second);
       },
-      new win_info{{}, {}, {}, {}, {}, {}, win->callback(), win->user_data()}
+      new win_info{{}, {}, {}, {}, {}, {}, {}, {}, win->callback(),
+        win->user_data()}
     );
   }
 }
@@ -70,7 +69,7 @@ void CairoWidget::draw()
   auto const win(top_window());
   auto& wi(*static_cast<win_info*>(win->user_data()));
 
-  auto const ww(w()), wh(h());
+  auto const wx(x()), wy(y()), ww(w()), wh(h());
 
   cairo_t* cr;
 
@@ -108,7 +107,7 @@ void CairoWidget::draw()
 
   if (cr)
   {
-    if ((wi.ww == ww) && (wi.wh == wh))
+    if ((wi.wx == wx) && (wi.wy == wy) && (wi.ww == ww) && (wi.wh == wh))
     {
       cr = wi.wcr;
     }
@@ -116,9 +115,9 @@ void CairoWidget::draw()
     {
       cairo_destroy(wi.wcr);
 
-      wi.ww = ww, wi.wh = wh;
+      wi.wx = wx, wi.wy = wy, wi.ww = ww, wi.wh = wh;
       auto const surf(cairo_surface_create_for_rectangle(cairo_get_target(cr),
-        x(), y(), ww, wh));
+        wx, wy, ww, wh));
       wi.wcr = cr = cairo_create(surf);
       cairo_surface_destroy(surf);
     }
