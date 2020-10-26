@@ -37,7 +37,6 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
     win->callback([](auto const w, void* const d)
       {
         auto const wi(static_cast<win_info*>(d));
-
         cairo_destroy(wi->cr);
 
         auto const p(std::make_pair(wi->c, wi->ud));
