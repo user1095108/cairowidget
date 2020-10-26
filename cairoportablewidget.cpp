@@ -3,18 +3,35 @@
 
 #include <cstdint>
 #include <cstring>
+#include <utility>
 #include <type_traits>
 
 #include "cairowidget.hpp"
 
-template <class To, class From>
+//////////////////////////////////////////////////////////////////////////////
+template <typename To, typename From>
 static To bit_cast(From const* const src) noexcept
 {
   static_assert(std::is_trivially_constructible_v<To>);
-
   To dst;
   std::memcpy(&dst, src, sizeof(To));
   return dst;
+}
+
+template <typename T, std::size_t ...I>
+static constexpr auto swap_impl(T const v, std::index_sequence<I...>) noexcept
+{
+  return (
+    (
+      ((v >> (I * 8)) & std::uint8_t(~0)) << ((sizeof(T) - 1 - I) * 8)
+    ) | ...
+  );
+}
+
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+static constexpr auto swap(T&& v) noexcept
+{
+  return swap_impl(std::forward<T>(v), std::make_index_sequence<sizeof(T)>());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -94,8 +111,7 @@ void CairoWidget::draw()
 
         for (; w; buf += 4, data += 4, --w)
         {
-          auto const tmp(__builtin_bswap32(
-            bit_cast<std::uint32_t>(data) << 8));
+          auto const tmp(swap(bit_cast<std::uint32_t>(data) << 8));
           std::memcpy(buf, &tmp, sizeof(tmp));
         }
       }
