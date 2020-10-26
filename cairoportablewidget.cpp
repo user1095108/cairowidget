@@ -7,15 +7,6 @@
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-struct CairoWidget::S
-{
-  static void free_cairo_resources(cairo_t* const cr) noexcept
-  {
-    cairo_destroy(cr);
-  }
-};
-
-//////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l)
@@ -25,7 +16,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::~CairoWidget()
 {
-  S::free_cairo_resources(static_cast<cairo_t*>(user_data()));
+  cairo_destroy(static_cast<cairo_t*>(user_data()));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -41,7 +32,7 @@ void CairoWidget::draw()
     (cairo_image_surface_get_height(surf) != wh))
   {
     // cr invalidated or not existing
-    S::free_cairo_resources(cr);
+    cairo_destroy(cr);
 
     // generate a cairo context
     surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh);

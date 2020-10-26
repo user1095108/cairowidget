@@ -15,24 +15,15 @@
 
 #include "cairowidget.hpp"
 
-//////////////////////////////////////////////////////////////////////////////
-struct CairoWidget::S
+struct win_info
 {
-  struct win_info
-  {
-    cairo_t* cr;
+  cairo_t* cr;
 
-    int w;
-    int h;
+  int w;
+  int h;
 
-    Fl_Callback* c;
-    void* ud;
-  };
-
-  static void free_cairo_resources(win_info* const wi) noexcept
-  {
-    cairo_destroy(wi->cr);
-  }
+  Fl_Callback* c;
+  void* ud;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -45,9 +36,9 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   {
     win->callback([](auto const w, void* const d)
       {
-        auto const wi(static_cast<S::win_info*>(d));
+        auto const wi(static_cast<win_info*>(d));
 
-        S::free_cairo_resources(wi);
+        cairo_destroy(wi->cr);
 
         auto const p(std::make_pair(wi->c, wi->ud));
 
@@ -57,7 +48,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 
         p.first(w, p.second);
       },
-      new S::win_info{{}, {}, {}, win->callback(), win->user_data()}
+      new win_info{{}, {}, {}, win->callback(), win->user_data()}
     );
   }
 }
@@ -74,7 +65,7 @@ void CairoWidget::draw()
 
   {
     auto const win(top_window());
-    auto const wi(static_cast<S::win_info*>(win->user_data()));
+    auto const wi(static_cast<win_info*>(win->user_data()));
 
     if (auto const ww(win->w()), wh(win->h()); (ww == wi->w) && (wh == wi->h))
     {
@@ -83,7 +74,7 @@ void CairoWidget::draw()
     else
     {
       // cr invalidated or not existing
-      S::free_cairo_resources(wi);
+      cairo_destroy(wi->cr);
 
       // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
@@ -97,7 +88,6 @@ void CairoWidget::draw()
         static_cast<CGContext*>(fl_gc), ww, wh))
 #endif
       {
-        // fill out wi and set cr
         wi->cr = cr = cairo_create(surf);
         cairo_surface_destroy(surf);
 
