@@ -63,8 +63,8 @@ void CairoWidget::draw()
     cairo_destroy(cr);
 
     // generate a cairo context
-    surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh);
-    user_data(cr = cairo_create(surf));
+    user_data(cr = cairo_create(surf =
+      cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh)));
     cairo_surface_destroy(surf);
   }
 
