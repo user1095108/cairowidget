@@ -67,14 +67,14 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
+  auto const win(top_window());
+  auto& wi(*static_cast<win_info*>(win->user_data()));
+
   auto const ww(w()), wh(h());
 
   cairo_t* cr;
 
   {
-    auto const win(top_window());
-    auto& wi(*static_cast<win_info*>(win->user_data()));
-
     if (auto const w(win->w()), h(win->h()); (w == wi.w) && (h == wi.h))
     {
       cr = wi.cr;
