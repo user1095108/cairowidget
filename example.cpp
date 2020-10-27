@@ -48,11 +48,14 @@ void capture(CairoWidget const& wi, char const* const filename)
   }
 
   {
-    cairo_rectangle(cr, 0., 0., w, h);
-    cairo_fill(cr);
-  }
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
-  wi.draw()(cr, w, h);
+    cairo_paint(cr);
+
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+
+    wi.draw()(cr, w, h);
+  }
 
   if constexpr (PNG == C)
   {
