@@ -14,14 +14,14 @@ CairoWindow::CairoWindow(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Gl_Window(x, y, w, h, l)
 {
-  mode(FL_DOUBLE | FL_RGB);
+  mode(FL_SINGLE | FL_RGB);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWindow::CairoWindow(int const w, int const h, const char* const l) :
   Fl_Gl_Window(w, h, l)
 {
-  mode(FL_DOUBLE | FL_RGB);
+  mode(FL_SINGLE | FL_RGB);
 }
 
 //////////////////////////////////////////////////////////////////////////////
