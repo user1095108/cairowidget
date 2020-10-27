@@ -12,7 +12,7 @@ class CairoWindow: public Fl_Gl_Window
 {
   struct S;
 
-  cairo_surface_t* surf_{};
+  cairo_t* cr_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};

@@ -27,13 +27,15 @@ CairoWindow::CairoWindow(int const w, int const h, const char* const l) :
 //////////////////////////////////////////////////////////////////////////////
 CairoWindow::~CairoWindow()
 {
-  cairo_surface_destroy(surf_);
+  cairo_destroy(cr_);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoWindow::draw()
 {
   auto const w{this->w()}, h{this->h()};
+
+  auto cr(cr_);
 
   if (!context_valid())
   {
@@ -44,19 +46,23 @@ void CairoWindow::draw()
     cairo_gl_device_set_thread_aware(device, false);
     assert(cairo_device_status(device) == CAIRO_STATUS_SUCCESS);
 
-    surf_ = cairo_gl_surface_create_for_window(device, fl_window, w, h);
+    auto const surf(cairo_gl_surface_create_for_window(device, fl_window,
+      w, h));
     cairo_device_destroy(device);
-    assert(cairo_surface_status(surf_) == CAIRO_STATUS_SUCCESS);
+    assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
+
+    cairo_destroy(cr);
+    cr_ = cr = cairo_create(surf);
+    cairo_surface_destroy(surf);
+    assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
   }
   else if (!valid())
   {
-    cairo_gl_surface_set_size(surf_, w, h);
-    assert(cairo_surface_status(surf_) == CAIRO_STATUS_SUCCESS);
+    cairo_gl_surface_set_size(cairo_get_target(cr), w, h);
   }
 
   {
-    auto const cr(cairo_create(surf_));
-    assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
+    cairo_save(cr);
 
     {
       uchar r, g, b;
@@ -75,8 +81,8 @@ void CairoWindow::draw()
       d_(cr, w, h);
     }
 
-    cairo_destroy(cr);
+    cairo_restore(cr);
 
-    cairo_surface_flush(surf_);
+    cairo_surface_flush(cairo_get_target(cr));
   }
 }
