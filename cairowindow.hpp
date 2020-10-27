@@ -1,16 +1,18 @@
-#ifndef CAIROWIDGET_HPP
-# define CAIROWIDGET_HPP
+#ifndef CAIROWINDOW_HPP
+# define CAIROWINDOW_HPP
 # pragma once
 
 #include "cairo/cairo.h"
 
-#include "Fl/Fl_Widget.h"
+#include "Fl/Fl_Gl_Window.H"
 
 #include <functional>
 
-class CairoWidget: public Fl_Widget
+class CairoWindow: public Fl_Gl_Window
 {
   struct S;
+
+  cairo_surface_t* surf_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
@@ -18,8 +20,9 @@ class CairoWidget: public Fl_Widget
   void draw() final;
 
 public:
-  CairoWidget(int, int, int, int, const char* = nullptr);
-  ~CairoWidget();
+  CairoWindow(int, int, const char* = nullptr);
+  CairoWindow(int, int, int, int, const char* = nullptr);
+  ~CairoWindow();
 
   auto& draw() const noexcept;
 
@@ -31,9 +34,9 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto& CairoWidget::draw() const noexcept
+inline auto& CairoWindow::draw() const noexcept
 {
   return d_;
 }
 
-#endif // CAIROWIDGET_HPP
+#endif // CAIROWINDOW_HPP
