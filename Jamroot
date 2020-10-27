@@ -24,6 +24,7 @@ lib cairo : ;
 lib fltk : ;
 lib fltk_gl : ;
 
+lib fontconfig : ;
 lib freetype : ;
 
 lib pixman-1 : ;
@@ -52,6 +53,7 @@ exe example3
     ..//cairo//cairo
     fltk/<link>shared
     fltk_gl/<link>shared
+    fontconfig/<link>shared
     freetype/<link>shared
     pixman-1/<link>shared
     GL/<link>shared
