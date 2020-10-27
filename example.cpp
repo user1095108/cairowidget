@@ -9,6 +9,61 @@
 
 #include <memory>
 
+enum Capture
+{
+  PDF,
+  PNG,
+  SVG
+};
+
+//////////////////////////////////////////////////////////////////////////////
+template <enum Capture C>
+void capture(CairoWidget const& wi, char const* const filename)
+{
+  auto const w(wi.w()), h(wi.h());
+
+  cairo_surface_t* surf;
+
+  if constexpr (PDF == C)
+  {
+    surf = cairo_pdf_surface_create(filename, w, h);
+  }
+  else if constexpr (PNG == C)
+  {
+    surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h);
+  }
+  else
+  {
+    surf = cairo_svg_surface_create(filename, w, h);
+  }
+
+  auto const cr(cairo_create(surf));
+
+  {
+    uchar r, g, b;
+    Fl::get_color(wi.color(), r, g, b);
+
+    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
+  }
+
+  {
+    cairo_rectangle(cr, 0., 0., w, h);
+    cairo_fill(cr);
+  }
+
+  wi.draw()(cr, w, h);
+
+  if constexpr (PNG == C)
+  {
+    cairo_surface_write_to_png(surf, filename);
+  }
+
+  {
+    cairo_destroy(cr);
+    cairo_surface_destroy(surf);
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
@@ -49,88 +104,6 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void pdf_capture(CairoWidget const& wi, char const* const filename)
-{
-  auto const w(wi.w()), h(wi.h());
-  auto const surf(cairo_pdf_surface_create(filename, w, h));
-  auto const cr(cairo_create(surf));
-
-  {
-    uchar r, g, b;
-    Fl::get_color(wi.color(), r, g, b);
-
-    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-  }
-
-  {
-    cairo_rectangle(cr, 0., 0., w, h);
-    cairo_fill(cr);
-  }
-
-  wi.draw()(cr, w, h);
-
-  {
-    cairo_destroy(cr);
-    cairo_surface_destroy(surf);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void png_capture(CairoWidget const& wi, char const* const filename)
-{
-  auto const w(wi.w()), h(wi.h());
-  auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
-  auto const cr(cairo_create(surf));
-
-  {
-    uchar r, g, b;
-    Fl::get_color(wi.color(), r, g, b);
-
-    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-  }
-
-  {
-    cairo_rectangle(cr, 0., 0., w, h);
-    cairo_fill(cr);
-  }
-
-  wi.draw()(cr, w, h);
-  cairo_surface_write_to_png(surf, filename);
-
-  {
-    cairo_destroy(cr);
-    cairo_surface_destroy(surf);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void svg_capture(CairoWidget const& wi, char const* const filename)
-{
-  auto const w(wi.w()), h(wi.h());
-  auto const surf(cairo_svg_surface_create(filename, w, h));
-  auto const cr(cairo_create(surf));
-
-  {
-    uchar r, g, b;
-    Fl::get_color(wi.color(), r, g, b);
-
-    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-  }
-
-  {
-    cairo_rectangle(cr, 0., 0., w, h);
-    cairo_fill(cr);
-  }
-
-  wi.draw()(cr, w, h);
-
-  {
-    cairo_destroy(cr);
-    cairo_surface_destroy(surf);
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////
 int main()
 {
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
@@ -142,9 +115,9 @@ int main()
 
   ex->draw(example);
 
-  pdf_capture(*ex, "example.pdf");
-  png_capture(*ex, "example.png");
-  svg_capture(*ex, "example.svg");
+  capture<PDF>(*ex, "example.pdf");
+  capture<PNG>(*ex, "example.png");
+  capture<SVG>(*ex, "example.svg");
 
   win->show();
 
