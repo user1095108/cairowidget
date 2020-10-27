@@ -100,7 +100,7 @@ void CairoWidget::draw()
       }
       else
       {
-        wi.cr = {};
+        cr = wi.cr = {};
       }
     }
   }
