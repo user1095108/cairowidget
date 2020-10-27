@@ -30,7 +30,7 @@ lib pixman-1 : ;
 
 exe example
   : cairowidget.cpp
-    example2.cpp
+    example.cpp
     cairo/<link>shared
     fltk/<link>shared
   : <link>static
@@ -39,7 +39,7 @@ exe example
 
 exe example2
   : cairoportablewidget.cpp
-    example2.cpp
+    example.cpp
     cairo/<link>shared
     fltk/<link>shared
   : <link>static
@@ -48,7 +48,7 @@ exe example2
 
 exe example3
   : cairowindow.cpp
-    example.cpp
+    example2.cpp
     ..//cairo//cairo
     fltk/<link>shared
     fltk_gl/<link>shared
