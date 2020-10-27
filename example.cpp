@@ -38,6 +38,7 @@ void capture(CairoWidget const& wi, char const* const filename)
   }
 
   auto const cr(cairo_create(surf));
+  cairo_surface_destroy(surf);
 
   {
     uchar r, g, b;
@@ -58,10 +59,7 @@ void capture(CairoWidget const& wi, char const* const filename)
     cairo_surface_write_to_png(surf, filename);
   }
 
-  {
-    cairo_destroy(cr);
-    cairo_surface_destroy(surf);
-  }
+  cairo_destroy(cr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
