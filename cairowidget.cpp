@@ -1,122 +1,75 @@
-#include "cairo/cairo-features.h"
-
-#if defined(CAIRO_HAS_XLIB_SURFACE)
-#  include "cairo/cairo-xlib.h"
-#elif defined(CAIRO_HAS_WIN32_SURFACE)
-#  include "cairo/cairo-win32.h"
-#elif defined(CAIRO_HAS_QUARTZ_SURFACE)
-#  include "cairo/cairo-quartz.h"
-#endif
-
 #include "Fl/Fl.h"
 #include "Fl/fl_draw.h"
 
-#include "Fl/Fl_Window.h"
+#include <cstdint>
+#include <cstring>
+#include <utility>
+#include <type_traits>
 
 #include "cairowidget.hpp"
 
-struct win_info
+//////////////////////////////////////////////////////////////////////////////
+template <typename To, typename From>
+static To bit_cast(From const* const src) noexcept
 {
-  cairo_t* cr;
+  static_assert(std::is_trivially_constructible_v<To>);
+  To dst;
+  std::memcpy(&dst, src, sizeof(To));
+  return dst;
+}
 
-  int w, h;
+template <typename T, std::size_t ...I>
+static constexpr auto swap_impl(T const v, std::index_sequence<I...>) noexcept
+{
+  return (
+    (
+      ((v >> (I * 8)) & std::uint8_t(~0)) << ((sizeof(T) - 1 - I) * 8)
+    ) | ...
+  );
+}
 
-  cairo_t* wcr;
-
-  int wx, wy, ww, wh;
-
-  Fl_Callback* c;
-  void* ud;
-};
+template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+static constexpr auto swap(T&& v) noexcept
+{
+  return swap_impl(std::forward<T>(v), std::make_index_sequence<sizeof(T)>());
+}
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l)
 {
-  // latch onto top window
-  if (auto const win(top_window()); win && !win->user_data())
-  {
-    win->callback([](auto const w, void* const d)
-      {
-        auto const wi(static_cast<win_info*>(d));
-
-        cairo_destroy(wi->cr);
-        cairo_destroy(wi->wcr);
-
-        auto const p(std::make_pair(wi->c, wi->ud));
-
-        w->user_data(p.second);
-
-        delete wi;
-
-        p.first(w, p.second);
-      },
-      new win_info{{}, {}, {}, {}, {}, {}, {}, {}, win->callback(),
-        win->user_data()}
-    );
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::~CairoWidget()
 {
+  cairo_destroy(cr_);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto const win(top_window());
-  auto& wi(*static_cast<win_info*>(win->user_data()));
-
   auto const wx(x()), wy(y()), ww(w()), wh(h());
 
-  cairo_t* cr;
+  auto cr(cr_);
+  cairo_surface_t* surf;
 
+  if (!cr ||
+    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != ww) ||
+    (cairo_image_surface_get_height(surf) != wh))
   {
-    if (auto const w(win->w()), h(win->h()); (w == wi.w) && (h == wi.h))
-    {
-      cr = wi.cr;
-    }
-    else
-    {
-      // cr invalidated or not existing
-      cairo_destroy(wi.cr);
+    // cr invalidated or not existing
+    cairo_destroy(cr);
 
-      // generate a cairo context
-#if defined(CAIRO_HAS_XLIB_SURFACE)
-      auto const surf(cairo_xlib_surface_create(fl_display,
-        fl_window, fl_visual->visual, w, h));
-#elif defined(CAIRO_HAS_WIN32_SURFACE)
-      auto const surf(cairo_win32_surface_create(static_cast<HDC>(fl_gc)));
-#elif defined(CAIRO_HAS_QUARTZ_SURFACE)
-      auto const surf(cairo_quartz_surface_create_for_cg_context(
-        static_cast<CGContext*>(fl_gc), w, h));
-#endif
-
-      wi.w = w, wi.h = h;
-      wi.cr = cr = cairo_create(surf);
-      cairo_surface_destroy(surf);
-    }
+    // generate a cairo context
+    cr_ = cr = cairo_create(surf =
+      cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
+    cairo_surface_destroy(surf);
   }
 
   if (cr)
   {
-    if ((wi.wx == wx) && (wi.wy == wy) && (wi.ww == ww) && (wi.wh == wh))
-    {
-      cr = wi.wcr;
-    }
-    else
-    {
-      cairo_destroy(wi.wcr);
-
-      wi.wx = wx, wi.wy = wy, wi.ww = ww, wi.wh = wh;
-      auto const surf(cairo_surface_create_for_rectangle(cairo_get_target(cr),
-        wx, wy, ww, wh));
-      wi.wcr = cr = cairo_create(surf);
-      cairo_surface_destroy(surf);
-    }
-
     cairo_save(cr);
 
     {
@@ -137,5 +90,26 @@ void CairoWidget::draw()
     }
 
     cairo_restore(cr);
+
+    //
+    cairo_surface_flush(surf);
+
+    auto const converter([](void* const s, int const x, int const y,
+      int w, uchar* buf) noexcept
+      {
+        auto const surf(static_cast<cairo_surface_t*>(s));
+
+        auto data(cairo_image_surface_get_data(surf) +
+          (y * cairo_image_surface_get_width(surf) + x) * 4);
+
+        for (; w; buf += 4, data += 4, --w)
+        {
+          auto const tmp(swap(bit_cast<std::uint32_t>(data) << 8));
+          std::memcpy(buf, &tmp, sizeof(tmp));
+        }
+      }
+    );
+
+    fl_draw_image(converter, surf, wx, wy, ww, wh, 4);
   }
 }

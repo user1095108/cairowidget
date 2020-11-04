@@ -1,7 +1,15 @@
 #include "Fl/Fl.H"
 #include "Fl/fl_draw.H"
 
-#include "cairo-gl.h"
+#include "cairo/cairo-features.h"
+
+#if defined(CAIRO_HAS_XLIB_SURFACE)
+#  include "cairo/cairo-xlib.h"
+#elif defined(CAIRO_HAS_WIN32_SURFACE)
+#  include "cairo/cairo-win32.h"
+#elif defined(CAIRO_HAS_QUARTZ_SURFACE)
+#  include "cairo/cairo-quartz.h"
+#endif
 
 #include <cassert>
 
@@ -12,18 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////
 CairoWindow::CairoWindow(int const x, int const y, int const w, int const h,
   const char* const l) :
-  Fl_Gl_Window(x, y, w, h, l)
+  Fl_Window(x, y, w, h, l)
 {
-  mode(FL_SINGLE | FL_RGB);
-  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWindow::CairoWindow(int const w, int const h, const char* const l) :
-  Fl_Gl_Window(w, h, l)
+  Fl_Window(w, h, l)
 {
-  mode(FL_SINGLE | FL_RGB);
-  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -39,21 +43,24 @@ void CairoWindow::draw()
 
   auto cr(cr_);
 
-  if (!context_valid())
+  if (!cr)
   {
     Fl_Window::make_current();
 
-    auto const device(cairo_glx_device_create(fl_display,
-      static_cast<GLXContext>(context())));
-    cairo_gl_device_set_thread_aware(device, false);
-    assert(cairo_device_status(device) == CAIRO_STATUS_SUCCESS);
-
-    auto const surf(cairo_gl_surface_create_for_window(device, fl_window,
-      w, h));
-    cairo_device_destroy(device);
+    // generate a cairo context
+#if defined(CAIRO_HAS_XLIB_SURFACE)
+    auto const surf(cairo_xlib_surface_create(fl_display,
+      fl_window, fl_visual->visual, w, h));
+#elif defined(CAIRO_HAS_WIN32_SURFACE)
+    auto const surf(cairo_win32_surface_create(static_cast<HDC>(fl_gc)));
+#elif defined(CAIRO_HAS_QUARTZ_SURFACE)
+    auto const surf(cairo_quartz_surface_create_for_cg_context(
+      static_cast<CGContext*>(fl_gc), w, h));
+#endif
     assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
 
-    cairo_destroy(cr);
+    w_ = w; h_ = h;
+
     cr_ = cr = cairo_create(surf);
     cairo_surface_destroy(surf);
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
@@ -61,21 +68,10 @@ void CairoWindow::draw()
     // some defaults
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
-
-    int attrs;
-    Fl::get_font_name(fl_font(), &attrs);
-
-    auto const cr(ctx());
-
-    cairo_select_font_face(cr,
-      Fl::get_font(fl_font()),
-      attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
-      attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size(cr, fl_size());
   }
-  else if (!valid())
+  else if ((w != w_) || (h != h_))
   {
-    cairo_gl_surface_set_size(cairo_get_target(cr), w, h);
+    cairo_xlib_surface_set_size(cairo_get_target(cr), w, h);
   }
 
   {
@@ -104,16 +100,6 @@ void CairoWindow::draw()
     cairo_restore(cr);
 
     //
-    if (children())
-    {
-      surface_device_->set_current();
-
-      Fl_Group::draw_children();
-
-      Fl_Display_Device::display_device()->set_current();
-    }
-
-    //
-    cairo_surface_flush(cairo_get_target(cr));
+    Fl_Group::draw_children();
   }
 }

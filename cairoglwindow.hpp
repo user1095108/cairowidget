@@ -1,19 +1,22 @@
-#ifndef CAIROWINDOW_HPP
-# define CAIROWINDOW_HPP
+#ifndef CAIROGLWINDOW_HPP
+# define CAIROGLWINDOW_HPP
 # pragma once
-
-#include "Fl/Fl_Window.H"
 
 #include "cairo/cairo.h"
 
+#include "Fl/Fl_Gl_Window.H"
+
+#include "cairosurfacedevice.hpp"
+
 #include <functional>
 
-class CairoWindow: public Fl_Window
+class Cairo_Gl_Window: public Fl_Gl_Window
 {
   struct S;
 
   cairo_t* cr_{};
-  int w_, h_;
+
+  std::unique_ptr<CairoSurfaceDevice> surface_device_{new CairoSurfaceDevice};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
@@ -21,9 +24,9 @@ class CairoWindow: public Fl_Window
   void draw() final;
 
 public:
-  CairoWindow(int, int, const char* = nullptr);
-  CairoWindow(int, int, int, int, const char* = nullptr);
-  ~CairoWindow();
+  Cairo_Gl_Window(int, int, const char* = nullptr);
+  Cairo_Gl_Window(int, int, int, int, const char* = nullptr);
+  ~Cairo_Gl_Window();
 
   auto ctx() const noexcept;
 
@@ -37,13 +40,13 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto CairoWindow::ctx() const noexcept
+inline auto Cairo_Gl_Window::ctx() const noexcept
 {
   return cr_;
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto& CairoWindow::draw() const noexcept
+inline auto& Cairo_Gl_Window::draw() const noexcept
 {
   return d_;
 }
