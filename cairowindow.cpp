@@ -108,7 +108,7 @@ void CairoWindow::draw()
     {
       surface_device_->set_current();
 
-      Fl_Window::draw_children();
+      Fl_Group::draw_children();
 
       Fl_Display_Device::display_device()->set_current();
     }
