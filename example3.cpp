@@ -55,12 +55,11 @@ int main()
   auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
   win->resizable(win.get());
 
-  auto const cw(new CairoWindow(0, 0, 724, 700));
+  auto const cw(new CairoWindow(0, 0, win->w(), win->h()));
   cw->draw(example);
+  cw->resizable(cw);
 
-  auto const b(new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40,
-    "Text from label"));
-  cw->resizable(b);
+  new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
 
   cw->end();
 
