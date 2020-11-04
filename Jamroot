@@ -49,6 +49,8 @@ exe example2
 
 exe example3
   : cairowindow.cpp
+    cairographicsdriver.cpp
+    cairosurfacedevice.cpp
     example2.cpp
     ..//cairo//cairo
     fltk/<link>shared

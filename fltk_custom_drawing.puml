@@ -1,0 +1,7 @@
+@startwbs
++ **custom drawing with FLTK**
+ + **analysis:**
+  + **""fl_graphics_driver"":**\n• widgets use ""Fl/fl_draw.H"" to draw,\n• ""Fl/fl_draw.H"" delegates most work to ""FL/Fl_Graphics_Driver.H"",\n• ""fl_graphics_driver"" is declared in ""FL/Fl_Graphics_Driver.H"",\n• most drawing functions are delegated to ""fl_graphics_driver"",\n• can be set directly or through ""FL/Fl_Device.H"".
+  + **relation of surfaces to graphics drivers:**\n• a surface references a graphics driver,\n• pretty way of setting ""fl_graphics_driver"".
+  + **conclusions:**\n• implement a custom ""Fl_Graphics_Driver"" for ""cairo"",\n• implement a custom ""Fl_Surface_Device"" for ""cairo"",\n• use  ""Cairo_Surface_Device::set_current()"" to set the graphics driver,\n• draw the background and then the children.
+@endwbs

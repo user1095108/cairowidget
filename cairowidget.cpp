@@ -85,23 +85,18 @@ void CairoWidget::draw()
 
       // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
-      if (auto const surf = cairo_xlib_surface_create(fl_display,
-        fl_window, fl_visual->visual, w, h))
+      auto const surf(cairo_xlib_surface_create(fl_display,
+        fl_window, fl_visual->visual, w, h));
 #elif defined(CAIRO_HAS_WIN32_SURFACE)
-      if (auto const surf = cairo_win32_surface_create(static_cast<HDC>(fl_gc)))
+      auto const surf(cairo_win32_surface_create(static_cast<HDC>(fl_gc)));
 #elif defined(CAIRO_HAS_QUARTZ_SURFACE)
-      if (auto const surf = cairo_quartz_surface_create_for_cg_context(
-        static_cast<CGContext*>(fl_gc), w, h))
+      auto const surf(cairo_quartz_surface_create_for_cg_context(
+        static_cast<CGContext*>(fl_gc), w, h));
 #endif
-      {
-        wi.w = w, wi.h = h;
-        wi.cr = cr = cairo_create(surf);
-        cairo_surface_destroy(surf);
-      }
-      else
-      {
-        cr = wi.cr = {};
-      }
+
+      wi.w = w, wi.h = h;
+      wi.cr = cr = cairo_create(surf);
+      cairo_surface_destroy(surf);
     }
   }
 

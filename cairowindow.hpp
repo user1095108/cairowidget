@@ -24,6 +24,8 @@ public:
   CairoWindow(int, int, int, int, const char* = nullptr);
   ~CairoWindow();
 
+  auto ctx() const noexcept;
+
   auto& draw() const noexcept;
 
   template <class U>
@@ -32,6 +34,12 @@ public:
     d_ = std::forward<U>(u);
   }
 };
+
+//////////////////////////////////////////////////////////////////////////////
+inline auto CairoWindow::ctx() const noexcept
+{
+  return cr_;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 inline auto& CairoWindow::draw() const noexcept
