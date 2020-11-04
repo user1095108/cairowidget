@@ -1,6 +1,3 @@
-#include "Fl/Fl.H"
-#include "Fl/fl_draw.H"
-
 #include "cairo/cairo-features.h"
 
 #if defined(CAIRO_HAS_XLIB_SURFACE)
@@ -11,9 +8,10 @@
 #  include "cairo/cairo-quartz.h"
 #endif
 
-#include <cassert>
+#include "Fl/Fl.H"
+#include "Fl/fl_draw.H"
 
-#include <iostream>
+#include <cassert>
 
 #include "cairowindow.hpp"
 
@@ -43,7 +41,7 @@ void CairoWindow::draw()
 
   auto cr(cr_);
 
-  if (!cr)
+  if (!cr || (w != w_) || (h != h_))
   {
     Fl_Window::make_current();
 
@@ -59,6 +57,8 @@ void CairoWindow::draw()
 #endif
     assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
 
+    cairo_destroy(cr);
+
     w_ = w; h_ = h;
 
     cr_ = cr = cairo_create(surf);
@@ -68,10 +68,6 @@ void CairoWindow::draw()
     // some defaults
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
-  }
-  else if ((w != w_) || (h != h_))
-  {
-    cairo_xlib_surface_set_size(cairo_get_target(cr), w, h);
   }
 
   {
@@ -101,5 +97,7 @@ void CairoWindow::draw()
 
     //
     Fl_Group::draw_children();
+
+    //cairo_surface_flush(cairo_get_target(cr));
   }
 }

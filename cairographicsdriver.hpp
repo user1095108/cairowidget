@@ -5,7 +5,7 @@
 #include "FL/Fl.H"
 #include "FL/Fl_Device.H"
 
-#include "cairowindow.hpp"
+#include "cairoglwindow.hpp"
 
 class CairoGraphicsDriver : public Fl_Graphics_Driver
 {
@@ -143,7 +143,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 inline cairo_t* CairoGraphicsDriver::ctx() const noexcept
 {
-  return static_cast<CairoWindow*>(Fl_Window::current())->ctx();
+  return static_cast<Cairo_Gl_Window*>(Fl_Window::current())->ctx();
 }
 
 #endif // CAIRO_GRAPHICS_DRIVER_HPP

@@ -2,11 +2,7 @@
 
 #include "Fl/Fl_Box.h"
 
-#include "cairowindow.hpp"
-
-#include <iostream>
-
-#include <memory>
+#include "cairoglwindow.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
@@ -50,7 +46,7 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  auto const win(new CairoWindow(724, 700));
+  auto const win(new Cairo_Gl_Window(724, 700));
   win->resizable(*win);
 
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");

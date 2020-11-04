@@ -19,7 +19,8 @@ Cairo_Gl_Window::Cairo_Gl_Window(int const x, int const y,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-Cairo_Gl_Window::Cairo_Gl_Window(int const w, int const h, const char* const l) :
+Cairo_Gl_Window::Cairo_Gl_Window(int const w, int const h,
+  const char* const l) :
   Fl_Gl_Window(w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);

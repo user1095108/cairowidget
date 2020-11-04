@@ -2,7 +2,7 @@
 # define CAIROGLWINDOW_HPP
 # pragma once
 
-#include "cairo/cairo.h"
+#include "cairo.h"
 
 #include "Fl/Fl_Gl_Window.H"
 

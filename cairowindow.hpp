@@ -2,7 +2,7 @@
 # define CAIROWINDOW_HPP
 # pragma once
 
-#include "Fl/Fl_Window.H"
+#include "Fl/Fl_Double_Window.H"
 
 #include "cairo/cairo.h"
 
