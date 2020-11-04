@@ -48,9 +48,9 @@ exe example2
   ;
 
 exe example3
-  : cairowindow.cpp
-    cairographicsdriver.cpp
+  : cairographicsdriver.cpp
     cairosurfacedevice.cpp
+    cairowindow.cpp
     example2.cpp
     ..//cairo//cairo
     fltk/<link>shared
@@ -67,9 +67,9 @@ exe example3
   ;
 
 exe example4
-  : cairowindow.cpp
-    cairographicsdriver.cpp
+  : cairographicsdriver.cpp
     cairosurfacedevice.cpp
+    cairowindow.cpp
     example3.cpp
     ..//cairo//cairo
     fltk/<link>shared
