@@ -65,3 +65,22 @@ exe example3
     <link>static
     <threading>multi
   ;
+
+exe example4
+  : cairowindow.cpp
+    cairographicsdriver.cpp
+    cairosurfacedevice.cpp
+    example3.cpp
+    ..//cairo//cairo
+    fltk/<link>shared
+    fltk_gl/<link>shared
+    fontconfig/<link>shared
+    freetype/<link>shared
+    pixman-1/<link>shared
+    GL/<link>shared
+    X11/<link>shared
+  : <include>../cairo/cairo/src
+    <include>../cairo/extra
+    <link>static
+    <threading>multi
+  ;

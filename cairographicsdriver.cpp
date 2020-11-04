@@ -7,21 +7,31 @@
 
 struct CairoGraphicsDriver::S
 {
-  static void set_color(cairo_t* const cr, Fl_Color const color) noexcept
-  {
-    uchar r, g, b;
-    Fl::get_color(color, r, g, b);
-
-    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-  }
 };
+
+//////////////////////////////////////////////////////////////////////////////
+void CairoGraphicsDriver::color(uchar const r, uchar const g, uchar const b)
+{
+  Fl_Graphics_Driver::color(fl_rgb_color(r, g, b));
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void CairoGraphicsDriver::color(Fl_Color const c)
+{
+  Fl_Graphics_Driver::color(c);
+
+  uchar r, g, b;
+  Fl::get_color(c, r, g, b);
+
+  auto const cr(ctx());
+
+  cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoGraphicsDriver::point(int x, int y)
 {
   auto const cr(ctx());
-
-  S::set_color(cr, Fl_Graphics_Driver::color());
 
   cairo_move_to(cr, x, y);
 	cairo_close_path(cr);
@@ -44,8 +54,6 @@ void CairoGraphicsDriver::rectf(int x, int y, int w, int h)
 {
   auto const cr(ctx());
 
-  S::set_color(cr, Fl_Graphics_Driver::color());
-
   cairo_rectangle(cr, x, y, w, h);
 
   cairo_fill(cr);
@@ -55,8 +63,6 @@ void CairoGraphicsDriver::rectf(int x, int y, int w, int h)
 void CairoGraphicsDriver::line(int x, int y, int x1, int y1)
 {
   auto const cr(ctx());
-
-  S::set_color(cr, Fl_Graphics_Driver::color());
 
   cairo_move_to(cr, x, y);
   cairo_line_to(cr, x1, y1);
@@ -74,13 +80,7 @@ void CairoGraphicsDriver::line(int x, int y, int x1, int y1, int x2, int y2)
 //////////////////////////////////////////////////////////////////////////////
 void CairoGraphicsDriver::xyline(int x, int y, int x1)
 {
-  int i;
-  if (x1<x) {
-    int tmp = x; x = x1; x1 = tmp;
-  }
-  for (i=x; i<=x1; i++) {
-    point(i, y);
-  }
+  line(x, y, x1, y);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -101,13 +101,7 @@ void CairoGraphicsDriver::xyline(int x, int y, int x1, int y2, int x3)
 //////////////////////////////////////////////////////////////////////////////
 void CairoGraphicsDriver::yxline(int x, int y, int y1)
 {
-  int i;
-  if (y1<y) {
-    int tmp = y; y = y1; y1 = tmp;
-  }
-  for (i=y; i<=y1; i++) {
-    point(x, i);
-  }
+  line(x, y, x, y1);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -147,8 +141,6 @@ void CairoGraphicsDriver::polygon(int x0, int y0, int x1, int y1, int x2, int y2
 {
   auto const cr(ctx());
 
-  S::set_color(cr, Fl_Graphics_Driver::color());
-
   cairo_move_to(cr, x0, y0);
   cairo_line_to(cr, x1, y1);
   cairo_line_to(cr, x2, y2);
@@ -161,8 +153,6 @@ void CairoGraphicsDriver::polygon(int x0, int y0, int x1, int y1, int x2, int y2
 void CairoGraphicsDriver::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3)
 {
   auto const cr(ctx());
-
-  S::set_color(cr, Fl_Graphics_Driver::color());
 
   cairo_move_to(cr, x0, y0);
   cairo_line_to(cr, x1, y1);
@@ -273,11 +263,6 @@ void CairoGraphicsDriver::line_style(int style, int width, char* dashes)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void CairoGraphicsDriver::color(uchar r, uchar g, uchar b)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
 Fl_Bitmask CairoGraphicsDriver::create_bitmask(int w, int h, const uchar *array)
 {
   return 0;
@@ -289,13 +274,31 @@ void CairoGraphicsDriver::delete_bitmask(Fl_Bitmask bm)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-double CairoGraphicsDriver::width(const char *str, int n)
+void CairoGraphicsDriver::font(Fl_Font const face, Fl_Fontsize const fsize)
+{
+  Fl_Graphics_Driver::font(face, fsize);
+
+  int attrs;
+  Fl::get_font_name(face, &attrs);
+
+  auto const cr(ctx());
+
+  cairo_select_font_face(cr,
+    Fl::get_font(face),
+    attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
+    attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
+  cairo_set_font_size(cr, fsize);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+double CairoGraphicsDriver::width(char const* const str, int const n)
 {
   cairo_text_extents_t cte;
 
   auto const cr(ctx());
 
-  cairo_text_extents(cr, str, &cte);
+  std::string tmp(str, n);
+  cairo_text_extents(cr, tmp.c_str(), &cte);
 
   return cte.width;
 }
@@ -325,12 +328,12 @@ int CairoGraphicsDriver::height()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void CairoGraphicsDriver::draw(const char *str, int, int const x, int const y)
+void CairoGraphicsDriver::draw(char const* const str, int const n,
+  int const x, int const y)
 {
   auto const cr(ctx());
 
-  S::set_color(cr, Fl_Graphics_Driver::color());
-
   cairo_move_to(cr, x, y);
+
   cairo_show_text(cr, str);
 }

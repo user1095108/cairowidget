@@ -2,16 +2,19 @@
 # define CAIRO_SURFACE_DEVICE_HPP
 # pragma once
 
+#include "FL/Fl_Device.H"
+
 #include <memory>
 
-#include "cairographicsdriver.hpp"
+class CairoGraphicsDriver;
 
-class CairoSurfaceDevice : public Fl_Surface_Device
+class CairoSurfaceDevice final: public Fl_Surface_Device
 {
-  std::unique_ptr<CairoGraphicsDriver> driver_;
+  std::unique_ptr<Fl_Graphics_Driver> driver_;
 
 public:
   CairoSurfaceDevice();
+  ~CairoSurfaceDevice() final;
 };
 
 #endif // CAIRO_SURFACE_DEVICE_HPP

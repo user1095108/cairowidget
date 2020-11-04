@@ -1,9 +1,15 @@
+#include "cairographicsdriver.hpp"
+
 #include "cairosurfacedevice.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 CairoSurfaceDevice::CairoSurfaceDevice():
-  Fl_Surface_Device(nullptr),
-  driver_(new CairoGraphicsDriver)
+  Fl_Surface_Device(new CairoGraphicsDriver),
+  driver_(driver())
 {
-  driver(driver_.get());
+}
+
+//////////////////////////////////////////////////////////////////////////////
+CairoSurfaceDevice::~CairoSurfaceDevice()
+{
 }

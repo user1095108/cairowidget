@@ -81,7 +81,9 @@ public:
 //  // --- implementation is in src/fl_color.cxx which includes src/cfg_gfx/xxx_color.cxx
 //  void color(Fl_Color c) { color_ = c; }
 //  Fl_Color color() { return color_; }
-  void color(uchar r, uchar g, uchar b) ;
+  void color(uchar r, uchar g, uchar b) final;
+  void color(Fl_Color c) final;
+
 //  // --- implementation is in src/fl_font.cxx which includes src/drivers/xxx/Fl_xxx_Graphics_Driver_font.cxx
   void draw(const char *str, int n, int x, int y) ;
 //  void draw(const char *str, int n, float x, float y) { draw(str, n, (int)(x+0.5), (int)(y+0.5));}
@@ -89,7 +91,7 @@ public:
 //  void rtl_draw(const char *str, int n, int x, int y) { draw(str, n, x, y); }
 //  /** Returns non-zero if the graphics driver possesses the \p feature */
 //  int has_feature(driver_feature feature) { return 0; }
-//  void font(Fl_Font face, Fl_Fontsize fsize) {font_ = face; size_ = fsize;}
+    void font(Fl_Font face, Fl_Fontsize fsize);
 //  Fl_Font font() {return font_; }
 //  Fl_Fontsize size() {return size_; }
   double width(const char *str, int n);

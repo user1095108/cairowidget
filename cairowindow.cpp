@@ -1,5 +1,5 @@
-#include "Fl/Fl.h"
-#include "Fl/fl_draw.h"
+#include "Fl/Fl.H"
+#include "Fl/fl_draw.H"
 
 #include "cairo-gl.h"
 
@@ -15,6 +15,7 @@ CairoWindow::CairoWindow(int const x, int const y, int const w, int const h,
   Fl_Gl_Window(x, y, w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);
+  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -22,6 +23,7 @@ CairoWindow::CairoWindow(int const w, int const h, const char* const l) :
   Fl_Gl_Window(w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);
+  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,6 +57,21 @@ void CairoWindow::draw()
     cr_ = cr = cairo_create(surf);
     cairo_surface_destroy(surf);
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
+
+    // some defaults
+    cairo_set_line_width(cr, 1.);
+    cairo_translate(cr, .5, .5);
+
+    int attrs;
+    Fl::get_font_name(fl_font(), &attrs);
+
+    auto const cr(ctx());
+
+    cairo_select_font_face(cr,
+      Fl::get_font(fl_font()),
+      attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
+      attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
+    cairo_set_font_size(cr, fl_size());
   }
   else if (!valid())
   {
@@ -78,11 +95,25 @@ void CairoWindow::draw()
 
       cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
-      d_(cr, w, h);
+      if (d_)
+      {
+        d_(cr, w, h);
+      }
     }
 
     cairo_restore(cr);
 
+    //
+    if (children())
+    {
+      surface_device_->set_current();
+
+      Fl_Window::draw_children();
+
+      Fl_Display_Device::display_device()->set_current();
+    }
+
+    //
     cairo_surface_flush(cairo_get_target(cr));
   }
 }

@@ -2,6 +2,8 @@
 
 #include "Fl/Fl_Box.h"
 
+#include "FL/Fl_Double_Window.h"
+
 #include "cairowindow.hpp"
 
 #include <iostream>
@@ -50,14 +52,19 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  auto const win(new CairoWindow(724, 700));
-  win->resizable(*win);
+  auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
+  win->resizable(win.get());
 
-  new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
+  auto const cw(new CairoWindow(0, 0, 724, 700));
+  cw->draw(example);
+
+  auto const b(new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40,
+    "Text from label"));
+  cw->resizable(b);
+
+  cw->end();
 
   win->end();
-
-  win->draw(example);
 
   win->show();
 

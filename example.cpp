@@ -1,5 +1,6 @@
 #include "FL/Fl.h"
 
+#include "Fl/Fl_Box.h"
 #include "FL/Fl_Double_Window.h"
 
 #include "cairowidget.hpp"
@@ -111,6 +112,7 @@ int main()
   win->resizable(win.get());
 
   auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
+  new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
 
   win->end();
 
