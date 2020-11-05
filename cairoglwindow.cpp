@@ -62,17 +62,6 @@ void Cairo_Gl_Window::draw()
     // some defaults
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
-
-    int attrs;
-    Fl::get_font_name(fl_font(), &attrs);
-
-    auto const cr(ctx());
-
-    cairo_select_font_face(cr,
-      Fl::get_font(fl_font()),
-      attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
-      attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size(cr, fl_size());
   }
   else if (!valid())
   {
