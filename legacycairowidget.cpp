@@ -115,6 +115,10 @@ void CairoWidget::draw()
         wx, wy, ww, wh));
       wi.wcr = cr = cairo_create(surf);
       cairo_surface_destroy(surf);
+
+      // some defaults
+      cairo_set_line_width(cr, 1.);
+      cairo_translate(cr, .5, .5);
     }
 
     cairo_save(cr);

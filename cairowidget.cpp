@@ -66,6 +66,10 @@ void CairoWidget::draw()
     cr_ = cr = cairo_create(surf =
       cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
     cairo_surface_destroy(surf);
+
+    // some defaults
+    cairo_set_line_width(cr, 1.);
+    cairo_translate(cr, .5, .5);
   }
 
   if (cr)
