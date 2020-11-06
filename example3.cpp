@@ -11,13 +11,7 @@
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
-  {
-    cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-
-    cairo_paint(cr);
-
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-  }
+  cairo_paint(cr);
 
   // we need this
   cairo_scale(cr, w, h);

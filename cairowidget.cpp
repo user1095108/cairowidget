@@ -43,7 +43,6 @@ void CairoWidget::draw()
     cairo_translate(cr, .5, .5);
   }
 
-  if (cr)
   {
     cairo_save(cr);
 

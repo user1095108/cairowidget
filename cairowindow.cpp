@@ -71,29 +71,14 @@ void CairoWindow::draw()
   }
 
   {
-    cairo_save(cr);
-
+    if (d_)
     {
-      uchar r, g, b;
-      Fl::get_color(color(), r, g, b);
+      cairo_save(cr);
 
-      cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
+      d_(cr, w, h);
+
+      cairo_restore(cr);
     }
-
-    {
-      cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-      cairo_paint(cr);
-
-      cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-
-      if (d_)
-      {
-        d_(cr, w, h);
-      }
-    }
-
-    cairo_restore(cr);
 
     //
     Fl_Group::draw_children();
