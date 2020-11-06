@@ -54,8 +54,8 @@ void CairoWidget::draw()
     //cairo_surface_flush(surf);
 
 #if defined(__GNUC__)
-    auto const converter([](void* const s, int const x, int const y,
-      int w, uchar* buf) noexcept
+    auto const converter(
+      [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
 
@@ -74,8 +74,8 @@ void CairoWidget::draw()
 
     fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
 #else
-    auto const converter([](void* const s, int const x, int const y,
-      int w, uchar* dst) noexcept
+    auto const converter(
+      [](void* const s, int const x, int const y, int w, uchar* dst) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
 
