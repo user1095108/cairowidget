@@ -1,7 +1,8 @@
-#include "FL/Fl.h"
+#include "FL/Fl.H"
 
-#include "Fl/Fl_Box.h"
-#include "FL/Fl_Double_Window.h"
+#include "Fl/Fl_Box.H"
+#include "FL/Fl_Double_Window.H"
+#include "FL/Fl_Image_Surface.H"
 
 #include "cairowidget.hpp"
 
@@ -67,6 +68,37 @@ void capture(CairoWidget const& wi, char const* const filename)
 }
 
 //////////////////////////////////////////////////////////////////////////////
+void capture(Fl_Widget* const wi, char const* const filename)
+{
+  auto const w(wi->w()), h(wi->h());
+
+  Fl_Image_Surface fis(w, h);
+  fis.set_current();
+
+  fis.draw(wi);
+
+  Fl_Display_Device::display_device()->set_current();
+
+  // convert
+  auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
+
+  auto src(fis.image()->data()[0]);
+  auto dst(cairo_image_surface_get_data(surf));
+
+  for (auto pixels(w * h); pixels; src += 3, dst += 4, --pixels)
+  {
+    dst[0] = src[2];
+    dst[1] = src[1];
+    dst[2] = src[0];
+//  dst[3] = 0;
+  }
+
+  //
+  cairo_surface_write_to_png(surf, filename);
+  cairo_surface_destroy(surf);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
   // we need this
@@ -112,18 +144,19 @@ int main()
   win->resizable(win.get());
 
   auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
+  ex->draw(example);
 
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
 
   win->end();
 
-  ex->draw(example);
+  win->show();
+
+  capture(win.get(), "capture.png");
 
   capture<PDF>(*ex, "example.pdf");
   capture<PNG>(*ex, "example.png");
   capture<SVG>(*ex, "example.svg");
-
-  win->show();
 
   return Fl::run();
 }
