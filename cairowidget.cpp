@@ -9,32 +9,6 @@
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-template <typename To, typename From>
-static To bit_cast(From const* const src) noexcept
-{
-  static_assert(std::is_trivially_constructible_v<To>);
-  To dst;
-  std::memcpy(&dst, src, sizeof(To));
-  return dst;
-}
-
-template <typename T, std::size_t ...I>
-static constexpr auto swap_impl(T const v, std::index_sequence<I...>) noexcept
-{
-  return (
-    (
-      ((v >> (I * 8)) & std::uint8_t(~0)) << ((sizeof(T) - 1 - I) * 8)
-    ) | ...
-  );
-}
-
-template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-static constexpr auto swap(T&& v) noexcept
-{
-  return swap_impl(std::forward<T>(v), std::make_index_sequence<sizeof(T)>());
-}
-
-//////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l)
@@ -99,21 +73,22 @@ void CairoWidget::draw()
     //cairo_surface_flush(surf);
 
     auto const converter([](void* const s, int const x, int const y,
-      int w, uchar* buf) noexcept
+      int w, uchar* dst) noexcept
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
 
-        auto data(cairo_image_surface_get_data(surf) +
+        auto src(cairo_image_surface_get_data(surf) +
           (y * cairo_image_surface_get_stride(surf)) + x * 4);
 
-        for (; w; buf += 4, data += 4, --w)
+        for (; w; src += 4, dst += 3, --w)
         {
-          auto const tmp(swap(bit_cast<std::uint32_t>(data) << 8));
-          std::memcpy(buf, &tmp, sizeof(tmp));
+          dst[0] = src[2];
+          dst[1] = src[1];
+          dst[2] = src[0];
         }
       }
     );
 
-    fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
+    fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
   }
 }
