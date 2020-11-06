@@ -60,10 +60,11 @@ void CairoWidget::draw()
       {
         auto const surf(static_cast<cairo_surface_t*>(s));
 
-        auto dst(reinterpret_cast<std::uint32_t*>(buf));
         auto src(reinterpret_cast<std::uint32_t*>(
           cairo_image_surface_get_data(surf) +
           (y * cairo_image_surface_get_stride(surf))) + x);
+
+        auto dst(reinterpret_cast<std::uint32_t*>(buf));
 
         while (w--)
         {
