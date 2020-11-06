@@ -104,7 +104,7 @@ void CairoWidget::draw()
         auto const surf(static_cast<cairo_surface_t*>(s));
 
         auto data(cairo_image_surface_get_data(surf) +
-          (y * cairo_image_surface_get_width(surf) + x) * 4);
+          (y * cairo_image_surface_get_stride(surf)) + x * 4);
 
         for (; w; buf += 4, data += 4, --w)
         {

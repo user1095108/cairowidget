@@ -72,9 +72,9 @@ void capture(Fl_Widget* const wi, char const* const filename)
 {
   auto const w(wi->w()), h(wi->h());
 
+  //
   Fl_Image_Surface fis(w, h);
   fis.set_current();
-
   fis.draw(wi);
 
   Fl_Display_Device::display_device()->set_current();
