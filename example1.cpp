@@ -72,7 +72,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
 {
   auto const w(wi->w()), h(wi->h());
 
-  //
+  // capture
   Fl_Image_Surface fis(w, h);
   fis.set_current();
   fis.draw(wi);
@@ -85,15 +85,14 @@ void capture(Fl_Widget* const wi, char const* const filename)
   auto src(fis.image()->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
-  for (auto pixels(w * h); pixels; src += 3, dst += 4, --pixels)
+  for (auto pixels(w * h); pixels--; src += 3, dst += 4)
   {
     dst[0] = src[2];
     dst[1] = src[1];
     dst[2] = src[0];
-//  dst[3] = 0;
   }
 
-  //
+  // save and cleanup
   cairo_surface_write_to_png(surf, filename);
   cairo_surface_destroy(surf);
 }
