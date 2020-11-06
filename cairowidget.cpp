@@ -47,22 +47,7 @@ void CairoWidget::draw()
   {
     cairo_save(cr);
 
-    {
-      uchar r, g, b;
-      Fl::get_color(color(), r, g, b);
-
-      cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-    }
-
-    {
-      cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-      cairo_paint(cr);
-
-      cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-
-      d_(cr, ww, wh);
-    }
+    d_(cr, ww, wh);
 
     cairo_restore(cr);
 
