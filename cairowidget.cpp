@@ -1,11 +1,6 @@
 #include "Fl/Fl.h"
 #include "Fl/fl_draw.h"
 
-#include <cstdint>
-#include <cstring>
-#include <utility>
-#include <type_traits>
-
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -80,7 +75,7 @@ void CairoWidget::draw()
         auto src(cairo_image_surface_get_data(surf) +
           (y * cairo_image_surface_get_stride(surf)) + x * 4);
 
-        for (; w; src += 4, dst += 3, --w)
+        for (; w--; src += 4, dst += 3)
         {
           dst[0] = src[2];
           dst[1] = src[1];
