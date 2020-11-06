@@ -1,6 +1,8 @@
 #include "Fl/Fl.h"
 #include "Fl/fl_draw.h"
 
+#include <cstdint>
+
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,26 @@ void CairoWidget::draw()
     //
     //cairo_surface_flush(surf);
 
+#if defined(__GNUC__)
+    auto const converter([](void* const s, int const x, int const y,
+      int w, uchar* buf) noexcept
+      {
+        auto const surf(static_cast<cairo_surface_t*>(s));
+
+        auto dst(reinterpret_cast<std::uint32_t*>(buf));
+        auto src(reinterpret_cast<std::uint32_t*>(
+          cairo_image_surface_get_data(surf) +
+          (y * cairo_image_surface_get_stride(surf))) + x);
+
+        while (w--)
+        {
+          *dst++ = __builtin_bswap32(*src++ << 8);
+        }
+      }
+    );
+
+    fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
+#else
     auto const converter([](void* const s, int const x, int const y,
       int w, uchar* dst) noexcept
       {
@@ -85,5 +107,6 @@ void CairoWidget::draw()
     );
 
     fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
+#endif
   }
 }
