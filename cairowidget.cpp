@@ -50,7 +50,7 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto const wx(x()), wy(y()), ww(w()), wh(h());
+  auto const ww(w()), wh(h());
 
   auto cr(cr_);
   cairo_surface_t* surf;
@@ -114,6 +114,6 @@ void CairoWidget::draw()
       }
     );
 
-    fl_draw_image(converter, surf, wx, wy, ww, wh, 4);
+    fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
   }
 }
