@@ -69,14 +69,11 @@ void Cairo_Gl_Window::draw()
   }
 
   {
-    if (d_)
-    {
-      cairo_save(cr);
+    cairo_save(cr);
 
-      d_(cr, w, h);
+    d_(cr, w, h);
 
-      cairo_restore(cr);
-    }
+    cairo_restore(cr);
 
     //
     if (children())

@@ -73,73 +73,53 @@ void CairoWidget::draw()
 
   cairo_t* cr;
 
+  if (auto const w(win->w()), h(win->h()); (w == wi.w) && (h == wi.h))
   {
-    if (auto const w(win->w()), h(win->h()); (w == wi.w) && (h == wi.h))
-    {
-      cr = wi.cr;
-    }
-    else
-    {
-      // cr invalidated or not existing
-      cairo_destroy(wi.cr);
+    cr = wi.cr;
+  }
+  else
+  {
+    // cr invalidated or not existing
+    cairo_destroy(wi.cr);
 
-      // generate a cairo context
+    // generate a cairo context
 #if defined(CAIRO_HAS_XLIB_SURFACE)
-      auto const surf(cairo_xlib_surface_create(fl_display,
-        fl_window, fl_visual->visual, w, h));
+    auto const surf(cairo_xlib_surface_create(fl_display,
+      fl_window, fl_visual->visual, w, h));
 #elif defined(CAIRO_HAS_WIN32_SURFACE)
-      auto const surf(cairo_win32_surface_create(static_cast<HDC>(fl_gc)));
+    auto const surf(cairo_win32_surface_create(static_cast<HDC>(fl_gc)));
 #elif defined(CAIRO_HAS_QUARTZ_SURFACE)
-      auto const surf(cairo_quartz_surface_create_for_cg_context(
-        static_cast<CGContext*>(fl_gc), w, h));
+    auto const surf(cairo_quartz_surface_create_for_cg_context(
+      static_cast<CGContext*>(fl_gc), w, h));
 #endif
 
-      wi.w = w, wi.h = h;
-      wi.cr = cr = cairo_create(surf);
-      cairo_surface_destroy(surf);
-    }
+    wi.w = w, wi.h = h;
+    wi.cr = cr = cairo_create(surf);
+    cairo_surface_destroy(surf);
   }
 
-  if (cr)
+  if ((wi.wx == wx) && (wi.wy == wy) && (wi.ww == ww) && (wi.wh == wh))
   {
-    if ((wi.wx == wx) && (wi.wy == wy) && (wi.ww == ww) && (wi.wh == wh))
-    {
-      cr = wi.wcr;
-    }
-    else
-    {
-      cairo_destroy(wi.wcr);
-
-      wi.wx = wx, wi.wy = wy, wi.ww = ww, wi.wh = wh;
-      auto const surf(cairo_surface_create_for_rectangle(cairo_get_target(cr),
-        wx, wy, ww, wh));
-      wi.wcr = cr = cairo_create(surf);
-      cairo_surface_destroy(surf);
-
-      // some defaults
-      cairo_set_line_width(cr, 1.);
-      cairo_translate(cr, .5, .5);
-    }
-
-    cairo_save(cr);
-
-    {
-      uchar r, g, b;
-      Fl::get_color(color(), r, g, b);
-
-      cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-    }
-
-    {
-      cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-      cairo_paint(cr);
-
-      cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-
-      d_(cr, ww, wh);
-    }
-
-    cairo_restore(cr);
+    cr = wi.wcr;
   }
+  else
+  {
+    cairo_destroy(wi.wcr);
+
+    wi.wx = wx, wi.wy = wy, wi.ww = ww, wi.wh = wh;
+    auto const surf(cairo_surface_create_for_rectangle(cairo_get_target(cr),
+      wx, wy, ww, wh));
+    wi.wcr = cr = cairo_create(surf);
+    cairo_surface_destroy(surf);
+
+    // some defaults
+    cairo_set_line_width(cr, 1.);
+    cairo_translate(cr, .5, .5);
+  }
+
+  cairo_save(cr);
+
+  d_(cr, ww, wh);
+
+  cairo_restore(cr);
 }

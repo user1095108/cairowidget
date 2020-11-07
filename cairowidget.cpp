@@ -43,54 +43,51 @@ void CairoWidget::draw()
     cairo_translate(cr, .5, .5);
   }
 
-  {
-    cairo_save(cr);
+  cairo_save(cr);
 
-    d_(cr, ww, wh);
+  d_(cr, ww, wh);
 
-    cairo_restore(cr);
+  cairo_restore(cr);
 
-    //
-    //cairo_surface_flush(surf);
+  //cairo_surface_flush(surf);
 
 #if defined(__GNUC__)
-    auto const converter(
-      [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
+  auto const converter(
+    [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
+    {
+      auto const surf(static_cast<cairo_surface_t*>(s));
+
+      auto src(reinterpret_cast<std::uint32_t*>(
+        cairo_image_surface_get_data(surf) +
+        (y * cairo_image_surface_get_stride(surf))) + x);
+      auto dst(reinterpret_cast<std::uint32_t*>(buf));
+
+      while (w--)
       {
-        auto const surf(static_cast<cairo_surface_t*>(s));
-
-        auto src(reinterpret_cast<std::uint32_t*>(
-          cairo_image_surface_get_data(surf) +
-          (y * cairo_image_surface_get_stride(surf))) + x);
-        auto dst(reinterpret_cast<std::uint32_t*>(buf));
-
-        while (w--)
-        {
-          *dst++ = __builtin_bswap32(*src++ << 8);
-        }
+        *dst++ = __builtin_bswap32(*src++ << 8);
       }
-    );
+    }
+  );
 
-    fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
+  fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
 #else
-    auto const converter(
-      [](void* const s, int const x, int const y, int w, uchar* dst) noexcept
+  auto const converter(
+    [](void* const s, int const x, int const y, int w, uchar* dst) noexcept
+    {
+      auto const surf(static_cast<cairo_surface_t*>(s));
+
+      auto src(cairo_image_surface_get_data(surf) +
+        (y * cairo_image_surface_get_stride(surf)) + x * 4);
+
+      for (; w--; src += 4, dst += 3)
       {
-        auto const surf(static_cast<cairo_surface_t*>(s));
-
-        auto src(cairo_image_surface_get_data(surf) +
-          (y * cairo_image_surface_get_stride(surf)) + x * 4);
-
-        for (; w--; src += 4, dst += 3)
-        {
-          dst[0] = src[2];
-          dst[1] = src[1];
-          dst[2] = src[0];
-        }
+        dst[0] = src[2];
+        dst[1] = src[1];
+        dst[2] = src[0];
       }
-    );
+    }
+  );
 
-    fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
+  fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
 #endif
-  }
 }

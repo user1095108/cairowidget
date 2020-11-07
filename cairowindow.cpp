@@ -70,19 +70,14 @@ void CairoWindow::draw()
     cairo_translate(cr, .5, .5);
   }
 
-  {
-    if (d_)
-    {
-      cairo_save(cr);
+  cairo_save(cr);
 
-      d_(cr, w, h);
+  d_(cr, w, h);
 
-      cairo_restore(cr);
-    }
+  cairo_restore(cr);
 
-    //
-    Fl_Group::draw_children();
+  //
+  Fl_Group::draw_children();
 
-    //cairo_surface_flush(cairo_get_target(cr));
-  }
+  //cairo_surface_flush(cairo_get_target(cr));
 }
