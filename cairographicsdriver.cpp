@@ -220,9 +220,9 @@ void CairoGraphicsDriver::arc(int x, int y, int w, int h, double a1, double a2)
   cairo_scale(cr, hw, hh);
   cairo_arc(cr, 0., 0., 1., 0., 2 * M_PI);
 
-  cairo_restore(cr);
-
   cairo_stroke(cr);
+
+  cairo_restore(cr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
