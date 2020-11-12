@@ -66,5 +66,8 @@ void CairoWindow::draw()
   //cairo_surface_flush(cairo_get_target(cr));
 
   //
-  Fl_Group::draw_children();
+  if (children())
+  {
+    Fl_Group::draw_children();
+  }
 }
