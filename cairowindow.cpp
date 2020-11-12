@@ -63,8 +63,8 @@ void CairoWindow::draw()
 
   cairo_restore(cr);
 
+  //cairo_surface_flush(cairo_get_target(cr));
+
   //
   Fl_Group::draw_children();
-
-  //cairo_surface_flush(cairo_get_target(cr));
 }
