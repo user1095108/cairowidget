@@ -40,8 +40,11 @@ void CairoWindow::draw()
   auto const w{this->w()}, h{this->h()};
 
   auto cr(cr_);
+  cairo_surface_t* surf;
 
-  if (!cr || (w != w_) || (h != h_))
+  if (!cr ||
+    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != w) ||
+    (cairo_image_surface_get_height(surf) != h))
   {
     Fl_Window::make_current();
 
@@ -58,8 +61,6 @@ void CairoWindow::draw()
     assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
 
     cairo_destroy(cr);
-
-    w_ = w; h_ = h;
 
     cr_ = cr = cairo_create(surf);
     cairo_surface_destroy(surf);

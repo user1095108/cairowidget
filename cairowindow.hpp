@@ -13,7 +13,6 @@ class CairoWindow: public Fl_Window
   struct S;
 
   cairo_t* cr_{};
-  int w_, h_;
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
