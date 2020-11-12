@@ -15,6 +15,10 @@ struct CairoGraphicsDriver::S
 void CairoGraphicsDriver::color(uchar const r, uchar const g, uchar const b)
 {
   Fl_Graphics_Driver::color(fl_rgb_color(r, g, b));
+
+  auto const cr(ctx());
+
+  cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -44,7 +48,8 @@ void CairoGraphicsDriver::point(int x, int y)
 //////////////////////////////////////////////////////////////////////////////
 void CairoGraphicsDriver::rect(int x, int y, int w, int h)
 {
-  int x1 = x+w-1, y1 = y+h-1;
+  auto const x1(x+w-1), y1(y+h-1);
+
   xyline(x, y, x1);
   xyline(x, y1, x1);
   yxline(x, y, y1);
@@ -196,61 +201,28 @@ void CairoGraphicsDriver::pop_clip()
 //////////////////////////////////////////////////////////////////////////////
 void CairoGraphicsDriver::circle(double x, double y, double r)
 {
-  begin_loop();
-  double X = r;
-  double Y = 0;
-  fl_vertex(x+X,y+Y);
+  auto const cr(ctx());
 
-  double rx = fabs(transform_dx(r, r));
-  double ry = fabs(transform_dy(r, r));
+  cairo_arc(cr, x, y, r, 0., 2 * M_PI);
 
-  double circ = M_PI*0.5*(rx+ry);
-  int segs = circ * 360 / 1000;  // every line is about three pixels long
-  if (segs<16) segs = 16;
-
-  double A = 2*M_PI;
-  int i = segs;
-
-  if (i) {
-    double epsilon = A/i;                       // Arc length for equal-size steps
-    double cos_e = cos(epsilon);        // Rotation coefficients
-    double sin_e = sin(epsilon);
-    do {
-      double Xnew =  cos_e*X + sin_e*Y;
-      Y = -sin_e*X + cos_e*Y;
-      fl_vertex(x + (X=Xnew), y + Y);
-    } while (--i);
-  }
-  end_loop();
+  cairo_stroke(cr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void CairoGraphicsDriver::arc(int xi, int yi, int w, int h, double a1, double a2)
+void CairoGraphicsDriver::arc(int x, int y, int w, int h, double a1, double a2)
 {
-  if (a2<=a1) return;
+  auto const cr(ctx());
 
-  double rx = w/2.0;
-  double ry = h/2.0;
-  double x = xi + rx;
-  double y = yi + ry;
-  double circ = M_PI*0.5*(rx+ry);
-  int i, segs = circ * (a2-a1) / 1000;  // every line is about three pixels long
-  if (segs<3) segs = 3;
+  cairo_save(cr);
 
-  int px, py;
-  a1 = a1/180*M_PI;
-  a2 = a2/180*M_PI;
-  double step = (a2-a1)/segs;
+  auto const hw(w / 2.), hh(h / 2.);
+  cairo_translate(cr, x + hw, y + hh);
+  cairo_scale(cr, hw, hh);
+  cairo_arc(cr, 0., 0., 1., 0., 2 * M_PI);
 
-  int nx = x + sin(a1)*rx;
-  int ny = y - cos(a1)*ry;
-  for (i=segs; i>0; i--) {
-    a1+=step;
-    px = nx; py = ny;
-    nx = x + sin(a1)*rx;
-    ny = y - cos(a1)*ry;
-    line(px, py, nx, ny);
-  }
+  cairo_restore(cr);
+
+  cairo_stroke(cr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
