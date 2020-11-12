@@ -16,19 +16,6 @@
 #include "cairowindow.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWindow::CairoWindow(int const x, int const y, int const w, int const h,
-  const char* const l) :
-  Fl_Window(x, y, w, h, l)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
-CairoWindow::CairoWindow(int const w, int const h, const char* const l) :
-  Fl_Window(w, h, l)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
 CairoWindow::~CairoWindow()
 {
   cairo_destroy(cr_);

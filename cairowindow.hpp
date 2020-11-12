@@ -20,8 +20,7 @@ class CairoWindow: public Fl_Window
   void draw() final;
 
 public:
-  CairoWindow(int, int, const char* = nullptr);
-  CairoWindow(int, int, int, int, const char* = nullptr);
+  using Fl_Window::Fl_Window;
   ~CairoWindow();
 
   auto ctx() const noexcept;
