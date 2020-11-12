@@ -8,7 +8,6 @@
 #  include "cairo/cairo-quartz.h"
 #endif
 
-#include "Fl/Fl.H"
 #include "Fl/fl_draw.H"
 
 #include <cassert>
