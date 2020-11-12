@@ -203,6 +203,8 @@ void CairoGraphicsDriver::circle(double x, double y, double r)
 {
   auto const cr(ctx());
 
+  cairo_new_sub_path(cr);
+
   cairo_arc(cr, x, y, r, 0., 2 * M_PI);
 
   cairo_stroke(cr);
@@ -214,6 +216,8 @@ void CairoGraphicsDriver::arc(int x, int y, int w, int h, double a1, double a2)
   auto const cr(ctx());
 
   cairo_save(cr);
+
+  cairo_new_sub_path(cr);
 
   auto const hw(w / 2.), hh(h / 2.);
   cairo_translate(cr, x + hw, y + hh);
@@ -262,6 +266,7 @@ void CairoGraphicsDriver::font(Fl_Font const face, Fl_Fontsize const fsize)
     attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
     attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
   cairo_set_font_size(cr, fsize);
+  cairo_font_extents(cr, &cfe_);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -280,25 +285,13 @@ double CairoGraphicsDriver::width(char const* const str, int const n)
 //////////////////////////////////////////////////////////////////////////////
 int CairoGraphicsDriver::descent()
 {
-  cairo_font_extents_t cfe;
-
-  auto const cr(ctx());
-
-  cairo_font_extents(cr, &cfe);
-
-  return cfe.descent;
+  return cfe_.descent;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 int CairoGraphicsDriver::height()
 {
-  cairo_font_extents_t cfe;
-
-  auto const cr(ctx());
-
-  cairo_font_extents(cr, &cfe);
-
-  return cfe.height;
+  return cfe_.height;
 }
 
 //////////////////////////////////////////////////////////////////////////////

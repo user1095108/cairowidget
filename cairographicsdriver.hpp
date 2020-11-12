@@ -11,6 +11,8 @@ class CairoGraphicsDriver : public Fl_Graphics_Driver
 {
   struct S;
 
+  cairo_font_extents_t cfe_;
+
 public:
   using Fl_Graphics_Driver::Fl_Graphics_Driver;
 
