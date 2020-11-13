@@ -75,16 +75,16 @@ void Cairo_Gl_Window::draw()
 
     cairo_restore(cr);
 
-    //
     if (children())
     {
+      cairo_save(cr);
       surface_device_->set_current();
 
-      //cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
-
+      //
       Fl_Group::draw_children();
 
       Fl_Display_Device::display_device()->set_current();
+      cairo_restore(cr);
     }
 
     //
