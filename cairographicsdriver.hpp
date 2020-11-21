@@ -7,7 +7,7 @@
 
 #include "cairoglwindow.hpp"
 
-class CairoGraphicsDriver : public Fl_Graphics_Driver
+class CairoGraphicsDriver final: public Fl_Graphics_Driver
 {
   struct S;
 
@@ -146,6 +146,18 @@ public:
 inline cairo_t* CairoGraphicsDriver::ctx() const noexcept
 {
   return static_cast<Cairo_Gl_Window*>(Fl_Window::current())->ctx();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+inline int CairoGraphicsDriver::descent()
+{
+  return cfe_.descent;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+inline int CairoGraphicsDriver::height()
+{
+  return cfe_.height;
 }
 
 #endif // CAIRO_GRAPHICS_DRIVER_HPP
