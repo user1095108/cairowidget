@@ -288,5 +288,5 @@ void CairoGraphicsDriver::draw(char const* const str, int const n,
 
   cairo_move_to(cr, x, y);
 
-  cairo_show_text(cr, str);
+  //cairo_show_text(cr, str);
 }
