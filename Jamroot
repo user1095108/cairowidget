@@ -56,12 +56,3 @@ exe example2
     <link>static
     <threading>multi
   ;
-
-exe example3
-  : cairowindow.cpp
-    example3.cpp
-    cairo/<link>shared
-    fltk/<link>shared
-  : <link>static
-    <threading>multi
-  ;
