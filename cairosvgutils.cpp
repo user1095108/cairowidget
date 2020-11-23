@@ -4,6 +4,8 @@
 
 #include "cairo/cairo.h"
 
+#include "Fl/Fl_Image.H"
+
 #define NANOSVG_ALL_COLOR_KEYWORDS
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
@@ -249,7 +251,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 {
   cairo_save(cr);
 
-  cairo_translate(cr, x, y);
+  cairo_translate(cr, x + .5, y + .5);
 
   // preserve aspect ratio
   if (w && h)
@@ -258,6 +260,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
     cairo_scale(cr, sm, sm);
   }
 
+  // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
   {
     if (NSVG_FLAGS_VISIBLE & shape->flags)
@@ -267,4 +270,39 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   }
 
   cairo_restore(cr);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
+  int const x, int const y) noexcept
+{
+  auto const w(fli->w()), h(fli->h());
+
+  auto const surf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h));
+  auto const cr(cairo_create(surf));
+  cairo_surface_destroy(surf);
+
+  //
+  cairo_set_source_rgba(cr, 0., 0., 0., 0.);
+  cairo_paint(cr);
+
+  //
+  cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+
+  draw_svg_image(cr, image, x, y, w, h);
+
+  //
+  auto dst(const_cast<char*>(fli->data()[0]));
+  auto src(cairo_image_surface_get_data(surf));
+
+  for (auto i(w * h); i--; src += 4, dst += 4)
+  {
+    dst[0] = src[2];
+    dst[1] = src[1];
+    dst[2] = src[0];
+    dst[3] = src[3];
+  }
+
+  //
+  cairo_destroy(cr);
 }
