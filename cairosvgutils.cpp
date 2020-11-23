@@ -130,7 +130,7 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
           auto const t(inverse(g.xform));
 
           auto const r(t[0]);
-          pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, 0,
+          pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, 0.,
             t[4], t[5], r);
 
           break;
