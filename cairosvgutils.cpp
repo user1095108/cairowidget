@@ -291,7 +291,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   auto dst(const_cast<char*>(fli->data()[0]));
   auto src(cairo_image_surface_get_data(surf));
 
-  for (auto i(w * h); i--; src += 4, dst += 4)
+  for (auto const end(src + 4 * w * h); end != src; src += 4, dst += 4)
   {
     dst[0] = src[2];
     dst[1] = src[1];
