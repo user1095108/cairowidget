@@ -1,14 +1,6 @@
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-
 #include "cairo/cairo.h"
 
 #include "Fl/Fl_Image.H"
-
-#define NANOSVG_ALL_COLOR_KEYWORDS
-#define NANOSVG_IMPLEMENTATION
-#include "nanosvg.h"
 
 #include <cassert>
 
@@ -17,6 +9,10 @@
 #include <iterator>
 
 #include <array>
+
+#define NANOSVG_ALL_COLOR_KEYWORDS
+#define NANOSVG_IMPLEMENTATION
+#include "cairosvgutils.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 static constexpr auto to_rgba(unsigned int const c) noexcept
