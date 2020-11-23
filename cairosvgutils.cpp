@@ -243,7 +243,7 @@ static inline void draw_svg_shape(cairo_t* const cr,
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
-  double const x, double const y, int const w, int const h) noexcept
+  double const x, double const y, double const w, double const h) noexcept
 {
   cairo_save(cr);
 
