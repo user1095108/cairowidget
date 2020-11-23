@@ -54,14 +54,14 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
   {
     {
       //cairo_new_sub_path(cr);
-      auto const p0(path->pts);
-      cairo_move_to(cr, p0[0], p0[1]);
+      auto p(path->pts);
 
-      auto const npts(path->npts);
+      cairo_move_to(cr, p[0], p[1]);
 
-      for (int i(1); i != npts; i += 3)
+      auto const end(p + 2 * path->npts);
+
+      for (p += 2; end != p; p += 6)
       {
-        auto const p(&p0[i * 2]);
         cairo_curve_to(cr, p[0], p[1], p[2], p[3], p[4], p[5]);
       }
     }
