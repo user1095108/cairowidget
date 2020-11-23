@@ -1,5 +1,3 @@
-#include "cairo/cairo.h"
-
 #include "Fl/Fl_Image.H"
 
 #include <cassert>

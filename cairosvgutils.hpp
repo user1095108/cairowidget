@@ -4,9 +4,9 @@
 
 #include "cairo/cairo.h"
 
-#include "Fl/Fl_Image.H"
-
 #include "nanosvg.h"
+
+class Fl_Image;
 
 void draw_svg_image(cairo_t*, struct NSVGimage*,
   double = 0, double = 0, double = 0, double = 0) noexcept;
