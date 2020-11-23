@@ -274,6 +274,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   int const x, int const y) noexcept
 {
   auto const w(fli->w()), h(fli->h());
+  assert(4 == fli->d());
 
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h));
   auto const cr(cairo_create(surf));
