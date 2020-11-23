@@ -42,7 +42,8 @@ static inline auto inverse(float const* const t) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
+static inline void draw_svg_shape(cairo_t* const cr,
+  struct NSVGshape* const shape) noexcept
 {
   cairo_new_path(cr);
 
@@ -242,7 +243,7 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
-  int const x, int const y, int const w, int const h) noexcept
+  double const x, double const y, int const w, int const h) noexcept
 {
   cairo_save(cr);
 
@@ -269,7 +270,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
-  int const x, int const y) noexcept
+  double const x, double const y) noexcept
 {
   auto const w(fli->w()), h(fli->h());
   assert(4 == fli->d());
@@ -285,9 +286,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   //
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
-  cairo_translate(cr, .5, .5);
-
-  draw_svg_image(cr, image, x, y, w, h);
+  draw_svg_image(cr, image, x + .5, y + .5, w, h);
 
   //
   auto dst(const_cast<char*>(fli->data()[0]));

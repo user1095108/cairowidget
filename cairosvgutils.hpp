@@ -9,10 +9,8 @@
 #include "nanosvg.h"
 
 void draw_svg_image(cairo_t*, struct NSVGimage*,
-  int = 0, int = 0, int = 0, int = 0) noexcept;
+  double = 0, double = 0, int = 0, int = 0) noexcept;
 void draw_svg_image(Fl_Image*, struct NSVGimage*,
-  int = 0, int = 0) noexcept;
-
-void draw_svg_shape(cairo_t*, struct NSVGshape*) noexcept;
+  double = 0, double = 0) noexcept;
 
 #endif // CAIRO_SVG_UTILS_HPP
