@@ -260,7 +260,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 
   for (auto shape(image->shapes); shape; shape = shape->next)
   {
-    if (shape->flags & NSVG_FLAGS_VISIBLE)
+    if (NSVG_FLAGS_VISIBLE & shape->flags)
     {
       draw_svg_shape(cr, shape);
     }
