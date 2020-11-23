@@ -286,7 +286,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   //
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
-  draw_svg_image(cr, image, x + .5, y + .5, w, h);
+  draw_svg_image(cr, image, x, y, w, h);
 
   //
   auto dst(const_cast<char*>(fli->data()[0]));
