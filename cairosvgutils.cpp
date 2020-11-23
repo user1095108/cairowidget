@@ -29,10 +29,9 @@ static inline auto to_rgba(unsigned int const c) noexcept
 
 static inline auto inverse(float const* const t) noexcept
 {
-	auto const det(double(t[0]) * t[3] - double(t[2]) * t[1]);
-	auto const invdet(1. / det);
+	auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
 
-  std::array<float, 6> inv;
+  std::array<double, 6> inv;
 
 	inv[0] = t[3] * invdet;
 	inv[2] = -t[2] * invdet;
