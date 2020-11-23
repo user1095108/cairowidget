@@ -92,7 +92,6 @@ static inline void draw_svg_shape(cairo_t* const cr,
       switch (type)
       {
         case NSVG_PAINT_COLOR:
-        {
           {
             auto const c(to_rgba(shape->fill.color));
             cairo_set_source_rgba(cr, c[0], c[1], c[2],
@@ -102,7 +101,6 @@ static inline void draw_svg_shape(cairo_t* const cr,
           cairo_fill_preserve(cr);
 
           goto stroke;
-        }
 
         case NSVG_PAINT_LINEAR_GRADIENT:
         {
