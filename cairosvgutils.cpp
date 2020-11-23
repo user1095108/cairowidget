@@ -27,26 +27,25 @@ static inline auto to_rgba(unsigned int const c) noexcept
   };
 }
 
-static inline auto inverse(float const* const t)
+static inline auto inverse(float const* const t) noexcept
 {
-	double invdet, det = (double)t[0] * t[3] - (double)t[2] * t[1];
-	invdet = 1. / det;
+	auto const det(double(t[0]) * t[3] - double(t[2]) * t[1]);
+	auto const invdet(1. / det);
 
   std::array<float, 6> inv;
 
 	inv[0] = t[3] * invdet;
 	inv[2] = -t[2] * invdet;
-	inv[4] = ((double)t[2] * t[5] - (double)t[3] * t[4]) * invdet;
+	inv[4] = (double(t[2]) * t[5] - double(t[3]) * t[4]) * invdet;
 	inv[1] = -t[1] * invdet;
 	inv[3] = t[0] * invdet;
-	inv[5] = ((double)t[1] * t[4] - (double)t[0] * t[5]) * invdet;
+	inv[5] = (double(t[1]) * t[4] - double(t[0]) * t[5]) * invdet;
 
   return inv;
 }
 
 //////////////////////////////////////////////////////////////////////////////
-static inline void draw_svg_shape(cairo_t* const cr,
-  struct NSVGshape* const shape) noexcept
+void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
 {
   cairo_new_path(cr);
 
@@ -57,7 +56,9 @@ static inline void draw_svg_shape(cairo_t* const cr,
       auto const p0(path->pts);
       cairo_move_to(cr, p0[0], p0[1]);
 
-      for (int i(1); i != path->npts; i += 3)
+      auto const npts(path->npts);
+
+      for (int i(1); i != npts; i += 3)
       {
         auto const p(&p0[i * 2]);
         cairo_curve_to(cr, p[0], p[1], p[2], p[3], p[4], p[5]);
@@ -242,7 +243,6 @@ static inline void draw_svg_shape(cairo_t* const cr,
       assert(0);
   }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
