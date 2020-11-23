@@ -74,9 +74,9 @@ void capture(Fl_Widget* const wi, char const* const filename)
 
   // capture
   Fl_Image_Surface fis(w, h);
+
   fis.set_current();
   fis.draw(wi);
-
   Fl_Display_Device::display_device()->set_current();
 
   // convert
@@ -85,7 +85,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   auto src(fis.image()->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
-  for (auto pixels(w * h); pixels--; src += 3, dst += 4)
+  for (auto const end(src + 3 * w * h); end != src; src += 3, dst += 4)
   {
     dst[0] = src[2];
     dst[1] = src[1];
