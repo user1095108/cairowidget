@@ -3,6 +3,7 @@ import pch ;
 project fchart
   : requirements
     <include>./
+    <include>./nanosvg/src
     <variant>release:<define>NDEBUG
     <variant>release:<cflags>"-Ofast -fno-plt -Wall -Wextra -g"
     <variant>release:<cxxflags>"-std=c++2a -fno-exceptions -fno-rtti -fno-stack-protector"
@@ -31,6 +32,7 @@ lib pixman-1 : ;
 
 exe example1
   : cairowidget.cpp
+    cairosvgutils.cpp
     example1.cpp
     cairo/<link>shared
     fltk/<link>shared
@@ -41,6 +43,7 @@ exe example1
 exe example2
   : cairographicsdriver.cpp
     cairosurfacedevice.cpp
+    cairosvgutils.cpp
     cairoglwindow.cpp
     example2.cpp
     ..//cairo//cairo

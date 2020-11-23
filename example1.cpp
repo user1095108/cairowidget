@@ -4,12 +4,12 @@
 #include "FL/Fl_Double_Window.H"
 #include "FL/Fl_Image_Surface.H"
 
-#include "cairowidget.hpp"
-
 #include "cairo/cairo-pdf.h"
 #include "cairo/cairo-svg.h"
 
-#include <memory>
+#include "cairosvgutils.hpp"
+
+#include "cairowidget.hpp"
 
 enum Capture
 {
@@ -97,67 +97,45 @@ void capture(Fl_Widget* const wi, char const* const filename)
   cairo_surface_destroy(surf);
 }
 
+struct NSVGimage* image{};
+
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
+  cairo_set_source_rgb(cr, 220 / 255., 220 / 255., 220 / 255.);
+
   cairo_paint(cr);
 
-  // we need this
-  cairo_scale(cr, w, h);
-
-  // code from https://www.cairographics.org/tutorial/
+  if (image)
   {
-    auto const radpat(cairo_pattern_create_radial(.25, .25, .1, .5, .5, .5));
-    cairo_pattern_add_color_stop_rgb(radpat, 0,  1., .8, .8);
-    cairo_pattern_add_color_stop_rgb(radpat, 1,  .9, .0, .0);
+    cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
-    for (int i=1; i!=10; ++i)
-      for (int j=1; j!=10; ++j)
-        cairo_rectangle(cr, i/10. - .04, j/10. - .04, .08, .08);
-
-    cairo_set_source(cr, radpat);
-    cairo_fill(cr);
-
-    cairo_pattern_destroy(radpat);
-  }
-
-  {
-    auto const linpat(cairo_pattern_create_linear(.25, .35, .75, .65));
-
-    cairo_pattern_add_color_stop_rgba(linpat, .00, 1, 1, 1, 0);
-    cairo_pattern_add_color_stop_rgba(linpat, .25, 0, 1, 0, .5);
-    cairo_pattern_add_color_stop_rgba(linpat, .50, 1, 1, 1, 0);
-    cairo_pattern_add_color_stop_rgba(linpat, .75, 0, 0, 1, .5);
-    cairo_pattern_add_color_stop_rgba(linpat,  1., 1, 1, 1, 0);
-
-    cairo_rectangle(cr, .0, .0, 1., 1.);
-    cairo_set_source(cr, linpat);
-    cairo_fill(cr);
-
-    cairo_pattern_destroy(linpat);
+    draw_svg_image(cr, image, 0, 0, w, h);
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  auto const win(std::make_unique<Fl_Double_Window>(724, 700, "example"));
-  win->resizable(win.get());
+  image = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
 
-  auto const ex(new CairoWidget(0, 0, win->w(), win->h()));
-  ex->draw(example);
+  auto const win(new Fl_Double_Window(724, 700, "example1"));
+  win->resizable(win);
 
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
+
+  auto const ex(new CairoWidget(0, 40, win->w(), win->h() - 40));
+  ex->draw(example);
 
   win->end();
 
   win->show();
 
-  capture(win.get(), "capture.png");
+  capture(win, "capture1.png");
 
-  capture<PDF>(*ex, "example.pdf");
-  capture<PNG>(*ex, "example.png");
-  capture<SVG>(*ex, "example.svg");
+  capture<PDF>(*ex, "example1.pdf");
+  capture<PNG>(*ex, "example1.png");
+  capture<SVG>(*ex, "example1.svg");
 
   return Fl::run();
 }

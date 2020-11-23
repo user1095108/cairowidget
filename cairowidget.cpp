@@ -1,5 +1,7 @@
 #include "Fl/fl_draw.h"
 
+#include "nanosvg.h"
+
 #include <cstdint>
 
 #include "cairowidget.hpp"
