@@ -19,6 +19,8 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
   {
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
+    cairo_translate(cr, .5, .5);
+
     draw_svg_image(cr, image, 0, 40, w, h - 40);
   }
 }

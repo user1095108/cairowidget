@@ -246,7 +246,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 {
   cairo_save(cr);
 
-  cairo_translate(cr, x + .5, y + .5);
+  cairo_translate(cr, x, y);
 
   // preserve aspect ratio
   if (w && h)
@@ -284,6 +284,8 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 
   //
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+
+  cairo_translate(cr, .5, .5);
 
   draw_svg_image(cr, image, x, y, w, h);
 
