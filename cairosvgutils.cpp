@@ -115,9 +115,7 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
 
         case NSVG_PAINT_LINEAR_GRADIENT:
         {
-          auto& g(*shape->fill.gradient);
-
-          auto const t(inverse(g.xform));
+          auto const t(inverse(shape->fill.gradient->xform));
 
           pat = cairo_pattern_create_linear(t[4], t[5],
             t[4] + t[2], t[5] + t[3]);
