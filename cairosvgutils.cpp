@@ -19,7 +19,7 @@
 #include <array>
 
 //////////////////////////////////////////////////////////////////////////////
-static inline auto to_rgba(unsigned int const c) noexcept
+static constexpr auto to_rgba(unsigned int const c) noexcept
 {
   return std::array<double, 4>{
     (c & 0xff) / 255.,
