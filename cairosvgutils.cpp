@@ -183,7 +183,8 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
 
       if (auto const count(shape->strokeDashCount); count)
       {
-        double dashes[sizeof(shape->strokeDashArray) / sizeof(float)];
+        double dashes[sizeof(shape->strokeDashArray) /
+          sizeof(*shape->strokeDashArray)];
 
         std::copy(shape->strokeDashArray, shape->strokeDashArray + count,
           std::begin(dashes));
