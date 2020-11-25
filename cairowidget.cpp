@@ -72,8 +72,9 @@ void CairoWidget::draw()
 
         while (w--)
         {
+          // RGB from ARGB (BGRA)
           if constexpr (std::endian::little == std::endian::native)
-            *dst++ = __builtin_bswap32(*src++ << 8);
+            *dst++ = __builtin_bswap32(*src++ << 8); // BGRA -> ARGB and shift
           else
             *dst++ = *src++ << 8;
         }
