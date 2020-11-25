@@ -185,7 +185,6 @@ static inline void draw_svg_shape(cairo_t* const cr,
       break;
 
     case NSVG_PAINT_COLOR:
-    {
       {
         auto const c(to_rgba(shape->stroke.color));
         cairo_set_source_rgba(cr, c[0], c[1], c[2],
@@ -246,7 +245,6 @@ static inline void draw_svg_shape(cairo_t* const cr,
       cairo_stroke_preserve(cr);
 
       break;
-    }
 
     default:
       assert(0);
