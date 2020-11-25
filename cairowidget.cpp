@@ -4,6 +4,8 @@
 
 #include <cstdint>
 
+#include <bit>
+
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,43 +54,62 @@ void CairoWidget::draw()
 
   //cairo_surface_flush(surf);
 
+  static_assert((std::endian::little == std::endian::native) ||
+    (std::endian::big == std::endian::native));
+
+  if constexpr (std::endian::little == std::endian::native)
+  {
 #if defined(__GNUC__)
-  auto const converter(
-    [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
-    {
-      auto const surf(static_cast<cairo_surface_t*>(s));
-
-      auto src(reinterpret_cast<std::uint32_t*>(
-        cairo_image_surface_get_data(surf) +
-        (y * cairo_image_surface_get_stride(surf))) + x);
-      auto dst(reinterpret_cast<std::uint32_t*>(buf));
-
-      while (w--)
+    auto const converter(
+      [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
       {
-        *dst++ = __builtin_bswap32(*src++ << 8);
-      }
-    }
-  );
+        auto const surf(static_cast<cairo_surface_t*>(s));
 
-  fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
+        auto src(reinterpret_cast<std::uint32_t*>(
+          cairo_image_surface_get_data(surf) +
+          (y * cairo_image_surface_get_stride(surf))) + x);
+        auto dst(reinterpret_cast<std::uint32_t*>(buf));
+
+        while (w--)
+        {
+          if constexpr (std::endian::little == std::endian::native)
+            *dst++ = __builtin_bswap32(*src++ << 8);
+          else
+            *dst++ = *src++ << 8;
+        }
+      }
+    );
+
+    fl_draw_image(converter, surf, x(), y(), ww, wh, 4);
 #else
-  auto const converter(
-    [](void* const s, int const x, int const y, int w, uchar* dst) noexcept
-    {
-      auto const surf(static_cast<cairo_surface_t*>(s));
-
-      auto src(cairo_image_surface_get_data(surf) +
-        (y * cairo_image_surface_get_stride(surf)) + x * 4);
-
-      for (; w--; src += 4, dst += 3)
+    auto const converter(
+      [](void* const s, int const x, int const y, int w, uchar* dst) noexcept
       {
-        dst[0] = src[2];
-        dst[1] = src[1];
-        dst[2] = src[0];
-      }
-    }
-  );
+        auto const surf(static_cast<cairo_surface_t*>(s));
 
-  fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
+        auto src(cairo_image_surface_get_data(surf) +
+          (y * cairo_image_surface_get_stride(surf)) + x * 4);
+
+        for (; w--; src += 4, dst += 3)
+        {
+          //RGB from ARGB (BGRA)
+          if constexpr (std::endian::little == std::endian::native)
+          {
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
+          }
+          else
+          {
+            dst[0] = src[1];
+            dst[1] = src[2];
+            dst[2] = src[3];
+          }
+        }
+      }
+    );
+
+    fl_draw_image(converter, surf, x(), y(), ww, wh, 3);
 #endif
+  }
 }

@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include <bit>
+
 #include <iterator>
 
 #include <array>
@@ -300,10 +302,21 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 
   for (auto const end(src + 4 * w * h); end != src; src += 4, dst += 4)
   {
-    dst[0] = src[2];
-    dst[1] = src[1];
-    dst[2] = src[0];
-    dst[3] = src[3];
+    // RGBA from ARGB (BGRA)
+    if constexpr (std::endian::little == std::endian::native)
+    {
+      dst[0] = src[2];
+      dst[1] = src[1];
+      dst[2] = src[0];
+      dst[3] = src[3];
+    }
+    else
+    {
+      dst[0] = src[1];
+      dst[1] = src[2];
+      dst[2] = src[3];
+      dst[3] = src[0];
+    }
   }
 
   //
