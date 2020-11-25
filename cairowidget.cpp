@@ -92,18 +92,14 @@ void CairoWidget::draw()
 
         for (; w--; src += 4, dst += 3)
         {
-          //RGB from ARGB (BGRA)
+          // RGB from ARGB (BGRA)
           if constexpr (std::endian::little == std::endian::native)
           {
-            dst[0] = src[2];
-            dst[1] = src[1];
-            dst[2] = src[0];
+            dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0];
           }
           else
           {
-            dst[0] = src[1];
-            dst[1] = src[2];
-            dst[2] = src[3];
+            dst[0] = src[1]; dst[1] = src[2]; dst[2] = src[3];
           }
         }
       }
