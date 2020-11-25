@@ -81,11 +81,10 @@ void CairoWidget::draw()
 
       while (w--)
       {
-        // ARGB (BGRA) to RGBx
         if constexpr (std::endian::little == std::endian::native)
-          *dst++ = shuffle<2, 1, 0>(*src++);
+          *dst++ = shuffle<2, 1, 0>(*src++); // BGRA -> RGBx
         else if constexpr (std::endian::big == std::endian::native)
-          *dst++ = shuffle<1, 2, 3>(*src++);
+          *dst++ = shuffle<1, 2, 3>(*src++); // ARGB -> RGBx
       }
     }
   );
