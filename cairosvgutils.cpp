@@ -307,7 +307,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
     {
       dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = src[3];
     }
-    else
+    else if constexpr (std::endian::big == std::endian::native)
     {
       dst[0] = src[1]; dst[1] = src[2]; dst[2] = src[3]; dst[3] = src[0];
     }
