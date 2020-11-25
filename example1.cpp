@@ -7,6 +7,8 @@
 #include "cairo/cairo-pdf.h"
 #include "cairo/cairo-svg.h"
 
+#include <bit>
+
 #include "cairosvgutils.hpp"
 
 #include "cairowidget.hpp"
@@ -72,9 +74,16 @@ void capture(Fl_Widget* const wi, char const* const filename)
 
   for (auto const end(src + 3 * w * h); end != src; src += 3, dst += 4)
   {
-    dst[0] = src[2];
-    dst[1] = src[1];
-    dst[2] = src[0];
+    if constexpr (std::endian::little == std::endian::native)
+    {
+      // RGB -> BGRA
+      dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0];
+    }
+    else
+    {
+      // RGB -> ARGB
+      dst[1] = src[0]; dst[2] = src[1]; dst[3] = src[2];
+    }
   }
 
   // save and cleanup
