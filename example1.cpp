@@ -75,7 +75,14 @@ void capture(Fl_Widget* const wi, char const* const filename)
   for (auto const end(src + 3 * w * h); end != src; src += 3, dst += 4)
   {
     // ARGB -> RGBx
-    dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0];
+    if constexpr (std::endian::little == std::endian::native)
+    {
+      dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0];
+    }
+    else if constexpr (std::endian::big == std::endian::native)
+    {
+      dst[0] = src[1]; dst[1] = src[2]; dst[2] = src[3];
+    }
   }
 
   // save and cleanup
