@@ -290,10 +290,6 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   cairo_surface_destroy(surf);
 
   //
-  cairo_set_source_rgba(cr, 0., 0., 0., 0.);
-  cairo_paint(cr);
-
-  //
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
   draw_svg_image(cr, image, x, y, w, h);
