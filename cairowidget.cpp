@@ -14,12 +14,8 @@ static constexpr T shuffle(T const i) noexcept
 {
   T r{};
 
-  {
-    unsigned j{};
-    ((r |= ((i >> 8 * I) & T(0xff)) << (8 * j++)), ...);
-  }
-
-  return r;
+  unsigned j{};
+  return ((r |= ((i >> 8 * I) & T(0xff)) << (8 * j++)), ...);
 }
 
 //////////////////////////////////////////////////////////////////////////////
