@@ -61,9 +61,6 @@ void CairoWidget::draw()
 
   //cairo_surface_flush(surf);
 
-  static_assert((std::endian::little == std::endian::native) ||
-    (std::endian::big == std::endian::native));
-
   auto const converter(
     [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
     {
@@ -79,7 +76,7 @@ void CairoWidget::draw()
         // ARGB (BGRA) to RGBx
         if constexpr (std::endian::little == std::endian::native)
           *dst++ = bswap<0, 1, 2, 3>(*src++ << 8);
-        else
+        else if constexpr (std::endian::big == std::endian::native)
           *dst++ = *src++ << 8;
       }
     }
