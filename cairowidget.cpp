@@ -12,7 +12,7 @@
 template <unsigned ...I, typename T>
 static constexpr T bswap(T const i) noexcept
 {
-  return ((((i >> 8 * I) & T(0xff)) << 8 * (sizeof(T) - 1 - I)) | ...);
+  return ((((i >> 8 * I) & 0xff) << 8 * (sizeof(T) - 1 - I)) | ...);
 }
 
 //////////////////////////////////////////////////////////////////////////////
