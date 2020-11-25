@@ -12,10 +12,15 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t ...I, std::size_t ...J, typename T>
-static constexpr T shuffle(T const i,
-  std::index_sequence<I...>, std::index_sequence<J...>) noexcept
+static constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
 {
   return ((((i >> 8 * I) & 0xff) << 8 * J) | ...);
+}
+
+template <std::size_t ...I, typename T>
+static constexpr T shuffle(T const i) noexcept
+{
+  return shuffle<I...>(i, std::make_index_sequence<sizeof...(I)>());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -78,11 +83,9 @@ void CairoWidget::draw()
       {
         // ARGB (BGRA) to RGBx
         if constexpr (std::endian::little == std::endian::native)
-          *dst++ = shuffle(*src++, std::index_sequence<2, 1, 0>(),
-            std::index_sequence<0, 1, 2>());
+          *dst++ = shuffle<2, 1, 0>(*src++);
         else if constexpr (std::endian::big == std::endian::native)
-          *dst++ = shuffle(*src++, std::index_sequence<1, 2, 3>(),
-            std::index_sequence<0, 1, 2>());
+          *dst++ = shuffle<1, 2, 3>(*src++);
       }
     }
   );
