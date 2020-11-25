@@ -57,9 +57,9 @@ void CairoWidget::draw()
   static_assert((std::endian::little == std::endian::native) ||
     (std::endian::big == std::endian::native));
 
+#if defined(__GNUC__)
   if constexpr (std::endian::little == std::endian::native)
   {
-#if defined(__GNUC__)
     auto const converter(
       [](void* const s, int const x, int const y, int w, uchar* buf) noexcept
       {
