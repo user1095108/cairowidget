@@ -10,9 +10,16 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <unsigned ...I, typename T>
-static constexpr T bswap(T const i) noexcept
+static constexpr T shuffle(T const i) noexcept
 {
-  return ((((i >> 8 * I) & T(0xff)) << 8 * (sizeof(T) - 1 - I)) | ...);
+  T r{};
+
+  {
+    unsigned j{};
+    ((r |= ((i >> 8 * I) & T(0xff)) << (8 * j++)), ...);
+  }
+
+  return r;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -75,7 +82,7 @@ void CairoWidget::draw()
       {
         // ARGB to RGBx
         if constexpr (std::endian::little == std::endian::native)
-          *dst++ = bswap<0, 1, 2, 3>(*src++ << 8);
+          *dst++ = shuffle<3, 2, 1, 0>(*src++ << 8);
         else if constexpr (std::endian::big == std::endian::native)
           *dst++ = *src++ << 8;
       }
