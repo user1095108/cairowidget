@@ -6,10 +6,10 @@ project fchart
     <include>./nanosvg/src
     <variant>release:<define>NDEBUG
     <variant>release:<cflags>"-Ofast -fno-plt -Wall -Wextra -g"
-    <variant>release:<cxxflags>"-std=c++2a -fno-exceptions -fno-rtti -fno-stack-protector"
+    <variant>release:<cxxflags>"-std=c++20 -fno-exceptions -fno-rtti -fno-stack-protector"
     <variant>release:<linkflags>"-fuse-ld=gold"
     <variant>debug:<cflags>"-Wall -Wextra -fno-omit-frame-pointer -fsanitize=address,undefined"
-    <variant>debug:<cxxflags>"-std=c++2a -fno-rtti -fno-stack-protector"
+    <variant>debug:<cxxflags>"-std=c++20 -fno-rtti -fno-stack-protector"
     <variant>debug:<linkflags>"-fsanitize=address,undefined -fuse-ld=gold"
     <threading>multi
   : default-build debug
