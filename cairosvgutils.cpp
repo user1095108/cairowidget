@@ -25,7 +25,7 @@ static constexpr auto to_rgba(unsigned int const c) noexcept
 
 static inline auto inverse(float const* const t) noexcept
 {
-	auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
+  auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
 
   return std::array<double, 6>{
     t[3] * invdet, -t[1] * invdet,
@@ -103,27 +103,27 @@ static inline void draw_svg_shape(cairo_t* const cr,
           goto stroke;
 
         case NSVG_PAINT_LINEAR_GRADIENT:
-        {
-          auto const t(inverse(shape->fill.gradient->xform));
+          {
+            auto const t(inverse(shape->fill.gradient->xform));
 
-          pat = cairo_pattern_create_linear(t[4], t[5],
-            t[4] + t[2], t[5] + t[3]);
+            pat = cairo_pattern_create_linear(t[4], t[5],
+              t[4] + t[2], t[5] + t[3]);
 
-          break;
-        }
+            break;
+          }
 
         case NSVG_PAINT_RADIAL_GRADIENT:
-        {
-          auto& g(*shape->fill.gradient);
+          {
+            auto& g(*shape->fill.gradient);
 
-          auto const t(inverse(g.xform));
+            auto const t(inverse(g.xform));
 
-          auto const r(t[0]);
-          pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, 0.,
-            t[4], t[5], r);
+            auto const r(t[0]);
+            pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, 0.,
+              t[4], t[5], r);
 
-          break;
-        }
+            break;
+          }
 
         default:
           assert(0);
@@ -133,15 +133,35 @@ static inline void draw_svg_shape(cairo_t* const cr,
 
       auto& g(*shape->fill.gradient);
 
-      auto const nstops(g.nstops);
-
-      for (int i{}; nstops != i; ++i)
+      switch (g.spread)
       {
-        auto& stop(g.stops[i]);
+        case NSVG_SPREAD_PAD:
+          cairo_pattern_set_extend(pat, CAIRO_EXTEND_PAD);
+          break;
 
-        auto const c(to_rgba(stop.color));
-        cairo_pattern_add_color_stop_rgba(pat, stop.offset,
-          c[0], c[1], c[2], shape->opacity * c[3]);
+        case NSVG_SPREAD_REFLECT:
+          cairo_pattern_set_extend(pat, CAIRO_EXTEND_REFLECT);
+          break;
+
+        case NSVG_SPREAD_REPEAT:
+          cairo_pattern_set_extend(pat, CAIRO_EXTEND_REPEAT);
+          break;
+
+        default:
+          assert(0);
+      }
+
+      {
+        auto const ns(g.nstops);
+
+        for (int i{}; ns != i; ++i)
+        {
+          auto& stop(g.stops[i]);
+
+          auto const c(to_rgba(stop.color));
+          cairo_pattern_add_color_stop_rgba(pat, stop.offset,
+            c[0], c[1], c[2], shape->opacity * c[3]);
+        }
       }
 
       cairo_set_source(cr, pat);
