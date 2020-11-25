@@ -120,12 +120,13 @@ int main()
   image = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
 
   auto const win(new Fl_Double_Window(724, 700, "example1"));
-  win->resizable(win);
 
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
 
   auto const ex(new CairoWidget(0, 40, win->w(), win->h() - 40));
   ex->draw(example);
+
+  win->resizable(ex);
 
   win->end();
 
