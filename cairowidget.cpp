@@ -6,16 +6,16 @@
 
 #include <bit>
 
+#include <utility>
+
 #include "cairowidget.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-template <unsigned ...I, typename T>
-static constexpr T shuffle(T const i) noexcept
+template <std::size_t ...I, std::size_t ...J, typename T>
+static constexpr T shuffle(T const i,
+  std::index_sequence<I...>, std::index_sequence<J...>) noexcept
 {
-  T r{};
-
-  unsigned j{};
-  return ((r |= ((i >> 8 * I) & 0xff) << 8 * j++), ...);
+  return ((((i >> 8 * I) & 0xff) << 8 * J) | ...);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -78,9 +78,11 @@ void CairoWidget::draw()
       {
         // ARGB (BGRA) to RGBx
         if constexpr (std::endian::little == std::endian::native)
-          *dst++ = shuffle<2, 1, 0>(*src++);
+          *dst++ = shuffle(*src++, std::index_sequence<2, 1, 0>(),
+            std::index_sequence<0, 1, 2>());
         else if constexpr (std::endian::big == std::endian::native)
-          *dst++ = shuffle<1, 2, 3>(*src++);
+          *dst++ = shuffle(*src++, std::index_sequence<1, 2, 3>(),
+            std::index_sequence<0, 1, 2>());
       }
     }
   );
