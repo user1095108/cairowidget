@@ -42,22 +42,7 @@ void capture(CairoWidget const& wi, char const* const filename)
   auto const cr(cairo_create(surf));
   cairo_surface_destroy(surf);
 
-  {
-    uchar r, g, b;
-    Fl::get_color(wi.color(), r, g, b);
-
-    cairo_set_source_rgb(cr, r / 255., g / 255., b / 255.);
-  }
-
-  {
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-    cairo_paint(cr);
-
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-
-    wi.draw()(cr, w, h);
-  }
+  wi.draw()(cr, w, h);
 
   if constexpr (PNG == C)
   {
