@@ -6,6 +6,8 @@
 
 #include "nanosvg.h"
 
+#include <cstring>
+
 #include <string_view>
 
 class Fl_Image;
@@ -15,12 +17,26 @@ void draw_svg_image(cairo_t*, struct NSVGimage*,
 void draw_svg_image(Fl_Image*, struct NSVGimage*,
   double = 0, double = 0) noexcept;
 
-struct NSVGshape* find_svg_shape(struct NSVGimage*,
-  std::string_view const&) noexcept;
+auto find_svg_shape(struct NSVGimage*, std::string_view const&) noexcept;
 
 void draw_svg_shape(cairo_t*, struct NSVGshape*) noexcept;
 auto draw_svg_shape(cairo_t*, struct NSVGimage*,
   std::string_view const&) noexcept;
+
+//////////////////////////////////////////////////////////////////////////////
+inline auto find_svg_shape(struct NSVGimage* const image,
+  std::string_view const& name) noexcept
+{
+  for (auto shape(image->shapes); shape; shape = shape->next)
+  {
+    if (!std::strncmp(shape->id, name.data(), name.size()))
+    {
+      return shape;
+    }
+  }
+
+  return static_cast<struct NSVGshape*>(nullptr);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 inline auto draw_svg_shape(cairo_t* const cr, struct NSVGimage* const image, 

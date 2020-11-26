@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include <cstring>
-
 #include <algorithm>
 
 #include <bit>
@@ -252,21 +250,6 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
     default:
       assert(0);
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-struct NSVGshape* find_svg_shape(struct NSVGimage* const image,
-  std::string_view const& name) noexcept
-{
-  for (auto shape(image->shapes); shape; shape = shape->next)
-  {
-    if (!std::strncmp(shape->id, name.data(), name.size()))
-    {
-      return shape;
-    }
-  }
-
-  return {};
 }
 
 //////////////////////////////////////////////////////////////////////////////
