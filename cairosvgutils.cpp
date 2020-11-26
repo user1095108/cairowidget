@@ -15,7 +15,7 @@
 #include "cairosvgutils.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-static constexpr auto to_rgba(unsigned int const c) noexcept
+constexpr auto to_rgba(unsigned int const c) noexcept
 {
   return std::array<double, 4>{
     (c & 0xff) / 255.,
@@ -25,7 +25,7 @@ static constexpr auto to_rgba(unsigned int const c) noexcept
   };
 }
 
-static inline auto inverse(float const* const t) noexcept
+inline auto inverse(float const* const t) noexcept
 {
   auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
 

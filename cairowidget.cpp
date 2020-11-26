@@ -12,25 +12,25 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t ...I, std::size_t ...J, typename T>
-static constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
+constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
 {
-  return ((((i >> 8 * I) & 0xff) << 8 * J) | ...);
+  return ((std::uint8_t(i >> 8 * I) << 8 * J) | ...);
 }
 
 template <std::size_t ...I, typename T>
-static constexpr T shuffle(T const i) noexcept
+constexpr T shuffle(T const i) noexcept
 {
   return shuffle<I...>(i, std::make_index_sequence<sizeof...(I)>());
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
-static constexpr T shuffle2(T const i, std::index_sequence<J...>) noexcept
+constexpr T shuffle2(T const i, std::index_sequence<J...>) noexcept
 {
-  return ((((i >> 8 * I) & 0xff) << 8 * (sizeof(T) - 1 - J)) | ...);
+  return ((std::uint8_t(i >> 8 * I) << 8 * (sizeof(T) - 1 - J)) | ...);
 }
 
 template <std::size_t ...I, typename T>
-static constexpr T shuffle2(T const i) noexcept
+constexpr T shuffle2(T const i) noexcept
 {
   return shuffle2<I...>(i, std::make_index_sequence<sizeof...(I)>());
 }
