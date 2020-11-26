@@ -5,6 +5,7 @@
 #include "FL/Fl_Image_Surface.H"
 
 #include "cairo/cairo-pdf.h"
+#include "cairo/cairo-ps.h"
 #include "cairo/cairo-svg.h"
 
 #include <bit>
@@ -15,6 +16,7 @@
 
 enum Capture
 {
+  EPS,
   PDF,
   PNG,
   SVG
@@ -28,7 +30,12 @@ void capture(CairoWidget const& wi, char const* const filename)
 
   cairo_surface_t* surf;
 
-  if constexpr (PDF == C)
+  if constexpr (EPS == C)
+  {
+    surf = cairo_ps_surface_create(filename, w, h);
+    cairo_ps_surface_set_eps(surf, true);
+  }
+  else if constexpr (PDF == C)
   {
     surf = cairo_pdf_surface_create(filename, w, h);
   }
@@ -127,6 +134,7 @@ int main()
 
   capture(win, "capture1.png");
 
+  capture<EPS>(*ex, "example1.eps");
   capture<PDF>(*ex, "example1.pdf");
   capture<PNG>(*ex, "example1.png");
   capture<SVG>(*ex, "example1.svg");
