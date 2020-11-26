@@ -43,7 +43,7 @@ void capture(CairoWidget const& wi, char const* const filename)
   {
     surf = cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h);
   }
-  else
+  else if constexpr (SVG == C)
   {
     surf = cairo_svg_surface_create(filename, w, h);
   }
