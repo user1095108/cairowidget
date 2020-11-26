@@ -20,7 +20,7 @@ void draw_svg_image(Fl_Image*, struct NSVGimage*,
 auto find_svg_shape(struct NSVGimage*, std::string_view const&) noexcept;
 
 void draw_svg_shape(cairo_t*, struct NSVGshape*) noexcept;
-auto draw_svg_shape(cairo_t*, struct NSVGimage*,
+void draw_svg_shape(cairo_t*, struct NSVGimage*,
   std::string_view const&) noexcept;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -39,17 +39,13 @@ inline auto find_svg_shape(struct NSVGimage* const image,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto draw_svg_shape(cairo_t* const cr, struct NSVGimage* const image, 
+inline void draw_svg_shape(cairo_t* const cr, struct NSVGimage* const image, 
   std::string_view const& name) noexcept
 {
-  auto const shape(find_svg_shape(image, name));
-
-  if (shape)
+  if (auto const shape(find_svg_shape(image, name)); shape)
   {
     draw_svg_shape(cr, shape);
   }
-
-  return shape;
 }
 
 #endif // CAIRO_SVG_UTILS_HPP
