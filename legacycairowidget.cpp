@@ -8,10 +8,10 @@
 #  include "cairo/cairo-quartz.h"
 #endif
 
-#include "Fl/Fl.h"
-#include "Fl/fl_draw.h"
+#include "FL/Fl.H"
+#include "FL/fl_draw.H"
 
-#include "Fl/Fl_Window.h"
+#include "FL/Fl_Window.H"
 
 #include "cairowidget.hpp"
 

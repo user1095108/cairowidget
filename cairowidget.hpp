@@ -4,7 +4,7 @@
 
 #include "cairo/cairo.h"
 
-#include "Fl/Fl_Widget.H"
+#include "FL/Fl_Widget.H"
 
 #include <functional>
 
