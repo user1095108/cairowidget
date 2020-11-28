@@ -1,4 +1,4 @@
-#include "Fl/Fl_Image.H"
+#include "FL/Fl_Image.H"
 
 #include <cassert>
 

@@ -1,6 +1,6 @@
 #include "FL/Fl.H"
 
-#include "Fl/Fl_Box.H"
+#include "FL/Fl_Box.H"
 #include "FL/Fl_Double_Window.H"
 #include "FL/Fl_Image_Surface.H"
 
