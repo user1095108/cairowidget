@@ -10,7 +10,7 @@
 
 #include <bit>
 
-#include "cairosvgutils.hpp"
+#include "caironanosvg.hpp"
 
 #include "cairowidget.hpp"
 

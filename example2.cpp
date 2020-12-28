@@ -2,7 +2,7 @@
 
 #include "Fl/Fl_Box.h"
 
-#include "cairosvgutils.hpp"
+#include "caironanosvg.hpp"
 
 #include "cairoglwindow.hpp"
 

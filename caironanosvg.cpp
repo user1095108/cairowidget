@@ -12,7 +12,7 @@
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
 #define NANOSVG_IMPLEMENTATION
-#include "cairosvgutils.hpp"
+#include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 constexpr auto to_rgba(unsigned int const c) noexcept
