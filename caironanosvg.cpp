@@ -10,6 +10,8 @@
 
 #include <array>
 
+#include "shuffler.hpp"
+
 #define NANOSVG_ALL_COLOR_KEYWORDS
 #define NANOSVG_IMPLEMENTATION
 #include "caironanosvg.hpp"
@@ -296,20 +298,15 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   draw_svg_image(cr, image, x, y, w, h);
 
   //
-  auto dst(const_cast<char*>(fli->data()[0]));
-  auto src(cairo_image_surface_get_data(surf));
+  auto dst(reinterpret_cast<std::uint32_t*>(
+    const_cast<char*>(fli->data()[0])));
+  auto src(reinterpret_cast<std::uint32_t const*>(
+    cairo_image_surface_get_data(surf)));
 
-  for (auto const end(src + 4 * w * h); end != src; src += 4, dst += 4)
+  for (auto const end(src + w * h); end != src;)
   {
     // ARGB (cairo) -> RGBA (fltk)
-    if constexpr (std::endian::little == std::endian::native)
-    {
-      dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = src[3];
-    }
-    else if constexpr (std::endian::big == std::endian::native)
-    {
-      dst[0] = src[1]; dst[1] = src[2]; dst[2] = src[3]; dst[3] = src[0];
-    }
+    *dst++ = shuffle<2, 1, 0>(*src++);
   }
 
   //

@@ -2,36 +2,11 @@
 
 #include <cstdint>
 
-#include <bit>
-
 #include <utility>
 
+#include "shuffler.hpp"
+
 #include "cairowidget.hpp"
-
-//////////////////////////////////////////////////////////////////////////////
-template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
-{
-  return ((std::uint8_t(i >> 8 * I) << 8 * J) | ...);
-}
-
-template <std::size_t ...I, typename T>
-constexpr T shuffle(T const i) noexcept
-{
-  return shuffle<I...>(i, std::make_index_sequence<sizeof...(I)>());
-}
-
-template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr T shuffle2(T const i, std::index_sequence<J...>) noexcept
-{
-  return ((std::uint8_t(i >> 8 * I) << 8 * (sizeof(T) - 1 - J)) | ...);
-}
-
-template <std::size_t ...I, typename T>
-constexpr T shuffle2(T const i) noexcept
-{
-  return shuffle2<I...>(i, std::make_index_sequence<sizeof...(I)>());
-}
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
@@ -85,17 +60,15 @@ void CairoWidget::draw()
     {
       auto const surf(static_cast<cairo_surface_t*>(s));
 
-      auto src(reinterpret_cast<std::uint32_t*>(
+      auto src(reinterpret_cast<std::uint32_t const*>(
         cairo_image_surface_get_data(surf) +
         (y * cairo_image_surface_get_stride(surf))) + x);
       auto dst(reinterpret_cast<std::uint32_t*>(buf));
 
       while (w--)
       {
-        if constexpr (std::endian::little == std::endian::native)
-          *dst++ = shuffle<2, 1, 0>(*src++); // ARGB -> xBGR -> RGBx
-        else if constexpr (std::endian::big == std::endian::native)
-          *dst++ = shuffle2<2, 1, 0>(*src++); // ARGB -> RGBx
+        // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
+        *dst++ = shuffle<2, 1, 0>(*src++);
       }
     }
   );
