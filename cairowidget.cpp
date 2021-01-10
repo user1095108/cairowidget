@@ -63,13 +63,10 @@ void CairoWidget::draw()
       auto src(reinterpret_cast<std::uint32_t const*>(
         cairo_image_surface_get_data(surf) +
         (y * cairo_image_surface_get_stride(surf))) + x);
-      auto dst(reinterpret_cast<std::uint32_t*>(buf));
 
-      while (w--)
-      {
-        // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
-        *dst++ = shuffle<2, 1, 0>(*src++);
-      }
+      // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
+      std::transform(src, src + w, reinterpret_cast<std::uint32_t*>(buf),
+        [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
     }
   );
 

@@ -298,16 +298,12 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   draw_svg_image(cr, image, x, y, w, h);
 
   //
-  auto dst(reinterpret_cast<std::uint32_t*>(
-    const_cast<char*>(fli->data()[0])));
   auto src(reinterpret_cast<std::uint32_t const*>(
     cairo_image_surface_get_data(surf)));
 
-  for (auto const end(src + w * h); end != src;)
-  {
-    // ARGB (cairo) -> RGBA (fltk)
-    *dst++ = shuffle<2, 1, 0>(*src++);
-  }
+  std::transform(src, src + w * h,
+    reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
+    [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
 
   //
   cairo_destroy(cr);
