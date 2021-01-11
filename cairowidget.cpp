@@ -30,14 +30,14 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  std::size_t const ww(w()), wh(h());
+  auto const ww(w()), wh(h());
 
   decltype(surf_) surf;
   auto cr(cr_);
 
   if (!cr ||
-    (cairo_image_surface_get_width(surf = surf_) != int(ww)) ||
-    (cairo_image_surface_get_height(surf) != int(wh)))
+    (cairo_image_surface_get_width(surf = surf_) != ww) ||
+    (cairo_image_surface_get_height(surf) != wh))
   {
     // cr invalidated or not existing
     cairo_destroy(cr);
@@ -49,8 +49,8 @@ void CairoWidget::draw()
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
     cairo_surface_destroy(surf);
 
-    assert(!(cairo_image_surface_get_stride(surf) * wh % 4));
-    size_ = cairo_image_surface_get_stride(surf) * wh / 4;
+    assert(!(std::size_t(cairo_image_surface_get_stride(surf)) * wh % 4));
+    size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh / 4;
 
     // some defaults
     cairo_set_line_width(cr, 1.);
