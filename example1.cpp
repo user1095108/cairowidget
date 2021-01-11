@@ -76,6 +76,8 @@ void capture(Fl_Widget* const wi, char const* const filename)
   // convert
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
 
+  cairo_surface_flush(surf);
+
   auto src(fis.image()->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
