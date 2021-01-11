@@ -4,10 +4,10 @@ project fchart
   : requirements
     <include>./
     <include>./nanosvg/src
-    <define>TBB_USE_EXCEPTIONS=0
+    <variant>release:<define>TBB_USE_EXCEPTIONS=0
     <variant>release:<define>NDEBUG
-    <variant>release:<cflags>"-Ofast -fno-rtti -fno-plt -Wall -Wextra -g"
-    <variant>release:<cxxflags>"-std=c++20 -fno-exceptions -fno-stack-protector"
+    <variant>release:<cflags>"-Ofast -fno-plt -fno-stack-protector -Wall -Wextra -g"
+    <variant>release:<cxxflags>"-std=c++20 -fno-exceptions -fno-rtti"
     <variant>release:<linkflags>"-fuse-ld=gold"
     <variant>debug:<cflags>"-Wall -Wextra -fno-omit-frame-pointer -fsanitize=address,undefined"
     <variant>debug:<cxxflags>"-std=c++20 -fno-stack-protector"
