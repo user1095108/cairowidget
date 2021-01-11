@@ -48,6 +48,8 @@ void CairoWidget::draw()
     // some defaults
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
+
+    pixels_ = cairo_image_surface_get_stride(surf) * wh / 4;
   }
 
   cairo_save(cr);
@@ -57,13 +59,14 @@ void CairoWidget::draw()
   cairo_restore(cr);
 
   // shuffle the entire surface at once, could be a source of bugs:
-  // no flushing, no marking, stride is ignored
+  // no flushing, no marking
   //cairo_surface_flush(surf);
 
   auto const src(reinterpret_cast<std::uint32_t*>(
     cairo_image_surface_get_data(surf)));
 
-  std::transform(std::execution::unseq, src, src + ww * wh, src,
+  // ARGB -> RGBx
+  std::transform(std::execution::unseq, src, src + pixels_, src,
     [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
 
   //cairo_surface_mark_dirty(surf);

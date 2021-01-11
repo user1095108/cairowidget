@@ -307,7 +307,8 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   auto const src(reinterpret_cast<std::uint32_t const*>(
     cairo_image_surface_get_data(surf)));
 
-  std::transform(std::execution::unseq, src, src + w * h,
+  std::transform(std::execution::unseq,
+    src, src + cairo_image_surface_get_stride(surf) * h / 4,
     reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
     [](auto const a) noexcept { return shuffle<2, 1, 0, 3>(a); });
 
