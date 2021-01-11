@@ -92,6 +92,8 @@ void capture(Fl_Widget* const wi, char const* const filename)
     }
   }
 
+  cairo_surface_mark_dirty(surf);
+
   // save and cleanup
   cairo_surface_write_to_png(surf, filename);
   cairo_surface_destroy(surf);
