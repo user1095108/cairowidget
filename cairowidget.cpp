@@ -32,11 +32,11 @@ void CairoWidget::draw()
 {
   std::size_t const ww(w()), wh(h());
 
+  decltype(surf_) surf;
   auto cr(cr_);
-  auto surf(surf_);
 
   if (!cr ||
-    (cairo_image_surface_get_width(surf) != int(ww)) ||
+    (cairo_image_surface_get_width(surf = surf_) != int(ww)) ||
     (cairo_image_surface_get_height(surf) != int(wh)))
   {
     // cr invalidated or not existing
