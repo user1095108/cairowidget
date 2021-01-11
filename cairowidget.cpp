@@ -49,7 +49,7 @@ void CairoWidget::draw()
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
 
-    pixels_ = cairo_image_surface_get_stride(surf) * wh / 4;
+    size_ = cairo_image_surface_get_stride(surf) * std::size_t(wh) / 4;
   }
 
   cairo_save(cr);
@@ -66,7 +66,7 @@ void CairoWidget::draw()
     cairo_image_surface_get_data(surf)));
 
   // ARGB -> RGBx
-  std::transform(std::execution::unseq, src, src + pixels_, src,
+  std::transform(std::execution::unseq, src, src + size_, src,
     [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
 
   //cairo_surface_mark_dirty(surf);

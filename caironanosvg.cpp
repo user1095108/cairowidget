@@ -288,7 +288,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 {
   assert(4 == fli->d()); // we are converting icons, hence 4 channels
 
-  auto const w(fli->w()), h(fli->h());
+  std::size_t const w(fli->w()), h(fli->h());
   assert(w && h);
 
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h));

@@ -17,7 +17,7 @@ class CairoWidget: public Fl_Widget
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
 
-  int pixels_;
+  std::size_t size_;
 
   void draw() final;
 
