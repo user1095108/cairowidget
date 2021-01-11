@@ -56,7 +56,7 @@ void Cairo_Gl_Window::draw()
 
     cairo_destroy(cr);
     cr_ = cr = cairo_create(surf);
-    cairo_surface_destroy(surf);
+    cairo_surface_destroy(surf_ = surf);
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
 
     // some defaults
@@ -94,6 +94,6 @@ void Cairo_Gl_Window::draw()
     }
 
     //
-    cairo_surface_flush(cairo_get_target(cr));
+    cairo_surface_flush(surf_);
   }
 }

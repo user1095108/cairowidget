@@ -15,6 +15,7 @@ class Cairo_Gl_Window: public Fl_Gl_Window
   struct S;
 
   cairo_t* cr_{};
+  cairo_surface_t* surf_{};
 
   std::unique_ptr<CairoSurfaceDevice> surface_device_{new CairoSurfaceDevice};
 
