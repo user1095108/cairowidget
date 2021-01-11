@@ -68,14 +68,9 @@ void CairoWidget::draw()
         (y * cairo_image_surface_get_stride(surf))) + x);
 
       // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
-#if defined(__cpp_rtti)
       std::transform(std::execution::unseq, src, src + w,
         reinterpret_cast<std::uint32_t*>(buf),
         [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
-#else
-      std::transform(src, src + w, reinterpret_cast<std::uint32_t*>(buf),
-        [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
-#endif // __cpp_rtti
     }
   );
 
