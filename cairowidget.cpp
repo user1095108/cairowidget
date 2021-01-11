@@ -1,5 +1,7 @@
 #include "FL/fl_draw.H"
 
+#include <cassert>
+
 #include <cstdint>
 
 #include <algorithm>
@@ -31,20 +33,23 @@ void CairoWidget::draw()
   std::size_t const ww(w()), wh(h());
 
   auto cr(cr_);
-  cairo_surface_t* surf;
+  auto surf(surf_);
 
   if (!cr ||
-    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != int(ww)) ||
+    (cairo_image_surface_get_width(surf) != int(ww)) ||
     (cairo_image_surface_get_height(surf) != int(wh)))
   {
     // cr invalidated or not existing
     cairo_destroy(cr);
 
     // generate a cairo context
-    cr_ = cr = cairo_create(surf =
+    cr_ = cr = cairo_create(surf_ = surf =
       cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
+    assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
+    assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
     cairo_surface_destroy(surf);
 
+    assert(!(cairo_image_surface_get_stride(surf) * wh % 4));
     size_ = cairo_image_surface_get_stride(surf) * wh / 4;
 
     // some defaults

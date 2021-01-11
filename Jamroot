@@ -31,6 +31,8 @@ lib freetype : ;
 
 lib pixman-1 : ;
 
+lib tbb : ;
+
 exe example1
   : cairowidget.cpp
     caironanosvg.cpp
@@ -39,6 +41,7 @@ exe example1
     fltk/<link>shared
   : <link>static
     <threading>multi
+    <variant>debug:<linkflags>-ltbb
   ;
 
 exe example2
@@ -59,4 +62,5 @@ exe example2
     <include>../cairo/extra
     <link>static
     <threading>multi
+    <variant>debug:<linkflags>-ltbb
   ;

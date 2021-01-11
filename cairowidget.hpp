@@ -13,11 +13,12 @@ class CairoWidget: public Fl_Widget
   struct S;
 
   cairo_t* cr_{};
+  cairo_surface_t* surf_;
+
+  std::size_t size_;
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
-
-  std::size_t size_;
 
   void draw() final;
 
