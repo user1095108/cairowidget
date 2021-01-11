@@ -45,11 +45,11 @@ void CairoWidget::draw()
       cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
     cairo_surface_destroy(surf);
 
+    size_ = cairo_image_surface_get_stride(surf) * wh / 4;
+
     // some defaults
     cairo_set_line_width(cr, 1.);
     cairo_translate(cr, .5, .5);
-
-    size_ = cairo_image_surface_get_stride(surf) * wh / 4;
   }
 
   cairo_save(cr);
