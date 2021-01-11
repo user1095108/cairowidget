@@ -65,7 +65,7 @@ void CairoWidget::draw()
   auto const src(reinterpret_cast<std::uint32_t*>(
     cairo_image_surface_get_data(surf)));
 
-  // ARGB -> RGBx
+  // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
   std::transform(std::execution::unseq, src, src + size_, src,
     [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
 
