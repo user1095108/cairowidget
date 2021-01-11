@@ -56,7 +56,7 @@ void CairoWidget::draw()
 
   cairo_restore(cr);
 
-  //cairo_surface_flush(surf);
+  cairo_surface_flush(surf);
 
   auto const converter([](void* const s, int const x, int const y, int w,
     uchar* const buf) noexcept
