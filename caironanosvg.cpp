@@ -312,6 +312,8 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
     reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
     [](auto const a) noexcept { return shuffle<2, 1, 0, 3>(a); });
 
+  //cairo_surface_mark_dirty(surf);
+
   //
   cairo_destroy(cr);
 }

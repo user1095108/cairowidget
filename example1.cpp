@@ -76,7 +76,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   //
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
 
-  cairo_surface_flush(surf);
+  //cairo_surface_flush(surf);
 
   // convert
   auto src(fis.image()->data()[0]);
@@ -95,7 +95,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
     }
   }
 
-  cairo_surface_mark_dirty(surf);
+  //cairo_surface_mark_dirty(surf);
 
   // save and cleanup
   cairo_surface_write_to_png(surf, filename);
