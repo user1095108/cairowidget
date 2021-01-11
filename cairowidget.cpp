@@ -58,8 +58,7 @@ void CairoWidget::draw()
 
   cairo_restore(cr);
 
-  // shuffle the entire surface at once, could be a source of bugs:
-  // no flushing, no marking
+  // shuffle the entire surface at once
   //cairo_surface_flush(surf);
 
   auto const src(reinterpret_cast<std::uint32_t*>(
