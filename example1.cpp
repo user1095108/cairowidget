@@ -73,11 +73,12 @@ void capture(Fl_Widget* const wi, char const* const filename)
   fis.draw(wi);
   Fl_Display_Device::display_device()->set_current();
 
-  // convert
+  //
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
 
   cairo_surface_flush(surf);
 
+  // convert
   auto src(fis.image()->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
@@ -98,6 +99,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
 
   // save and cleanup
   cairo_surface_write_to_png(surf, filename);
+
   cairo_surface_destroy(surf);
 }
 

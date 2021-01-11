@@ -34,8 +34,8 @@ void CairoWidget::draw()
   cairo_surface_t* surf;
 
   if (!cr ||
-    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != ww) ||
-    (cairo_image_surface_get_height(surf) != wh))
+    (cairo_image_surface_get_width(surf = cairo_get_target(cr)) != int(ww)) ||
+    (cairo_image_surface_get_height(surf) != int(wh)))
   {
     // cr invalidated or not existing
     cairo_destroy(cr);
