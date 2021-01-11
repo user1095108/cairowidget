@@ -300,7 +300,8 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 
   draw_svg_image(cr, image, x, y, w, h);
 
-  cairo_surface_flush(surf);
+  //
+  //cairo_surface_flush(surf);
 
   // ARGB -> RGBA (selects bytes and places them MSB -> LSB)
   auto const src(reinterpret_cast<std::uint32_t const*>(
@@ -309,8 +310,6 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   std::transform(std::execution::unseq, src, src + w * h,
     reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
     [](auto const a) noexcept { return shuffle<2, 1, 0, 3>(a); });
-
-  //cairo_surface_mark_dirty(surf);
 
   //
   cairo_destroy(cr);
