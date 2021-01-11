@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <cstdint>
+
 #include <algorithm>
 
 #include <execution>
@@ -288,7 +290,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 {
   assert(4 == fli->d()); // we are converting icons, hence 4 channels
 
-  std::size_t const w(fli->w()), h(fli->h());
+  auto const w(fli->w()), h(fli->h());
   assert(w && h);
 
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h));
@@ -308,7 +310,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
 
   // ARGB -> RGBA (selects bytes and places them MSB -> LSB)
   std::transform(std::execution::unseq,
-    src, src + cairo_image_surface_get_stride(surf) * h / 4,
+    src, src + std::uintptr_t(cairo_image_surface_get_stride(surf)) * h / 4,
     reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
     [](auto const a) noexcept { return shuffle<2, 1, 0, 3>(a); });
 
