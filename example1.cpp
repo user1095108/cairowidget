@@ -10,6 +10,10 @@
 
 #include <bit>
 
+#include <execution>
+
+#include "shuffler.hpp"
+
 #include "caironanosvg.hpp"
 
 #include "cairowidget.hpp"
@@ -82,18 +86,27 @@ void capture(Fl_Widget* const wi, char const* const filename)
   auto src(fis.image()->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
-  for (auto const end(src + 3 * w * h); end != src; src += 3, dst += 4)
-  {
-    // RGB (fltk) -> xRGB (cairo)
-    if constexpr (std::endian::little == std::endian::native)
+  // RGB (fltk) -> xRGB (cairo)
+  std::transform(std::execution::unseq,
+    pixel_iterator<char const, 3>(src),
+    pixel_iterator<char const, 3>(src + 3 * w * h),
+    pixel_iterator<unsigned char, 4>(dst),
+    [](auto const s) noexcept
     {
-      dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0];
+      typename pixel_iterator<unsigned char, 4>::value_type d;
+
+      if constexpr (std::endian::little == std::endian::native)
+      {
+        d[0] = s[2]; d[1] = s[1]; d[2] = s[0];
+      }
+      else if constexpr (std::endian::big == std::endian::native)
+      {
+        d[1] = s[0]; d[2] = s[1]; d[3] = s[2];
+      }
+
+      return d;
     }
-    else if constexpr (std::endian::big == std::endian::native)
-    {
-      dst[1] = src[0]; dst[2] = src[1]; dst[3] = src[2];
-    }
-  }
+  );
 
   //cairo_surface_mark_dirty(surf);
 
