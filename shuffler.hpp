@@ -22,8 +22,8 @@ public:
   //
   auto& operator*() const noexcept
   {
-    return *reinterpret_cast<pointer>(const_cast<void*>(
-      static_cast<void const*>(std::addressof(*ptr_))));
+    return *const_cast<pointer>(reinterpret_cast<value_type const*>(
+      std::addressof(*ptr_)));
   }
 
   //
