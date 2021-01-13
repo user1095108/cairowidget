@@ -39,7 +39,7 @@ exe example1
     example1.cpp
     cairo/<link>shared
     fltk/<link>shared
-    tbb/<link>shared
+#   tbb/<link>shared
   : <link>static
     <threading>multi
   ;
