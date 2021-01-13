@@ -21,7 +21,7 @@ public:
   using reference = value_type&;
 
 public:
-  explicit pixel_iterator(T* const ptr) : ptr_(ptr) {}
+  explicit pixel_iterator(T* const ptr) noexcept : ptr_(ptr) {}
 
   //
   auto& operator*() const noexcept
