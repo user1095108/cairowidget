@@ -40,7 +40,8 @@ exe example1
     cairo/<link>shared
     fltk/<link>shared
     tbb/<link>shared
-  : <link>static
+  : <define>TBB_USE_EXCEPTIONS=0
+    <link>static
     <threading>multi
   ;
 

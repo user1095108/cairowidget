@@ -30,11 +30,6 @@ public:
       std::addressof(*ptr_)));
   }
 
-  auto& operator[](std::size_t const I) const noexcept
-  {
-    return *(*this + I);
-  }
-
   //
   auto operator==(pixel_iterator const other) const noexcept
   {
@@ -74,10 +69,16 @@ public:
   {
     return pixel_iterator(ptr_ - N * M);
   }
+
+  //
+  auto& operator[](std::size_t const I) const noexcept
+  {
+    return *(*this + I);
+  }
 };
 
 template <std::size_t N, typename T>
-auto make_pixel_iterator(T* const p) noexcept
+inline auto make_pixel_iterator(T* const p) noexcept
 {
   return pixel_iterator<T, N>(p);
 }
