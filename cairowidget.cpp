@@ -69,13 +69,13 @@ void CairoWidget::draw()
     cairo_image_surface_get_data(surf)));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
-  std::transform(std::execution::unseq, src, src + size_ / 4, src,
+  std::transform(std::execution::par_unseq, src, src + size_ / 4, src,
     [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
 
 /*
   auto const src(cairo_image_surface_get_data(surf));
 
-  std::transform(std::execution::unseq,
+  std::transform(std::execution::par_unseq,
     pixel_iterator<unsigned char, 4>(src),
     pixel_iterator<unsigned char, 4>(src + size_),
     pixel_iterator<unsigned char, 4>(src),
