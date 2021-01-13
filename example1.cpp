@@ -88,9 +88,9 @@ void capture(Fl_Widget* const wi, char const* const filename)
 
   // RGB (fltk) -> xRGB (cairo)
   std::transform(std::execution::unseq,
-    pixel_iterator<char const, 3>(src),
-    pixel_iterator<char const, 3>(src + 3 * w * h),
-    pixel_iterator<unsigned char, 4>(dst),
+    make_pixel_iterator<3>(src),
+    make_pixel_iterator<3>(src + 3 * w * h),
+    make_pixel_iterator<4>(dst),
     [](auto const& s) noexcept
     {
       typename pixel_iterator<unsigned char, 4>::value_type d;

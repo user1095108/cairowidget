@@ -76,9 +76,9 @@ void CairoWidget::draw()
   auto const src(cairo_image_surface_get_data(surf));
 
   std::transform(std::execution::unseq,
-    pixel_iterator<unsigned char, 4>(src),
-    pixel_iterator<unsigned char, 4>(src + 4 * size_),
-    pixel_iterator<unsigned char, 4>(src),
+    make_pixel_iterator<4>(src),
+    make_pixel_iterator<4>(src + 4 * size_),
+    make_pixel_iterator<4>(src),
     [](auto const& s) noexcept ->
       typename pixel_iterator<unsigned char, 4>::value_type
     {

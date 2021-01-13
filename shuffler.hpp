@@ -2,9 +2,13 @@
 # define SHUFFLER_HPP
 # pragma once
 
+#include <cstddef>
+
+#include <array>
+
 #include <bit>
 
-template <typename T, std::size_t N = 3>
+template <typename T, std::size_t N>
 class pixel_iterator
 {
   T* ptr_;
@@ -24,6 +28,11 @@ public:
   {
     return *const_cast<pointer>(reinterpret_cast<value_type const*>(
       std::addressof(*ptr_)));
+  }
+
+  auto& operator[](std::size_t const I) const noexcept
+  {
+    return *(*this + I);
   }
 
   //
@@ -55,6 +64,7 @@ public:
   auto& operator--() noexcept { return ptr_ -= N, *this; }
   auto operator--(int) const noexcept { return pixel_iterator(ptr_ - N); }
 
+  //
   auto operator+(std::size_t const M) const noexcept
   {
     return pixel_iterator(ptr_ + N * M);
@@ -64,12 +74,13 @@ public:
   {
     return pixel_iterator(ptr_ - N * M);
   }
-
-  auto& operator[](std::size_t const I) const noexcept
-  {
-    return *(*this + I);
-  }
 };
+
+template <std::size_t N, typename T>
+auto make_pixel_iterator(T* const p) noexcept
+{
+  return pixel_iterator<T, N>(p);
+}
 
 namespace shuffler::detail
 {
