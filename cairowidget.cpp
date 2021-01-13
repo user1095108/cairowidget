@@ -49,8 +49,7 @@ void CairoWidget::draw()
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
     cairo_surface_destroy(surf);
 
-    assert(!(std::size_t(cairo_image_surface_get_stride(surf)) * wh % 4));
-    size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh / 4;
+    size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh;
 
     // some defaults
     cairo_set_line_width(cr, 1.);
@@ -70,8 +69,32 @@ void CairoWidget::draw()
     cairo_image_surface_get_data(surf)));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB)
-  std::transform(std::execution::unseq, src, src + size_, src,
+  std::transform(std::execution::unseq, src, src + size_ / 4, src,
     [](auto const a) noexcept { return shuffle<2, 1, 0>(a); });
+
+/*
+  auto const src(cairo_image_surface_get_data(surf));
+
+  std::transform(std::execution::unseq,
+    pixel_iterator<unsigned char, 4>(src),
+    pixel_iterator<unsigned char, 4>(src + size_),
+    pixel_iterator<unsigned char, 4>(src),
+    [](auto const& s) noexcept ->
+      typename pixel_iterator<unsigned char, 4>::value_type
+    {
+      if constexpr (std::endian::little == std::endian::native)
+      {
+        // BGRA -> RGBx
+        return {s[2], s[1], s[0]};
+      }
+      else if constexpr (std::endian::big == std::endian::native)
+      {
+        // ARGB -> RGBx
+        return {s[1], s[2], s[3]};
+      }
+    }
+  );
+*/
 
   //cairo_surface_mark_dirty(surf);
 

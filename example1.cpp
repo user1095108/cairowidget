@@ -91,7 +91,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
     pixel_iterator<char const, 3>(src),
     pixel_iterator<char const, 3>(src + 3 * w * h),
     pixel_iterator<unsigned char, 4>(dst),
-    [](auto const s) noexcept
+    [](auto const& s) noexcept
     {
       typename pixel_iterator<unsigned char, 4>::value_type d;
 
