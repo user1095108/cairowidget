@@ -56,6 +56,7 @@ void CairoWidget::draw()
     cairo_translate(cr, .5, .5);
   }
 
+  //
   cairo_save(cr);
 
   d_(cr, ww, wh);
