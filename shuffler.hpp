@@ -8,7 +8,10 @@
 
 #include <bit>
 
-namespace shuffler::detail
+namespace shuffler
+{
+
+namespace detail
 {
 
 //////////////////////////////////////////////////////////////////////////////
@@ -35,6 +38,8 @@ constexpr T shuffle(T const i) noexcept
   else if constexpr (std::endian::big == std::endian::native)
     return shuffler::detail::shuffle2<I...>(i,
       std::make_index_sequence<sizeof...(I)>());
+}
+
 }
 
 #endif // SHUFFLER_HPP
