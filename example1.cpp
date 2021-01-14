@@ -12,7 +12,7 @@
 
 #include <execution>
 
-#include "shuffler.hpp"
+#include "pixeliterator.hpp"
 
 #include "caironanosvg.hpp"
 
