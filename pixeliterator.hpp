@@ -92,7 +92,7 @@ inline auto make_pixel_iterator(T* const p) noexcept
     make_pixel_iterator<4>(src),
     make_pixel_iterator<4>(src + 4 * size_),
     make_pixel_iterator<4>(src),
-    [](auto const& s) noexcept ->
+    [](auto&& s) noexcept ->
       typename pixel_iterator<unsigned char, 4>::value_type
     {
       if constexpr (std::endian::little == std::endian::native)
