@@ -2,13 +2,9 @@
 
 #include <cassert>
 
-#include <cstdint>
-
 #include <algorithm>
 
 #include <execution>
-
-#include <utility>
 
 #include "shuffler.hpp"
 
