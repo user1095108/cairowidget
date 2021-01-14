@@ -84,3 +84,27 @@ inline auto make_pixel_iterator(T* const p) noexcept
 }
 
 #endif // PIXELITERATOR_HPP
+
+/*
+  auto const src(cairo_image_surface_get_data(surf));
+
+  std::transform(std::execution::unseq,
+    make_pixel_iterator<4>(src),
+    make_pixel_iterator<4>(src + 4 * size_),
+    make_pixel_iterator<4>(src),
+    [](auto const& s) noexcept ->
+      typename pixel_iterator<unsigned char, 4>::value_type
+    {
+      if constexpr (std::endian::little == std::endian::native)
+      {
+        // BGRA -> RGBx
+        return {s[2], s[1], s[0]};
+      }
+      else if constexpr (std::endian::big == std::endian::native)
+      {
+        // ARGB -> RGBx
+        return {s[1], s[2], s[3]};
+      }
+    }
+  );
+*/
