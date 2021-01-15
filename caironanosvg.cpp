@@ -310,7 +310,7 @@ void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
   std::transform(std::execution::unseq,
     src, src + std::size_t(cairo_image_surface_get_stride(surf)) * h / 4,
     reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
-    [](auto const a) noexcept { return shuffler::shuffle<2, 1, 0, 3>(a); });
+    (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0, 3>));
 
   //cairo_surface_mark_dirty(surf);
 
