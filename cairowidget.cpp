@@ -67,7 +67,7 @@ void CairoWidget::draw()
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
   std::transform(std::execution::unseq, src, src + size_, src,
-    [](auto const a) noexcept { return shuffler::shuffle<2, 1, 0>(a); });
+    (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
   //cairo_surface_mark_dirty(surf);
 
