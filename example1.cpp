@@ -93,7 +93,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
     make_pixel_iterator<4>(dst),
     [](auto&& s) noexcept
     {
-      typename pixel_iterator<unsigned char, 4>::value_type d;
+      decltype(make_pixel_iterator<4>(dst))::value_type d;
 
       if constexpr (std::endian::little == std::endian::native)
       {
