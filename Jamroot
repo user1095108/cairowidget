@@ -31,15 +31,12 @@ lib freetype : ;
 
 lib pixman-1 : ;
 
-lib tbb : ;
-
 exe example1
   : cairowidget.cpp
     caironanosvg.cpp
     example1.cpp
     cairo/<link>shared
     fltk/<link>shared
-    tbb/<link>shared
   : <define>TBB_USE_EXCEPTIONS=0
     <link>static
     <threading>multi
