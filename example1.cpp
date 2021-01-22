@@ -153,10 +153,10 @@ int main()
 
   capture(win, "capture1.png");
 
-  capture<EPS>(*ex, "example1.eps");
-  capture<PDF>(*ex, "example1.pdf");
-  capture<PNG>(*ex, "example1.png");
-  capture<SVG>(*ex, "example1.svg");
+  capture<EPS>(*ex, "capture2.eps");
+  capture<PDF>(*ex, "capture2.pdf");
+  capture<PNG>(*ex, "capture2.png");
+  capture<SVG>(*ex, "capture2.svg");
 
   return Fl::run();
 }
