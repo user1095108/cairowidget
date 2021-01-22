@@ -60,5 +60,4 @@ exe example2
     <include>../cairo/extra
     <link>static
     <threading>multi
-    <variant>debug:<linkflags>-ltbb
   ;
