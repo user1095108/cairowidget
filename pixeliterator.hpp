@@ -25,14 +25,30 @@ public:
 public:
   explicit pixel_iterator(T* const ptr) noexcept : ptr_(ptr) {}
 
-  //
-  auto& operator*() const noexcept
+  // increment, decrement
+  auto& operator++() noexcept { return ptr_ += N, *this; }
+  auto operator++(int) const noexcept { return pixel_iterator(ptr_ + N); }
+
+  auto& operator--() noexcept { return ptr_ -= N, *this; }
+  auto operator--(int) const noexcept { return pixel_iterator(ptr_ - N); }
+
+  // arithmetic
+  auto operator-(pixel_iterator const other) const noexcept
   {
-    return *const_cast<pointer>(reinterpret_cast<value_type const*>(
-      std::addressof(*ptr_)));
+    return (ptr_ - other.ptr_) / N;
   }
 
-  //
+  auto operator+(std::size_t const M) const noexcept
+  {
+    return pixel_iterator(ptr_ + N * M);
+  }
+
+  auto operator-(std::size_t const M) const noexcept
+  {
+    return pixel_iterator(ptr_ - N * M);
+  }
+
+  // comparison
   auto operator==(pixel_iterator const other) const noexcept
   {
     return std::addressof(*ptr_ ) == std::addressof(*other.ptr_);
@@ -48,31 +64,13 @@ public:
     return std::addressof(*ptr_ ) < std::addressof(*other.ptr_);
   }
 
-  //
-  auto operator-(pixel_iterator const other) const noexcept
+  // member access
+  auto& operator*() const noexcept
   {
-    return (ptr_ - other.ptr_) / N;
+    return *const_cast<pointer>(reinterpret_cast<value_type const*>(
+      std::addressof(*ptr_)));
   }
 
-  //
-  auto& operator++() noexcept { return ptr_ += N, *this; }
-  auto operator++(int) const noexcept { return pixel_iterator(ptr_ + N); }
-
-  auto& operator--() noexcept { return ptr_ -= N, *this; }
-  auto operator--(int) const noexcept { return pixel_iterator(ptr_ - N); }
-
-  //
-  auto operator+(std::size_t const M) const noexcept
-  {
-    return pixel_iterator(ptr_ + N * M);
-  }
-
-  auto operator-(std::size_t const M) const noexcept
-  {
-    return pixel_iterator(ptr_ - N * M);
-  }
-
-  //
   auto& operator[](std::size_t const I) const noexcept
   {
     return *(*this + I);
