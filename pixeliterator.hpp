@@ -6,6 +6,8 @@
 
 #include <array>
 
+#include <iterator>
+
 #include <memory>
 
 template <typename T, std::size_t N>
