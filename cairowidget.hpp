@@ -34,7 +34,7 @@ public:
   ~CairoWidget();
 
   template <class U>
-  void init(U&& u) noexcept(noexcept(d_ = std::forward<U>(u)))
+  void init(U&& u) noexcept(noexcept(i_ = std::forward<U>(u)))
   {
     i_ = std::forward<U>(u);
   }

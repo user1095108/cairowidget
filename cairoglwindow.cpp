@@ -57,9 +57,8 @@ void Cairo_Gl_Window::draw()
     cairo_surface_destroy(surf_ = surf);
     assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
 
-    // some defaults
-    cairo_set_line_width(cr, 1.);
-    cairo_translate(cr, .5, .5);
+    //
+    i_(cr, w, h);
   }
   else if (!valid())
   {
