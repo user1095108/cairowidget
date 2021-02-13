@@ -127,9 +127,7 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 
   if (image)
   {
-    cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-
-    draw_svg_image(cr, image, -.5, -.5, w, h);
+    draw_svg_image(cr, image, 0, 0, w, h);
   }
 }
 
@@ -143,11 +141,18 @@ int main()
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
 
   auto const ex(new CairoWidget(0, 40, win->w(), win->h() - 40));
-  ex->draw(example);
 
   win->resizable(ex);
 
   win->end();
+
+  ex->init([](cairo_t* const cr, int, int) noexcept
+    {
+      cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+    }
+  );
+
+  ex->draw(example);
 
   win->show();
 
