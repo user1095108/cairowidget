@@ -47,9 +47,8 @@ void CairoWidget::draw()
 
     size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh / 4;
 
-    // some defaults
-    cairo_set_line_width(cr, 1.);
-    cairo_translate(cr, .5, .5);
+    //
+    i_(cr, ww, wh);
   }
 
   //
