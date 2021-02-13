@@ -80,6 +80,9 @@ void Cairo_Gl_Window::draw()
       //
       cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
 
+      cairo_set_line_width(cr, 1.);
+      cairo_translate(cr, .5, .5);
+
       surface_device_->set_current();
 
       Fl_Group::draw_children();
