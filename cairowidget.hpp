@@ -33,6 +33,7 @@ public:
   CairoWidget(int, int, int, int, const char* = nullptr);
   ~CairoWidget();
 
+  //
   template <class U>
   void init(U&& u) noexcept(noexcept(i_ = std::forward<U>(u)))
   {

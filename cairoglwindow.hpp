@@ -36,6 +36,7 @@ public:
   Cairo_Gl_Window(int, int, int, int, const char* = nullptr);
   ~Cairo_Gl_Window();
 
+  //
   auto ctx() const noexcept;
 
   template <class U>
