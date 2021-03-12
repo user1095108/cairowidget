@@ -42,13 +42,13 @@ void CairoWidget::draw()
     cairo_destroy(cr);
 
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
-    auto const newsize(h * stride);
+    auto const newbuffersize(h * stride);
 
-    pixelcount_ = newsize / 4;
+    pixelcount_ = newbuffersize / 4;
 
-    if (buffersize_ < newsize)
+    if (buffersize_ < newbuffersize)
     {
-      data_.reset(new unsigned char[buffersize_ = newsize]);
+      data_.reset(new unsigned char[buffersize_ = newbuffersize]);
     }
 
     // generate a cairo context
