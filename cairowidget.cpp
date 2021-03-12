@@ -13,8 +13,11 @@
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
-  Fl_Widget(x, y, w, h, l)
+  Fl_Widget(x, y, w, h, l),
+  cr_(cairo_create(surf_ =
+    cairo_image_surface_create(CAIRO_FORMAT_RGB24, 0, 0)))
 {
+  cairo_surface_destroy(surf_);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -28,11 +31,10 @@ void CairoWidget::draw()
 {
   auto const ww(w()), wh(h());
 
-  decltype(surf_) surf;
   auto cr(cr_);
+  auto surf(surf_);
 
-  if (!cr ||
-    (cairo_image_surface_get_width(surf = surf_) != ww) ||
+  if ((cairo_image_surface_get_width(surf) != ww) ||
     (cairo_image_surface_get_height(surf) != wh))
   {
     // cr invalidated or not existing
@@ -41,8 +43,8 @@ void CairoWidget::draw()
     // generate a cairo context
     cr_ = cr = cairo_create(surf_ = surf =
       cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
-    assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
-    assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
+    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
+    assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
     cairo_surface_destroy(surf);
 
     size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh / 4;

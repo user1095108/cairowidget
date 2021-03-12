@@ -47,15 +47,13 @@ void Cairo_Gl_Window::draw()
     cairo_gl_device_set_thread_aware(device, false);
     assert(cairo_device_status(device) == CAIRO_STATUS_SUCCESS);
 
-    auto const surf(cairo_gl_surface_create_for_window(device, fl_window,
-      w, h));
-    cairo_device_destroy(device);
-    assert(cairo_surface_status(surf) == CAIRO_STATUS_SUCCESS);
-
     cairo_destroy(cr);
-    cr_ = cr = cairo_create(surf);
-    cairo_surface_destroy(surf_ = surf);
-    assert(cairo_status(cr) == CAIRO_STATUS_SUCCESS);
+    cr_ = cr = cairo_create(surf_ =
+      cairo_gl_surface_create_for_window(device, fl_window, w, h));
+    cairo_device_destroy(device);
+    cairo_surface_destroy(surf_);
+    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf_));
+    assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
 
     //
     i_(cr, w, h);
