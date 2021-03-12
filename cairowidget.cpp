@@ -1,7 +1,5 @@
 #include "FL/fl_draw.H"
 
-#include <iostream>
-
 #include <cassert>
 
 #include <algorithm>
@@ -42,7 +40,7 @@ void CairoWidget::draw()
 
   auto cr(cr_);
   
-  if (auto surf(surf_); (cairo_image_surface_get_width(surf) != w) ||
+  if (auto const surf(surf_); (cairo_image_surface_get_width(surf) != w) ||
     (cairo_image_surface_get_height(surf) != h))
   {
     // cr invalidated or not existing
@@ -51,7 +49,7 @@ void CairoWidget::draw()
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
     auto const newdatasize(h * stride);
 
-    pixelcount_ = newdatasize / 4;
+    pixels_ = newdatasize / 4;
 
     if (datasize_ < newdatasize)
     {
@@ -59,11 +57,11 @@ void CairoWidget::draw()
     }
 
     // generate a cairo context
-    cr_ = cr = cairo_create(surf_ = surf =
+    cr_ = cr = cairo_create(surf_ =
       cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
       w, h, stride));
-    cairo_surface_destroy(surf);
-    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
+    cairo_surface_destroy(surf_);
+    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf_));
     assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
 
     //
@@ -83,7 +81,7 @@ void CairoWidget::draw()
   auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
-  std::transform(std::execution::unseq, src, src + pixelcount_, src,
+  std::transform(std::execution::unseq, src, src + pixels_, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
   //cairo_surface_mark_dirty(surf_);

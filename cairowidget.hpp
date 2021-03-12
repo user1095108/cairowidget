@@ -17,7 +17,7 @@ class CairoWidget: public Fl_Widget
   cairo_t* cr_;
   cairo_surface_t* surf_;
 
-  int pixelcount_;
+  int pixels_;
 
   std::unique_ptr<unsigned char[]> data_;
   int datasize_{};
