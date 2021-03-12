@@ -39,6 +39,8 @@ void CairoWidget::draw()
 
   auto cr(cr_);
 
+  auto d(data_.get());
+
   if ((w_ != w) || (h_ != h))
   {
     w_ = w; h_ = h;
@@ -52,14 +54,14 @@ void CairoWidget::draw()
 
       if (datasize_ < newdatasize)
       {
-        data_.reset(new unsigned char[datasize_ = newdatasize]);
+        data_.reset(d = new unsigned char[datasize_ = newdatasize]);
       }
     }
 
     //
     cairo_destroy(cr);
 
-    auto const surf(cairo_image_surface_create_for_data(data_.get(),
+    auto const surf(cairo_image_surface_create_for_data(d,
       CAIRO_FORMAT_RGB24, w, h, stride));
     assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
     cr_ = cr = cairo_create(surf);
@@ -80,7 +82,7 @@ void CairoWidget::draw()
   //
   //cairo_surface_flush(surf);
 
-  auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
+  auto const src(reinterpret_cast<std::uint32_t*>(d));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
   std::transform(std::execution::unseq, src, src + pixels_, src,
@@ -88,5 +90,5 @@ void CairoWidget::draw()
 
   //cairo_surface_mark_dirty(surf);
 
-  fl_draw_image(reinterpret_cast<uchar*>(src), x(), y(), w, h, 4);
+  fl_draw_image(static_cast<uchar*>(d), x(), y(), w, h, 4);
 }
