@@ -90,5 +90,5 @@ void CairoWidget::draw()
 
   //cairo_surface_mark_dirty(surf);
 
-  fl_draw_image(static_cast<uchar*>(d), x(), y(), w, h, 4);
+  fl_draw_image(d, x(), y(), w, h, 4);
 }
