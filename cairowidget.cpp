@@ -43,9 +43,7 @@ void CairoWidget::draw()
   if (auto surf(surf_); (cairo_image_surface_get_width(surf) != w) ||
     (cairo_image_surface_get_height(surf) != h))
   {
-    // cr invalidated or not existing
-    cairo_destroy(cr);
-
+    //
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
 
     {
@@ -59,6 +57,7 @@ void CairoWidget::draw()
     }
 
     // generate a cairo context
+    cairo_destroy(cr);
     cr_ = cr = cairo_create(surf_ = surf =
       cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
       w, h, stride));
