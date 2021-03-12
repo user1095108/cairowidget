@@ -17,7 +17,14 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l),
   cr_(cairo_create(surf_ =
-    cairo_image_surface_create(CAIRO_FORMAT_RGB24, 0, 0)))
+    cairo_image_surface_create(CAIRO_FORMAT_RGB24, 0, 0))),
+  d_{[](cairo_t*, int, int) noexcept {}},
+  i_{[](cairo_t* const cr, int, int) noexcept
+    {
+      cairo_set_line_width(cr, 1.);
+      cairo_translate(cr, .5, .5);
+    }
+  }
 {
   cairo_surface_destroy(surf_);
 }

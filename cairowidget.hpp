@@ -23,14 +23,9 @@ class CairoWidget: public Fl_Widget
   int datasize_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
-  draw_t d_{[](cairo_t*, int, int) noexcept {}};
 
-  draw_t i_{[](cairo_t* const cr, int, int) noexcept
-    {
-      cairo_set_line_width(cr, 1.);
-      cairo_translate(cr, .5, .5);
-    }
-  };
+  draw_t d_;
+  draw_t i_;
 
   void draw() final;
 
