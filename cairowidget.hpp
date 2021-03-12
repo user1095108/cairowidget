@@ -20,7 +20,7 @@ class CairoWidget: public Fl_Widget
   int pixelcount_;
   std::unique_ptr<unsigned char[]> data_;
 
-  int buffersize_{};
+  int datasize_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};
