@@ -50,9 +50,8 @@ void CairoWidget::draw()
 
     {
       auto const datasize(h * stride);
-      pixels_ = datasize / 4;
 
-      if (datasize_ < datasize)
+      if (pixels_ = datasize / 4; datasize_ < datasize)
       {
         data_.reset(d = new unsigned char[datasize_ = datasize]);
       }
