@@ -18,8 +18,8 @@ class CairoWidget: public Fl_Widget
   cairo_surface_t* surf_;
 
   int pixelcount_;
-  std::unique_ptr<unsigned char[]> data_;
 
+  std::unique_ptr<unsigned char[]> data_;
   int datasize_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
