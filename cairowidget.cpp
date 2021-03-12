@@ -14,8 +14,7 @@
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l),
-  cr_(cairo_create(surf_ =
-    cairo_image_surface_create(CAIRO_FORMAT_RGB24, 0, 0))),
+  cr_(cairo_create(cairo_image_surface_create(CAIRO_FORMAT_RGB24, 0, 0))),
   d_{[](cairo_t*, int, int) noexcept {}},
   i_{[](cairo_t* const cr, int, int) noexcept
     {
@@ -24,7 +23,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
     }
   }
 {
-  cairo_surface_destroy(surf_);
+  cairo_surface_destroy(cairo_get_target(cr_));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -59,12 +58,13 @@ void CairoWidget::draw()
 
     //
     cairo_destroy(cr);
-    cr_ = cr = cairo_create(surf_ =
-      cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
-      w, h, stride));
-    cairo_surface_destroy(surf_);
-    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf_));
+
+    auto const surf(cairo_image_surface_create_for_data(data_.get(),
+      CAIRO_FORMAT_RGB24, w, h, stride));
+    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
+    cr_ = cr = cairo_create(surf);
     assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
+    cairo_surface_destroy(surf);
 
     //
     i_(cr, w, h);
@@ -78,7 +78,7 @@ void CairoWidget::draw()
   cairo_restore(cr);
 
   //
-  //cairo_surface_flush(surf_);
+  //cairo_surface_flush(surf);
 
   auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
 
@@ -86,7 +86,7 @@ void CairoWidget::draw()
   std::transform(std::execution::unseq, src, src + pixels_, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
-  //cairo_surface_mark_dirty(surf_);
+  //cairo_surface_mark_dirty(surf);
 
   fl_draw_image(reinterpret_cast<uchar*>(src), x(), y(), w, h, 4);
 }
