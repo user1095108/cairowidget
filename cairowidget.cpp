@@ -40,9 +40,10 @@ void CairoWidget::draw()
 
   auto cr(cr_);
   
-  if (auto surf(surf_); (cairo_image_surface_get_width(surf) != w) ||
-    (cairo_image_surface_get_height(surf) != h))
+  if ((w_ != w) || (h_ != h))
   {
+    w_ = w; h_ = h;
+
     //
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
 
@@ -58,11 +59,11 @@ void CairoWidget::draw()
 
     //
     cairo_destroy(cr);
-    cr_ = cr = cairo_create(surf_ = surf =
+    cr_ = cr = cairo_create(surf_ =
       cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
       w, h, stride));
-    cairo_surface_destroy(surf);
-    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
+    cairo_surface_destroy(surf_);
+    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf_));
     assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
 
     //
