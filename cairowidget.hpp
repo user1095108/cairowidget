@@ -17,8 +17,8 @@ class CairoWidget: public Fl_Widget
   cairo_t* cr_;
   cairo_surface_t* surf_;
 
-  int w_;
-  int h_;
+  int w_{};
+  int h_{};
 
   int pixels_;
 

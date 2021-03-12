@@ -39,7 +39,7 @@ void CairoWidget::draw()
   auto const w(this->w()), h(this->h());
 
   auto cr(cr_);
-  
+
   if ((w_ != w) || (h_ != h))
   {
     w_ = w; h_ = h;
