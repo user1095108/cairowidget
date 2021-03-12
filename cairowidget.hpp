@@ -16,8 +16,7 @@ class CairoWidget: public Fl_Widget
 
   cairo_t* cr_;
 
-  int w_{};
-  int h_{};
+  int w_{}, h_{};
 
   int pixels_;
 
