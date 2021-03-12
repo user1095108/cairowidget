@@ -42,19 +42,20 @@ void CairoWidget::draw()
     cairo_destroy(cr);
 
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
+    pixelcount_ = h * stride / 4;
 
-    if (auto const newsize(h * stride); size_ < newsize)
+    if (auto const newsize(h * stride); buffersize_ < newsize)
     {
-      data_.reset(new unsigned char[size_ = newsize]);
+      data_.reset(new unsigned char[buffersize_ = newsize]);
     }
 
     // generate a cairo context
     cr_ = cr = cairo_create(surf_ = surf =
       cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
       w, h, stride));
+    cairo_surface_destroy(surf);
     assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
     assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
-    cairo_surface_destroy(surf);
 
     //
     i_(cr, w, h);
@@ -73,7 +74,7 @@ void CairoWidget::draw()
   auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
-  std::transform(std::execution::unseq, src, src + size_ / 4, src,
+  std::transform(std::execution::unseq, src, src + pixelcount_, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
   //cairo_surface_mark_dirty(surf_);
