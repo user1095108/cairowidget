@@ -56,7 +56,7 @@ void CairoWidget::draw()
       }
     }
 
-    // generate a cairo context
+    //
     cairo_destroy(cr);
     cr_ = cr = cairo_create(surf_ = surf =
       cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
@@ -76,7 +76,7 @@ void CairoWidget::draw()
 
   cairo_restore(cr);
 
-  // shuffle the entire surface at once
+  //
   //cairo_surface_flush(surf_);
 
   auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
