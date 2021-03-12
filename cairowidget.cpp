@@ -35,11 +35,11 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto const w(this->w()), h(this->h());
-
   auto cr(cr_);
 
   auto d(data_.get());
+
+  auto const w(this->w()), h(this->h());
 
   if ((w_ != w) || (h_ != h))
   {
