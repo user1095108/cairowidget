@@ -42,9 +42,11 @@ void CairoWidget::draw()
     cairo_destroy(cr);
 
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
-    pixelcount_ = h * stride / 4;
+    auto const newsize(h * stride);
 
-    if (auto const newsize(h * stride); buffersize_ < newsize)
+    pixelcount_ = newsize / 4;
+
+    if (buffersize_ < newsize)
     {
       data_.reset(new unsigned char[buffersize_ = newsize]);
     }
