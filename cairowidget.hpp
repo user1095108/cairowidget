@@ -8,6 +8,8 @@
 
 #include <functional>
 
+#include <memory>
+
 class CairoWidget: public Fl_Widget
 {
   struct S;
@@ -15,7 +17,9 @@ class CairoWidget: public Fl_Widget
   cairo_t* cr_;
   cairo_surface_t* surf_;
 
-  std::size_t size_{};
+  std::unique_ptr<unsigned char[]> data_;
+
+  int size_{};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
   draw_t d_{[](cairo_t*, int, int) noexcept {}};

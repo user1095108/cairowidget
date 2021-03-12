@@ -1,5 +1,7 @@
 #include "FL/fl_draw.H"
 
+#include <iostream>
+
 #include <cassert>
 
 #include <algorithm>
@@ -29,48 +31,52 @@ CairoWidget::~CairoWidget()
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto const ww(w()), wh(h());
+  auto const w(this->w()), h(this->h());
 
   auto cr(cr_);
-  auto surf(surf_);
-
-  if ((cairo_image_surface_get_width(surf) != ww) ||
-    (cairo_image_surface_get_height(surf) != wh))
+  
+  if (auto surf(surf_); (cairo_image_surface_get_width(surf) != w) ||
+    (cairo_image_surface_get_height(surf) != h))
   {
     // cr invalidated or not existing
     cairo_destroy(cr);
 
+    auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
+
+    if (auto const newsize(h * stride); size_ < newsize)
+    {
+      data_.reset(new unsigned char[size_ = newsize]);
+    }
+
     // generate a cairo context
     cr_ = cr = cairo_create(surf_ = surf =
-      cairo_image_surface_create(CAIRO_FORMAT_RGB24, ww, wh));
+      cairo_image_surface_create_for_data(data_.get(), CAIRO_FORMAT_RGB24,
+      w, h, stride));
     assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
     assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
     cairo_surface_destroy(surf);
 
-    size_ = std::size_t(cairo_image_surface_get_stride(surf)) * wh / 4;
-
     //
-    i_(cr, ww, wh);
+    i_(cr, w, h);
   }
 
   //
   cairo_save(cr);
 
-  d_(cr, ww, wh);
+  d_(cr, w, h);
 
   cairo_restore(cr);
 
   // shuffle the entire surface at once
-  //cairo_surface_flush(surf);
+  //cairo_surface_flush(surf_);
 
-  auto const src(reinterpret_cast<std::uint32_t*>(
-    cairo_image_surface_get_data(surf)));
+  auto const src(reinterpret_cast<std::uint32_t*>(data_.get()));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
-  std::transform(std::execution::unseq, src, src + size_, src,
+  std::transform(std::execution::unseq, src, src + size_ / 4, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
-  //cairo_surface_mark_dirty(surf);
+  //cairo_surface_mark_dirty(surf_);
 
-  fl_draw_image(reinterpret_cast<uchar*>(src), x(), y(), ww, wh, 4);
+  fl_draw_image(reinterpret_cast<uchar*>(src), x(), y(), w, h, 4);
 }
