@@ -48,7 +48,7 @@ void CairoWidget::draw()
 
     if ((w != w_) || (h != h_) || (d != d_))
     {
-      w_ = w; h_ = h; d_ = d;
+      w_ = w; h_ = h;
 
       //
       auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
@@ -58,9 +58,11 @@ void CairoWidget::draw()
 
         if (pixels_ = datasize / 4; S::datasize_ < datasize)
         {
-          S::data_.reset(d_ = d = new unsigned char[S::datasize_ = datasize]);
+          S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
         }
       }
+
+      d_ = d;
 
       //
       cairo_destroy(cr);
