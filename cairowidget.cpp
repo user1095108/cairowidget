@@ -46,7 +46,7 @@ void CairoWidget::draw()
   {
     auto cr(cr_);
 
-    if ((w != w_) || (h != h_))
+    if ((w != w_) || (h != h_) || (cairo_image_surface_get_data(surf_) != d))
     {
       w_ = w; h_ = h;
 
@@ -67,7 +67,7 @@ void CairoWidget::draw()
 
       auto const surf(cairo_image_surface_create_for_data(d,
         CAIRO_FORMAT_RGB24, w, h, stride));
-      cr_ = cr = cairo_create(surf);
+      cr_ = cr = cairo_create(surf_ = surf);
       cairo_surface_destroy(surf);
 
       //

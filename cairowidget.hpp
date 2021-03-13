@@ -13,6 +13,7 @@ class CairoWidget: public Fl_Widget
   struct S;
 
   cairo_t* cr_{};
+  cairo_surface_t* surf_;
 
   int w_{}, h_{};
 
