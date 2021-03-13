@@ -34,7 +34,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWidget::~CairoWidget()
+CairoWidget::~CairoWidget() noexcept
 {
   cairo_destroy(cr_);
 }
