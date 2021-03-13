@@ -73,35 +73,35 @@ void Cairo_Gl_Window::draw()
     cairo_gl_surface_set_size(surf, w, h);
   }
 
+  //
+  cairo_save(cr);
+
+  d_(cr, w, h);
+
+  cairo_restore(cr);
+
+  //
+  if (children())
   {
+    //
     cairo_save(cr);
 
-    d_(cr, w, h);
+    //
+    cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
 
-    cairo_restore(cr);
+    cairo_set_line_width(cr, 1.);
+    cairo_translate(cr, .5, .5);
 
-    if (children())
-    {
-      //
-      cairo_save(cr);
+    surface_device_->set_current();
 
-      //
-      cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
+    Fl_Group::draw_children();
 
-      cairo_set_line_width(cr, 1.);
-      cairo_translate(cr, .5, .5);
-
-      surface_device_->set_current();
-
-      Fl_Group::draw_children();
-
-      Fl_Display_Device::display_device()->set_current();
-
-      //
-      cairo_restore(cr);
-    }
+    Fl_Display_Device::display_device()->set_current();
 
     //
-    cairo_surface_flush(surf);
+    cairo_restore(cr);
   }
+
+  //
+  cairo_surface_flush(surf);
 }
