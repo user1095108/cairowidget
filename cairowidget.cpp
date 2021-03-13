@@ -6,9 +6,18 @@
 
 #include <execution>
 
+#include <memory>
+
 #include "shuffler.hpp"
 
 #include "cairowidget.hpp"
+
+struct CairoWidget::S
+{
+  // all drawing is done on the main thread, hence we need a single buffer
+  static inline unsigned datasize_;
+  static inline std::unique_ptr<unsigned char[]> data_;
+};
 
 //////////////////////////////////////////////////////////////////////////////
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
@@ -35,7 +44,7 @@ void CairoWidget::draw()
 {
   auto cr(cr_);
 
-  auto d(data_.get());
+  auto d(S::data_.get());
 
   auto const w(this->w()), h(this->h());
 
@@ -47,11 +56,11 @@ void CairoWidget::draw()
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
 
     {
-      auto const datasize(h * stride);
+      unsigned const datasize(h * stride);
 
-      if (pixels_ = datasize / 4; datasize_ < datasize)
+      if (pixels_ = datasize / 4; S::datasize_ < datasize)
       {
-        data_.reset(d = new unsigned char[datasize_ = datasize]);
+        S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
       }
     }
 

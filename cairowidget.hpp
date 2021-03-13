@@ -8,18 +8,15 @@
 
 #include <functional>
 
-#include <memory>
-
 class CairoWidget: public Fl_Widget
 {
+  struct S;
+
   cairo_t* cr_{};
 
   int w_{}, h_{};
 
-  int pixels_;
-
-  std::unique_ptr<unsigned char[]> data_;
-  int datasize_{};
+  unsigned pixels_;
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
 
