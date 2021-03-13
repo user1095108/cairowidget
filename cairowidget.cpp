@@ -14,7 +14,7 @@
 
 struct CairoWidget::S
 {
-  // all drawing is done on the main thread, hence we need a single buffer
+  // all drawing is done on the main thread, hence a static pixel buffer
   static inline unsigned datasize_;
   static inline std::unique_ptr<unsigned char[]> data_;
 };
