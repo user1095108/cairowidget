@@ -13,16 +13,17 @@ class CairoWidget: public Fl_Widget
   struct S;
 
   cairo_t* cr_{};
-  cairo_surface_t* surf_;
 
   int w_{}, h_{};
+
+  unsigned char* d_;
 
   unsigned pixels_;
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
 
-  draw_t d_;
-  draw_t i_;
+  draw_t df_;
+  draw_t if_;
 
   void draw() final;
 
@@ -32,24 +33,24 @@ public:
 
   //
   template <class U>
-  void init(U&& u) noexcept(noexcept(i_ = std::forward<U>(u)))
+  void init(U&& u) noexcept(noexcept(if_ = std::forward<U>(u)))
   {
-    i_ = std::forward<U>(u);
+    if_ = std::forward<U>(u);
   }
 
   auto& draw() const noexcept;
 
   template <class U>
-  void draw(U&& u) noexcept(noexcept(d_ = std::forward<U>(u)))
+  void draw(U&& u) noexcept(noexcept(df_ = std::forward<U>(u)))
   {
-    d_ = std::forward<U>(u);
+    df_ = std::forward<U>(u);
   }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 inline auto& CairoWidget::draw() const noexcept
 {
-  return d_;
+  return df_;
 }
 
 #endif // CAIROWIDGET_HPP

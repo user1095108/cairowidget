@@ -20,8 +20,8 @@ struct CairoWidget::S
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l),
-  d_{[](cairo_t*, int, int) noexcept {}},
-  i_{[](cairo_t* const cr, int, int) noexcept
+  df_{[](cairo_t*, int, int) noexcept {}},
+  if_{[](cairo_t* const cr, int, int) noexcept
     {
       cairo_set_line_width(cr, 1.);
       cairo_translate(cr, .5, .5);
@@ -46,7 +46,7 @@ void CairoWidget::draw()
   {
     auto cr(cr_);
 
-    if ((w != w_) || (h != h_) || (cairo_image_surface_get_data(surf_) != d))
+    if ((w != w_) || (h != h_) || (d_ != d))
     {
       w_ = w; h_ = h;
 
@@ -58,7 +58,7 @@ void CairoWidget::draw()
 
         if (pixels_ = datasize / 4; S::datasize_ < datasize)
         {
-          S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
+          S::data_.reset(d_ = d = new unsigned char[S::datasize_ = datasize]);
         }
       }
 
@@ -67,17 +67,17 @@ void CairoWidget::draw()
 
       auto const surf(cairo_image_surface_create_for_data(d,
         CAIRO_FORMAT_RGB24, w, h, stride));
-      cr_ = cr = cairo_create(surf_ = surf);
+      cr_ = cr = cairo_create(surf);
       cairo_surface_destroy(surf);
 
       //
-      i_(cr, w, h);
+      if_(cr, w, h);
     }
 
     //
     cairo_save(cr);
 
-    d_(cr, w, h);
+    df_(cr, w, h);
 
     cairo_restore(cr);
   }
