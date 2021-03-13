@@ -6,7 +6,7 @@
 
 #include "cairoglwindow.hpp"
 
-struct NSVGimage* image{};
+NSVGimage* image{};
 
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
@@ -33,7 +33,7 @@ int main()
 
   win->end();
 
-  win->init([](cairo_t* const cr, int, int) noexcept
+  win->init([](auto const cr, auto, auto) noexcept
     {
       cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
     }

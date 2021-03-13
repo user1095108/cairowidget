@@ -116,7 +116,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   cairo_surface_destroy(surf);
 }
 
-struct NSVGimage* image{};
+NSVGimage* image{};
 
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
@@ -146,7 +146,7 @@ int main()
 
   win->end();
 
-  ex->init([](cairo_t* const cr, int, int) noexcept
+  ex->init([](auto const cr, auto, auto) noexcept
     {
       cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
     }
