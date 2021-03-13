@@ -121,7 +121,7 @@ struct NSVGimage* image{};
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
 {
-  cairo_set_source_rgba(cr, 220 / 255., 220 / 255., 220 / 255., 1.);
+  cairo_set_source_rgb(cr, 220 / 255., 220 / 255., 220 / 255.);
 
   cairo_paint(cr);
 
