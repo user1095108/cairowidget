@@ -56,7 +56,7 @@ void CairoWidget::draw()
     auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
 
     {
-      unsigned const datasize(h * stride);
+      auto const datasize(unsigned(h) * unsigned(stride));
 
       if (pixels_ = datasize / 4; S::datasize_ < datasize)
       {
