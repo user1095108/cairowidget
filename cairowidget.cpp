@@ -46,7 +46,7 @@ void CairoWidget::draw()
   {
     auto cr(cr_);
 
-    if ((w != w_) || (h != h_) || (d_ != d))
+    if ((w != w_) || (h != h_) || (d != d_))
     {
       w_ = w; h_ = h; d_ = d;
 
