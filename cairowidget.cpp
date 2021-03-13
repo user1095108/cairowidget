@@ -48,7 +48,7 @@ void CairoWidget::draw()
 
     if ((w != w_) || (h != h_) || (d_ != d))
     {
-      w_ = w; h_ = h;
+      w_ = w; h_ = h; d_ = d;
 
       //
       auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
