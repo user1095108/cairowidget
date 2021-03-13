@@ -1,7 +1,5 @@
 #include "FL/fl_draw.H"
 
-#include <cassert>
-
 #include <algorithm>
 
 #include <execution>
@@ -14,7 +12,6 @@
 
 struct CairoWidget::S
 {
-  // all drawing is done on the main thread, hence a static pixel buffer
   static inline std::size_t datasize_;
   static inline std::unique_ptr<unsigned char[]> data_;
 };
@@ -42,48 +39,48 @@ CairoWidget::~CairoWidget() noexcept
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto cr(cr_);
-
   auto d(S::data_.get());
 
   auto const w(this->w()), h(this->h());
 
-  if ((w != w_) || (h != h_))
   {
-    w_ = w; h_ = h;
+    auto cr(cr_);
 
-    //
-    auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
-
+    if ((w != w_) || (h != h_))
     {
-      auto const datasize(std::size_t(h) * std::size_t(stride));
+      w_ = w; h_ = h;
 
-      if (pixels_ = datasize / 4; S::datasize_ < datasize)
+      //
+      auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
+
       {
-        S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
+        auto const datasize(std::size_t(h) * std::size_t(stride));
+
+        if (pixels_ = datasize / 4; S::datasize_ < datasize)
+        {
+          S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
+        }
       }
+
+      //
+      cairo_destroy(cr);
+
+      auto const surf(cairo_image_surface_create_for_data(d,
+        CAIRO_FORMAT_RGB24, w, h, stride));
+      cr_ = cr = cairo_create(surf);
+      cairo_surface_destroy(surf);
+
+      //
+      i_(cr, w, h);
     }
 
     //
-    cairo_destroy(cr);
+    cairo_save(cr);
 
-    auto const surf(cairo_image_surface_create_for_data(d,
-      CAIRO_FORMAT_RGB24, w, h, stride));
-    assert(CAIRO_STATUS_SUCCESS == cairo_surface_status(surf));
-    cr_ = cr = cairo_create(surf);
-    assert(CAIRO_STATUS_SUCCESS == cairo_status(cr));
-    cairo_surface_destroy(surf);
+    d_(cr, w, h);
 
-    //
-    i_(cr, w, h);
+    cairo_restore(cr);
   }
-
-  //
-  cairo_save(cr);
-
-  d_(cr, w, h);
-
-  cairo_restore(cr);
 
   //
   //cairo_surface_flush(surf);
