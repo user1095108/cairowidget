@@ -116,7 +116,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   cairo_surface_destroy(surf);
 }
 
-NSVGimage* image{};
+struct NSVGimage* image{};
 
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept

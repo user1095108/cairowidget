@@ -6,7 +6,7 @@
 
 #include "cairoglwindow.hpp"
 
-NSVGimage* image{};
+struct NSVGimage* image{};
 
 //////////////////////////////////////////////////////////////////////////////
 void example(cairo_t* const cr, int const w, int const h) noexcept
