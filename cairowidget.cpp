@@ -20,8 +20,8 @@ struct CairoWidget::S
 CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
   const char* const l) :
   Fl_Widget(x, y, w, h, l),
-  df_{[](cairo_t*, int, int) noexcept {}},
-  if_{[](cairo_t* const cr, int, int) noexcept
+  df_{[](auto, auto, auto) noexcept {}},
+  if_{[](auto const cr, auto, auto) noexcept
     {
       cairo_set_line_width(cr, 1.);
       cairo_translate(cr, .5, .5);
