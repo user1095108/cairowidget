@@ -10,14 +10,7 @@
 //////////////////////////////////////////////////////////////////////////////
 Cairo_Gl_Window::Cairo_Gl_Window(int const x, int const y,
   int const w, int const h, const char* const l) :
-  Fl_Gl_Window(x, y, w, h, l),
-  d_{[](cairo_t*, int, int) noexcept {}},
-  i_{[](cairo_t* const cr, int, int) noexcept
-    {
-      cairo_set_line_width(cr, 1.);
-      cairo_translate(cr, .5, .5);
-    }
-  }
+  Fl_Gl_Window(x, y, w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);
   Fl_Group::current(this);

@@ -21,8 +21,13 @@ class Cairo_Gl_Window: public Fl_Gl_Window
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
 
-  draw_t d_;
-  draw_t i_;
+  draw_t d_{[](auto, auto, auto) noexcept {}};
+  draw_t i_{[](auto const cr, auto, auto) noexcept
+      {
+        cairo_set_line_width(cr, 1.);
+        cairo_translate(cr, .5, .5);
+      }
+    };
 
   void draw() final;
 
