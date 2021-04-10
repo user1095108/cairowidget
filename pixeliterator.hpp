@@ -35,7 +35,7 @@ public:
   // arithmetic
   auto operator-(pixel_iterator const other) const noexcept
   {
-    return (ptr_ - other.ptr_) / N;
+    return difference_type(ptr_ - other.ptr_) / N;
   }
 
   auto operator+(std::size_t const M) const noexcept
