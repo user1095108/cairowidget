@@ -65,15 +65,15 @@ public:
   }
 
   // member access
+  auto& operator[](std::size_t const I) const noexcept
+  {
+    return *(*this + I);
+  }
+
   auto& operator*() const noexcept
   {
     return *const_cast<pointer>(reinterpret_cast<value_type const*>(
       std::addressof(*ptr_)));
-  }
-
-  auto& operator[](std::size_t const I) const noexcept
-  {
-    return *(*this + I);
   }
 };
 
