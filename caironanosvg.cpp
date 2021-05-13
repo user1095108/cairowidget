@@ -2,10 +2,6 @@
 
 #include <cassert>
 
-#include <algorithm>
-
-#include <execution>
-
 #include <iterator>
 
 #include <array>
@@ -280,40 +276,4 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   }
 
   cairo_restore(cr);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void draw_svg_image(Fl_Image* const fli, struct NSVGimage* const image,
-  double const x, double const y) noexcept
-{
-  assert(4 == fli->d()); // we are converting icons, hence 4 channels
-
-  auto const w(fli->w()), h(fli->h());
-  assert(w && h);
-
-  auto const surf(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h));
-  auto const cr(cairo_create(surf));
-  cairo_surface_destroy(surf);
-
-  // draw svg onto surface
-  cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-
-  draw_svg_image(cr, image, x, y, w, h);
-
-  //
-  //cairo_surface_flush(surf);
-
-  auto const src(reinterpret_cast<std::uint32_t const*>(
-    cairo_image_surface_get_data(surf)));
-
-  // ARGB -> RGBA (selects bytes and places them MSB -> LSB)
-  std::transform(std::execution::unseq,
-    src, src + std::size_t(cairo_image_surface_get_stride(surf)) * h / 4,
-    reinterpret_cast<std::uint32_t*>(const_cast<char*>(fli->data()[0])),
-    (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0, 3>));
-
-  //cairo_surface_mark_dirty(surf);
-
-  //
-  cairo_destroy(cr);
 }
