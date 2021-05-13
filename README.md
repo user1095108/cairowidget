@@ -10,5 +10,7 @@ I also explored support for cairo's OpenGL backend (`Cairo_Gl_Window`). This cou
 
 or
 
+    git submodule init
+    git submodule update
     qmake
     make
