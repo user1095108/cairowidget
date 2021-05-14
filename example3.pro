@@ -23,3 +23,16 @@ SOURCES += caironanosvg.cpp \
            CairoWidget.cpp \
            example3.cpp
 LIBS += -lcairo
+
+*-g++* {
+  QMAKE_CFLAGS = -Wall -Wextra -fno-stack-protector -fno-plt
+  QMAKE_CXXFLAGS = $$QMAKE_CFLAGS
+
+  unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
+  unix:QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
+
+  QMAKE_CFLAGS_RELEASE *= -DNDEBUG
+  QMAKE_CXXFLAGS_RELEASE *= -Ofast -DQT_NO_DEBUG_OUTPUT -DNDEBUG
+
+  QMAKE_LFLAGS *= -fno-stack-protector -fuse-ld=gold
+}
