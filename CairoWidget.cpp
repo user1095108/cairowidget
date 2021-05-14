@@ -34,7 +34,7 @@ void CairoWidget::paintEvent(QPaintEvent*)
 {
   auto d(S::data_.get());
 
-  auto const w(this->width()), h(this->height());
+  auto const w(width()), h(height());
 
   {
     auto cr(cr_);
