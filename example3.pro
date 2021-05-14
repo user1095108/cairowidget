@@ -8,6 +8,12 @@ CONFIG -= c++11 c++14 exceptions rtti
 QT += widgets
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
+DEFINES +=                 \
+  QT_USE_FAST_CONCATENATION\
+  QT_USE_FAST_OPERATOR_PLUS\
+  QT_NO_CAST_FROM_ASCII    \
+  QT_NO_CAST_TO_ASCII      \
+  QT_NO_CAST_FROM_BYTEARRAY
 
 # Input
 HEADERS += caironanosvg.hpp \
