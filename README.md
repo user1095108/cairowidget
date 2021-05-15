@@ -4,7 +4,7 @@ This code illustrates one possible way to use cairo in your FLTK **and** Qt proj
 
 I also explored support for cairo's OpenGL backend (`Cairo_Gl_Window`). This could make for fast renders of large interactive GUI controls, but the backend has considerable bugs. Nevertheless, should these ever be fixed, we will have the option of rendering everything through cairo.
 
-Qt markedly outperforms FLTK as regards rendering performance.
+Qt markedly outperforms FLTK in rendering performance.
 
 # build instructions
 First do:
