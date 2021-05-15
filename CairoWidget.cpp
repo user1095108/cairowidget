@@ -47,13 +47,10 @@ void CairoWidget::paintEvent(QPaintEvent*)
       auto const stride(stride_ =
         cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, w));
 
+      if (auto const datasize(h * std::size_t(stride));
+        S::datasize_ < datasize)
       {
-        auto const datasize(h * std::size_t(stride));
-
-        if (S::datasize_ < datasize)
-        {
-          S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
-        }
+        S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
       }
 
       d_ = d;
