@@ -73,11 +73,10 @@ void CairoWidget::paintEvent(QPaintEvent*)
     df_(cr, w, h);
 
     cairo_restore(cr);
+    //cairo_surface_flush(surf);
   }
 
   //
-  //cairo_surface_flush(surf);
-
   QPainter painter(this);
 
   painter.setCompositionMode(QPainter::CompositionMode_Source);
