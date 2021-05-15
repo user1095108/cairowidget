@@ -84,9 +84,9 @@ void CairoWidget::draw()
     cairo_restore(cr);
   }
 
-  //
   //cairo_surface_flush(surf);
 
+  //
   auto const src(reinterpret_cast<std::uint32_t*>(d));
 
   // ARGB -> RGBx (selects bytes and places them MSB -> LSB),
