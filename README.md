@@ -9,7 +9,7 @@ First do:
     git submodule init
     git submodule update
 
-then:
+then
 
     g++ -std=c++2a -Ofast -I./nanosvg/src example1.cpp cairowidget.cpp caironanosvg.cpp -o example1 -lfltk -lcairo
 
