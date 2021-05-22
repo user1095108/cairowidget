@@ -25,7 +25,7 @@ SOURCES += caironanosvg.cpp \
 LIBS += -lcairo
 
 *-g++* {
-  QMAKE_CFLAGS = -Wall -Wextra -fno-stack-protector -fno-plt
+  QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
   QMAKE_CXXFLAGS = $$QMAKE_CFLAGS
 
   unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
