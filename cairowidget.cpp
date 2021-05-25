@@ -1,5 +1,7 @@
 #include "FL/fl_draw.H"
 
+#include "cairo/cairo.h"
+
 #include <algorithm>
 
 #include <execution>
@@ -12,7 +14,7 @@
 
 struct CairoWidget::S
 {
-  static inline std::size_t datasize_;
+  static inline std::size_t size_;
   static inline std::unique_ptr<unsigned char[]> data_;
 };
 
@@ -54,11 +56,11 @@ void CairoWidget::draw()
       auto const stride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, w));
 
       {
-        auto const datasize(h * std::size_t(stride));
+        auto const size(h * std::size_t(stride));
 
-        if (pixels_ = datasize / 4; S::datasize_ < datasize)
+        if (pixels_ = size / 4; S::size_ < size)
         {
-          S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
+          S::data_.reset(d = new unsigned char[S::size_ = size]);
         }
       }
 

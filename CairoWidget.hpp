@@ -4,15 +4,15 @@
 
 #include <QWidget>
 
-#include "cairo/cairo.h"
-
 #include <functional>
+
+struct _cairo;
 
 class CairoWidget: public QWidget
 {
   struct S;
 
-  cairo_t* cr_{};
+  _cairo* cr_{};
 
   int w_{}, h_;
 

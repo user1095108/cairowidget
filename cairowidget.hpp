@@ -2,17 +2,17 @@
 # define CAIROWIDGET_HPP
 # pragma once
 
-#include "cairo/cairo.h"
-
 #include "FL/Fl_Widget.H"
 
 #include <functional>
+
+struct _cairo;
 
 class CairoWidget: public Fl_Widget
 {
   struct S;
 
-  cairo_t* cr_{};
+  _cairo* cr_{};
 
   int w_{}, h_;
 

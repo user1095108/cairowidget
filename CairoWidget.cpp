@@ -1,13 +1,14 @@
-#include <memory>
-
 #include <QPainter>
+#include <QScopedArrayPointer>
+
+#include "cairo/cairo.h"
 
 #include "CairoWidget.hpp"
 
 struct CairoWidget::S
 {
-  static inline std::size_t datasize_;
-  static inline std::unique_ptr<unsigned char[]> data_;
+  static inline std::size_t size_;
+  static inline QScopedArrayPointer<unsigned char> data_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -47,10 +48,9 @@ void CairoWidget::paintEvent(QPaintEvent*)
       auto const stride(stride_ =
         cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, w));
 
-      if (auto const datasize(h * std::size_t(stride));
-        S::datasize_ < datasize)
+      if (auto const size(h * std::size_t(stride)); S::size_ < size)
       {
-        S::data_.reset(d = new unsigned char[S::datasize_ = datasize]);
+        S::data_.reset(d = new unsigned char[S::size_ = size]);
       }
 
       d_ = d;
