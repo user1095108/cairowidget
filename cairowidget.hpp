@@ -20,7 +20,7 @@ class CairoWidget: public Fl_Widget
 
   unsigned pixels_;
 
-  using draw_t = std::function<void(cairo_t*, int, int)>;
+  using draw_t = std::function<void(_cairo*, int, int)>;
 
   draw_t df_;
   draw_t if_;
