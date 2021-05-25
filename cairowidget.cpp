@@ -2,8 +2,6 @@
 
 #include "cairo/cairo.h"
 
-#include <algorithm>
-
 #include <execution>
 
 #include <memory>
