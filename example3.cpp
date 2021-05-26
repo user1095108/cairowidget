@@ -26,8 +26,7 @@ class MyWidget: public CairoWidget
 
     draw([&](cairo_t* const cr, int const w, int const h)
       {
-        cairo_set_source_rgba(cr, .0, .0, .0, .0);
-        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
         cairo_paint(cr);
 
         if (image_)
