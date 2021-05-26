@@ -5,13 +5,13 @@
 
 #include "CairoWidget.hpp"
 
-class MyWidget: public CairoWidget
+class MyWidget final: public CairoWidget
 {
   struct NSVGimage* image_{};
   QPoint p_;
 
   public:
-  explicit MyWidget() :
+  explicit MyWidget():
     CairoWidget(nullptr, Qt::FramelessWindowHint)
   {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -40,7 +40,7 @@ class MyWidget: public CairoWidget
   }
 
   private:
-  void mouseMoveEvent(QMouseEvent* const e)
+  void mouseMoveEvent(QMouseEvent* const e) final
   {
     if (Qt::LeftButton & e->buttons())
     {
@@ -48,7 +48,7 @@ class MyWidget: public CairoWidget
     }
   }
 
-  void mousePressEvent(QMouseEvent* const e)
+  void mousePressEvent(QMouseEvent* const e) final
   {
     if (Qt::LeftButton == e->button())
     {
