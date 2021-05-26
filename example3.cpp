@@ -11,7 +11,7 @@ class MyWidget final: public CairoWidget
   struct NSVGimage* image_{};
   QPoint p_;
 
-  public:
+public:
   explicit MyWidget():
     CairoWidget(nullptr, Qt::FramelessWindowHint)
   {
@@ -40,7 +40,7 @@ class MyWidget final: public CairoWidget
     );
   }
 
-  private:
+private:
   void mouseMoveEvent(QMouseEvent* const e) final
   {
     if (Qt::LeftButton & e->buttons())
@@ -57,7 +57,7 @@ class MyWidget final: public CairoWidget
     }
   }
 
-  /*
+/*
   void resizeEvent(QResizeEvent*) final
   {
     clearMask();
@@ -65,7 +65,7 @@ class MyWidget final: public CairoWidget
     render(&image);
     setMask(QBitmap::fromImage(image.createMaskFromColor(qRgba(0, 0, 0, 0))));
   }
-  */
+*/
 };
 
 //////////////////////////////////////////////////////////////////////////////
