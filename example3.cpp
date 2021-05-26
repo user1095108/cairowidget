@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QBitmap>
 #include <QMouseEvent>
 
 #include "caironanosvg.hpp"
@@ -55,6 +56,16 @@ class MyWidget final: public CairoWidget
       p_ = pos() - e->globalPos();
     }
   }
+
+  /*
+  void resizeEvent(QResizeEvent*) final
+  {
+    clearMask();
+    QImage image(size(), QImage::Format_ARGB32_Premultiplied);
+    render(&image);
+    setMask(QBitmap::fromImage(image.createAlphaMask()));
+  }
+  */
 };
 
 //////////////////////////////////////////////////////////////////////////////
