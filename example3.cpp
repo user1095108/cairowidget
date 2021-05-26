@@ -1,41 +1,69 @@
 #include <QApplication>
+#include <QMouseEvent>
 
 #include "caironanosvg.hpp"
 
 #include "CairoWidget.hpp"
 
-struct NSVGimage* image{};
-
-//////////////////////////////////////////////////////////////////////////////
-void example(cairo_t* const cr, int const w, int const h) noexcept
+class MyWidget: public CairoWidget
 {
-  cairo_set_source_rgb(cr, 220 / 255., 220 / 255., 220 / 255.);
+  struct NSVGimage* image_{};
+  QPoint p_;
 
-  cairo_paint(cr);
-
-  if (image)
+  public:
+  explicit MyWidget() :
+    CairoWidget(nullptr, Qt::FramelessWindowHint)
   {
-    draw_svg_image(cr, image, 0, 0, w, h);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    image_ = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
+
+    init([](auto const cr, auto, auto) noexcept
+      {
+        cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+      }
+    );
+
+    draw([&](cairo_t* const cr, int const w, int const h)
+      {
+        cairo_set_source_rgba(cr, .0, .0, .0, .0);
+        cairo_paint(cr);
+
+        if (image_)
+        {
+          cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+
+          draw_svg_image(cr, image_, 0, 0, w, h);
+        }
+      }
+    );
   }
-}
+
+  private:
+  void mouseMoveEvent(QMouseEvent* const e)
+  {
+    if (Qt::LeftButton & e->buttons())
+    {
+      move(e->globalPos() + p_);
+    }
+  }
+
+  void mousePressEvent(QMouseEvent* const e)
+  {
+    if (Qt::LeftButton == e->button())
+    {
+      p_ = pos() - e->globalPos();
+    }
+  }
+};
 
 //////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
-  image = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
-
   QApplication app(argc, argv);
 
-  CairoWidget w;
-
-  w.init([](auto const cr, auto, auto) noexcept
-    {
-      cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-    }
-  );
-
-  w.draw(example);
-
+  MyWidget w;
   w.show();
 
   return app.exec();
