@@ -21,13 +21,13 @@ class MyWidget: public CairoWidget
     init([](auto const cr, auto, auto) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
       }
     );
 
     draw([&](cairo_t* const cr, int const w, int const h)
       {
         cairo_set_source_rgba(cr, .0, .0, .0, .0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
 
         if (image_)
