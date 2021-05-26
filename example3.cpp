@@ -61,9 +61,9 @@ class MyWidget final: public CairoWidget
   void resizeEvent(QResizeEvent*) final
   {
     clearMask();
-    QImage image(size(), QImage::Format_ARGB32_Premultiplied);
+    QImage image(size(), QImage::Format_Alpha8);
     render(&image);
-    setMask(QBitmap::fromImage(image.createAlphaMask()));
+    setMask(QBitmap::fromImage(image.createMaskFromColor(qRgba(0, 0, 0, 0))));
   }
   */
 };
