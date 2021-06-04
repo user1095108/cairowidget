@@ -53,7 +53,7 @@ private:
   {
     if (Qt::LeftButton == e->button())
     {
-      p_ = pos() - e->globalPos();
+      p_ = -e->pos();
     }
   }
 
