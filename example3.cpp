@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QBitmap>
+#include <QCursor>
 #include <QMouseEvent>
 
 #include "caironanosvg.hpp"
@@ -45,7 +46,7 @@ private:
   {
     if (Qt::LeftButton & e->buttons())
     {
-      move(e->globalPos() + p_);
+      move(QCursor::pos() + p_);
     }
   }
 
