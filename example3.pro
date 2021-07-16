@@ -25,7 +25,6 @@ LIBS += -lcairo
 
 *-g++* {
   QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
-  QMAKE_CXXFLAGS = $$QMAKE_CFLAGS
 
   unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
   unix:QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
