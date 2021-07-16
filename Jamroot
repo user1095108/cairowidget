@@ -6,7 +6,7 @@ project fchart
     <define>_GLIBCXX_USE_TBB_PAR_BACKEND=0
     <variant>release:<define>NDEBUG
     <variant>release:<cflags>"-march=native -Ofast -fno-plt -fno-stack-protector -Wall -Wextra -g"
-    <variant>release:<cxxflags>"-std=c++20 -fno-rtti"
+    <variant>release:<cxxflags>"-std=c++20 -fno-rtti -fno-exceptions"
     <variant>release:<linkflags>"-fuse-ld=gold"
     <variant>debug:<cflags>"-Wall -Wextra -fno-omit-frame-pointer -fno-stack-protector -fsanitize=address,undefined"
     <variant>debug:<cxxflags>"-std=c++20"
@@ -36,8 +36,7 @@ exe example1
     example1.cpp
     cairo/<link>shared
     fltk/<link>shared
-  : <define>TBB_USE_EXCEPTIONS=0
-    <link>static
+  : <link>static
     <threading>multi
   ;
 
