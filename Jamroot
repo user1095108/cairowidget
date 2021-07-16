@@ -2,8 +2,6 @@ import pch ;
 
 project fchart
   : requirements
-    <include>./
-    <include>./nanosvg/src
     <define>TBB_USE_EXCEPTIONS=0
     <define>_GLIBCXX_USE_TBB_PAR_BACKEND=0
     <variant>release:<define>NDEBUG

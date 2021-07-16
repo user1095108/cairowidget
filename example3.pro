@@ -1,6 +1,5 @@
 TEMPLATE = app
 TARGET = example3
-INCLUDEPATH += . nanosvg/src
 
 CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++
 CONFIG -= c++11 c++14 exceptions rtti
