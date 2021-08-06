@@ -76,10 +76,12 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
       {
         case NSVG_FILLRULE_NONZERO:
           cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
+
           break;
 
         case NSVG_FILLRULE_EVENODD:
           cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+
           break;
 
         default:
@@ -116,8 +118,8 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
             auto& g(*shape->fill.gradient);
 
             auto const t(inverse(g.xform));
-
             auto const r(t[0]);
+
             pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, 0.,
               t[4], t[5], r);
 
@@ -136,14 +138,17 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
       {
         case NSVG_SPREAD_PAD:
           cairo_pattern_set_extend(pat, CAIRO_EXTEND_PAD);
+
           break;
 
         case NSVG_SPREAD_REFLECT:
           cairo_pattern_set_extend(pat, CAIRO_EXTEND_REFLECT);
+
           break;
 
         case NSVG_SPREAD_REPEAT:
           cairo_pattern_set_extend(pat, CAIRO_EXTEND_REPEAT);
+
           break;
 
         default:
@@ -153,7 +158,7 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
       {
         auto const ns(g.nstops);
 
-        for (int i{}; ns != i; ++i)
+        for (decltype(g.nstops) i{}; ns != i; ++i)
         {
           auto& stop(g.stops[i]);
 
@@ -186,8 +191,7 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
     case NSVG_PAINT_COLOR:
       {
         auto const c(to_rgba(shape->stroke.color));
-        cairo_set_source_rgba(cr, c[0], c[1], c[2],
-          shape->opacity * c[3]);
+        cairo_set_source_rgba(cr, c[0], c[1], c[2], shape->opacity * c[3]);
       }
 
       if (auto const count(shape->strokeDashCount); count)
@@ -206,14 +210,17 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
       {
         case NSVG_CAP_BUTT:
           cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
+
           break;
 
         case NSVG_CAP_ROUND:
           cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
+
           break;
 
         case NSVG_CAP_SQUARE:
           cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
+
           break;
 
         default:
@@ -225,14 +232,17 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
         case NSVG_JOIN_MITER:
           cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
           cairo_set_miter_limit(cr, shape->miterLimit);
+
           break;
 
         case NSVG_JOIN_ROUND:
           cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
+
           break;
 
         case NSVG_JOIN_BEVEL:
           cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL);
+
           break;
 
         default:
