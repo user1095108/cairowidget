@@ -1,15 +1,21 @@
-#include "FL/Fl_Image.H"
-
 #include <cassert>
 
-#include <iterator>
+#include <cstring>
 
 #include <array>
 
-#include "shuffler.hpp"
+#include <string_view>
+
+#include <iterator>
+
+#include "cairo/cairo.h"
 
 #define NANOSVG_ALL_COLOR_KEYWORDS
 #define NANOSVG_IMPLEMENTATION
+#include "nanosvg/src/nanosvg.h"
+
+#include "shuffler.hpp"
+
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -286,4 +292,29 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   }
 
   cairo_restore(cr);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+inline auto find_svg_shape(struct NSVGimage* const image,
+  std::string_view const& name) noexcept
+{
+  for (auto shape(image->shapes); shape; shape = shape->next)
+  {
+    if (!std::strncmp(shape->id, name.data(), name.size()))
+    {
+      return shape;
+    }
+  }
+
+  return static_cast<struct NSVGshape*>(nullptr);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void draw_svg_shape(cairo_t* const cr, struct NSVGimage* const image, 
+  std::string_view const& name) noexcept
+{
+  if (auto const shape(find_svg_shape(image, name)); shape)
+  {
+    draw_svg_shape(cr, shape);
+  }
 }
