@@ -1,16 +1,20 @@
+#include <bit>
+
+#include <execution>
+
 #include "FL/Fl.H"
 
 #include "FL/Fl_Box.H"
 #include "FL/Fl_Double_Window.H"
 #include "FL/Fl_Image_Surface.H"
 
+#include "cairo/cairo.h"
+
 #include "cairo/cairo-pdf.h"
 #include "cairo/cairo-ps.h"
 #include "cairo/cairo-svg.h"
 
-#include <bit>
-
-#include <execution>
+#include "nanosvg/src/nanosvg.h"
 
 #include "pixeliterator.hpp"
 

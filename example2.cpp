@@ -2,6 +2,10 @@
 
 #include "Fl/Fl_Box.h"
 
+#include "cairo/cairo.h"
+
+#include "nanosvg/src/nanosvg.h"
+
 #include "caironanosvg.hpp"
 
 #include "cairoglwindow.hpp"
