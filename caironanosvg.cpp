@@ -1,12 +1,9 @@
 #include <cassert>
-
 #include <cstring>
 
 #include <array>
-
-#include <string_view>
-
 #include <iterator>
+#include <string_view>
 
 #include "cairo/cairo.h"
 
