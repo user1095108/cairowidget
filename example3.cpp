@@ -3,6 +3,10 @@
 #include <QCursor>
 #include <QMouseEvent>
 
+#include "cairo/cairo.h"
+
+#include "nanosvg/src/nanosvg.h"
+
 #include "caironanosvg.hpp"
 
 #include "CairoWidget.hpp"
