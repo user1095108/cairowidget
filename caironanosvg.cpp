@@ -16,7 +16,7 @@
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-constexpr auto to_rgba(unsigned int const c) noexcept
+inline auto to_rgba(unsigned int const c) noexcept
 {
   return std::array<double, 4>{
     (c & 0xff) / 255.,
