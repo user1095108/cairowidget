@@ -39,7 +39,7 @@ inline auto inverse(float const* const t) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
+void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 {
   cairo_new_path(cr);
 
