@@ -265,6 +265,26 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
+  double const w, double const h)
+{
+  {
+    auto const sm(std::min(w / image->width, h / image->height));
+
+    cairo_scale(cr, sm, sm);
+
+    cairo_translate(cr, .5 * (w - sm * image->width),
+      .5 * (h - sm * image->height));
+  }
+
+  // draw shapes
+  for (auto shape(image->shapes); shape; shape = shape->next)
+  {
+    draw_svg_shape(cr, shape);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   double const x, double const y, double const w, double const h)
 {
   cairo_save(cr);
@@ -290,29 +310,6 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   }
 
   cairo_restore(cr);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
-  double const w, double const h)
-{
-  {
-    auto const sm(std::min(w / image->width, h / image->height));
-
-    cairo_scale(cr, sm, sm);
-
-    cairo_translate(cr, .5 * (w - sm * image->width),
-      .5 * (h - sm * image->height));
-  }
-
-  // draw shapes
-  for (auto shape(image->shapes); shape; shape = shape->next)
-  {
-    if (NSVG_FLAGS_VISIBLE & shape->flags)
-    {
-      draw_svg_shape(cr, shape);
-    }
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
