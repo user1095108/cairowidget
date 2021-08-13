@@ -9,8 +9,7 @@ Qt markedly outperforms FLTK in rendering performance.
 # build instructions
 First do:
 
-    git submodule init
-    git submodule update
+    git submodule update --recursive --init
 
 then
 
