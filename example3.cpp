@@ -39,7 +39,7 @@ public:
         {
           cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
-          draw_svg_image(cr, image_, 0, 0, w, h);
+          draw_svg_image(cr, image_, w, h);
         }
       }
     );

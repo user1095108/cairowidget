@@ -265,18 +265,17 @@ void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape) noexcept
 
 //////////////////////////////////////////////////////////////////////////////
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
-  double const x, double const y, double const w, double const h) noexcept
+  double const w, double const h)
 {
   cairo_save(cr);
 
-  cairo_translate(cr, x, y);
-
-  // preserve aspect ratio
-  if (w && h)
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
     cairo_scale(cr, sm, sm);
+
+    cairo_translate(cr, .5 * (w - sm * image->width),
+      .5 * (h - sm * image->height));
   }
 
   // draw shapes

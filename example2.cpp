@@ -21,7 +21,7 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 
   if (image)
   {
-    draw_svg_image(cr, image, 0, 40, w, h - 40);
+    draw_svg_image(cr, image, w, h - 40);
   }
 }
 
@@ -40,6 +40,7 @@ int main()
   win->init([](auto const cr, auto, auto) noexcept
     {
       cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+      cairo_translate(cr, 0, 40);
     }
   );
 
