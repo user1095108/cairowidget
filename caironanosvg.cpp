@@ -294,8 +294,6 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   double const w, double const h)
 {
-  cairo_save(cr);
-
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
@@ -313,8 +311,6 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
       draw_svg_shape(cr, shape);
     }
   }
-
-  cairo_restore(cr);
 }
 
 //////////////////////////////////////////////////////////////////////////////
