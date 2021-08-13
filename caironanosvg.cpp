@@ -269,14 +269,16 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 {
   cairo_save(cr);
 
-  cairo_translate(cr, x, y);
-
-  if (w && h)
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
     cairo_scale(cr, sm, sm);
+
+    cairo_translate(cr, .5 * (w - sm * image->width),
+      .5 * (h - sm * image->height));
   }
+
+  cairo_translate(cr, x, y);
 
   // draw shapes
   for (auto shape(image->shapes); shape; shape = shape->next)
