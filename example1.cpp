@@ -131,7 +131,7 @@ void example(cairo_t* const cr, int const w, int const h) noexcept
 
   if (image)
   {
-    draw_svg_image(cr, image, w, h);
+    draw_svg_image(cr, image, 0, 0, w, h);
   }
 }
 
