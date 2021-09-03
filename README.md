@@ -7,12 +7,8 @@ I also explored support for cairo's OpenGL backend (`Cairo_Gl_Window`). This cou
 Qt markedly outperforms FLTK in rendering performance.
 
 # build instructions
-First do:
 
-    git submodule update --recursive --init
-
-then
-
+    git submodule update --init
     g++ -std=c++2a -Ofast -I./nanosvg/src example1.cpp cairowidget.cpp caironanosvg.cpp -o example1 -lfltk -lcairo
 
 or
