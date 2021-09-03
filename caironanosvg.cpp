@@ -46,9 +46,9 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
   for (auto path(shape->paths); path; path = path->next)
   {
     {
-      //cairo_new_sub_path(cr);
       auto p(path->pts);
 
+      //cairo_new_sub_path(cr);
       cairo_move_to(cr, p[0], p[1]);
 
       auto const end(p + 2 * path->npts);
