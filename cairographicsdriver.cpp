@@ -354,9 +354,12 @@ void CairoGraphicsDriver::draw(char const* const str, int const n,
 
   auto const cr(ctx());
 
-  cairo_move_to(cr, x - .5, y - .5);
+  cairo_move_to(cr, x, y);
 
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-  cairo_show_text(cr, tmp.c_str());
+
+  cairo_text_path(ctx(), tmp.c_str());
+  cairo_fill(ctx());
+
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
 }
