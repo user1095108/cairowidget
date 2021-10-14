@@ -350,16 +350,14 @@ double CairoGraphicsDriver::width(char const* const str, int const n)
 void CairoGraphicsDriver::draw(char const* const str, int const n,
   int const x, int const y)
 {
-  std::string const tmp(str, n);
-
   auto const cr(ctx());
 
   cairo_move_to(cr, x, y);
 
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
-  cairo_text_path(ctx(), tmp.c_str());
-  cairo_fill(ctx());
+  cairo_text_path(cr, std::string(str, n).c_str());
+  cairo_fill(cr);
 
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
 }
