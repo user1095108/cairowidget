@@ -322,16 +322,21 @@ void CairoGraphicsDriver::font(Fl_Font const face, Fl_Fontsize const fsize)
 {
   Fl_Graphics_Driver::font(face, fsize);
 
+  //
   int attrs;
   Fl::get_font_name(face, &attrs);
 
+  //
   auto const cr(ctx());
 
-  cairo_select_font_face(cr,
+  cairo_select_font_face(
+    cr,
     Fl::get_font(face),
     attrs & FL_ITALIC ? CAIRO_FONT_SLANT_ITALIC : CAIRO_FONT_SLANT_NORMAL,
-    attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL);
+    attrs & FL_BOLD ? CAIRO_FONT_WEIGHT_BOLD : CAIRO_FONT_WEIGHT_NORMAL
+  );
   cairo_set_font_size(cr, fsize);
+
   cairo_font_extents(cr, &cfe_);
 }
 
