@@ -2,7 +2,6 @@ TEMPLATE = app
 TARGET = example3
 
 CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++
-CONFIG -= c++11 c++14 exceptions rtti
 
 QT += widgets
 
@@ -23,11 +22,11 @@ SOURCES += caironanosvg.cpp \
            example3.cpp
 LIBS += -lcairo
 
-*-g++* {
+unix:*-g++* {
   QMAKE_CFLAGS = -pedantic -Wall -Wextra -fno-stack-protector -fno-plt
 
-  unix:QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
-  unix:QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
+  QMAKE_CXXFLAGS_DEBUG *= -fsanitize=address,undefined
+  QMAKE_LFLAGS_DEBUG *= -fsanitize=address,undefined
 
   QMAKE_CFLAGS_RELEASE *= -DNDEBUG
   QMAKE_CXXFLAGS_RELEASE *= -Ofast -DQT_NO_DEBUG_OUTPUT -DNDEBUG
