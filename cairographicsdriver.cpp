@@ -343,10 +343,8 @@ void CairoGraphicsDriver::font(Fl_Font const face, Fl_Fontsize const fsize)
 //////////////////////////////////////////////////////////////////////////////
 double CairoGraphicsDriver::width(char const* const str, int const n)
 {
-  std::string const tmp(str, n);
-
   cairo_text_extents_t cte;
-  cairo_text_extents(ctx(), tmp.c_str(), &cte);
+  cairo_text_extents(ctx(), std::string(str, n).c_str(), &cte);
 
   return cte.width;
 }
