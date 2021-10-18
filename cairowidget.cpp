@@ -62,7 +62,7 @@ void CairoWidget::draw()
         }
       }
 
-      d_ = d;
+      d_ = d; // multiple instances
 
       //
       cairo_destroy(cr);
