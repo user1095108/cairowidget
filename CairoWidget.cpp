@@ -53,7 +53,7 @@ void CairoWidget::paintEvent(QPaintEvent*)
         S::data_.reset(d = new unsigned char[S::size_ = size]);
       }
 
-      d_ = d;
+      d_ = d; // multiple instances
 
       //
       cairo_destroy(cr);
