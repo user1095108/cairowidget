@@ -270,10 +270,12 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
+    cairo_translate(
+      cr,
+      .5 * (w - sm * image->width),
+      .5 * (h - sm * image->height)
+    );
     cairo_scale(cr, sm, sm);
-
-    cairo_translate(cr, .5 * (w - sm * image->width),
-      .5 * (h - sm * image->height));
   }
 
   // draw shapes
@@ -292,10 +294,12 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
   {
     auto const sm(std::min(w / image->width, h / image->height));
 
+    cairo_translate(
+      cr,
+      x + .5 * (w - sm * image->width),
+      y + .5 * (h - sm * image->height)
+    );
     cairo_scale(cr, sm, sm);
-
-    cairo_translate(cr, x + .5 * (w - sm * image->width),
-      y + .5 * (h - sm * image->height));
   }
 
   // draw shapes
@@ -311,7 +315,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto find_svg_shape(struct NSVGimage* const image,
+inline struct NSVGshape* find_svg_shape(struct NSVGimage* const image,
   std::string_view const& name) noexcept
 {
   for (auto shape(image->shapes); shape; shape = shape->next)
@@ -322,7 +326,7 @@ inline auto find_svg_shape(struct NSVGimage* const image,
     }
   }
 
-  return static_cast<struct NSVGshape*>(nullptr);
+  return {};
 }
 
 //////////////////////////////////////////////////////////////////////////////
