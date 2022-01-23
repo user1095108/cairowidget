@@ -24,7 +24,7 @@ constexpr auto to_rgba(unsigned int const c) noexcept
   return [c]<auto ...I>(std::index_sequence<I...>) noexcept
     {
       return std::array<double, N>{
-        std::uint8_t(c >> CHAR_BIT * I) / double(255)...
+        (1. / 255) * std::uint8_t(c >> CHAR_BIT * I)...
       };
     }(std::make_index_sequence<N>());
 }
