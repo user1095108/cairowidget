@@ -19,7 +19,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t N = 4>
-constexpr auto to_rgba(unsigned int const c) noexcept
+constexpr auto to_rgba(auto const c) noexcept
 { // ABGR -> [R, G, B, A]
   return [c]<auto ...I>(std::index_sequence<I...>) noexcept
     {
