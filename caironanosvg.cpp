@@ -1,4 +1,6 @@
 #include <cassert>
+#include <climits>
+#include <cstdint>
 #include <cstring>
 
 #include <array>
@@ -16,14 +18,15 @@
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto to_rgba(unsigned int const c) noexcept
-{
-  return std::array<double, 4>{
-    (c & 0xff) / 255.,
-    ((c >> 8) & 0xff) / 255.,
-    ((c >> 16) & 0xff) / 255.,
-    ((c >> 24) & 0xff) / 255.
-  };
+template <std::size_t N = 4>
+constexpr auto to_rgba(unsigned int const c) noexcept
+{ // ABGR -> [R, G, B, A]
+  return [c]<auto ...I>(std::index_sequence<I...>) noexcept
+    {
+      return std::array<double, sizeof...(I)>{
+        std::uint8_t(c >> CHAR_BIT * I) / double(255)...
+      };
+    }(std::make_index_sequence<N>());
 }
 
 inline auto inverse(float const* const t) noexcept
@@ -98,8 +101,12 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
         case NSVG_PAINT_COLOR:
           {
             auto const c(to_rgba(shape->fill.color));
-            cairo_set_source_rgba(cr, c[0], c[1], c[2],
-              shape->opacity * c[3]);
+
+            cairo_set_source_rgba(
+              cr,
+              c[0], c[1], c[2],
+              shape->opacity * c[3]
+            );
           }
 
           cairo_fill_preserve(cr);
@@ -110,8 +117,12 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
           {
             auto const t(inverse(shape->fill.gradient->xform));
 
-            pat = cairo_pattern_create_linear(t[4], t[5],
-              t[4] + t[2], t[5] + t[3]);
+            pat = cairo_pattern_create_linear(
+              t[4],
+              t[5],
+              t[2] + t[4],
+              t[3] + t[5]
+            );
 
             break;
           }
@@ -123,8 +134,14 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
             auto const t(inverse(g.xform));
             auto const r(-t[0]);
 
-            pat = cairo_pattern_create_radial(g.fx * r, g.fy * r, .0,
-              t[4], t[5], t[0]);
+            pat = cairo_pattern_create_radial(
+              g.fx * r,
+              g.fy * r,
+              .0,
+              t[4],
+              t[5],
+              t[0]
+            );
 
             break;
           }
@@ -166,8 +183,13 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
           auto& stop(g.stops[i]);
 
           auto const c(to_rgba(stop.color));
-          cairo_pattern_add_color_stop_rgba(pat, stop.offset,
-            c[0], c[1], c[2], shape->opacity * c[3]);
+
+          cairo_pattern_add_color_stop_rgba(
+            pat,
+            stop.offset,
+            c[0], c[1], c[2],
+            shape->opacity * c[3]
+          );
         }
       }
 
@@ -194,6 +216,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
     case NSVG_PAINT_COLOR:
       {
         auto const c(to_rgba(shape->stroke.color));
+
         cairo_set_source_rgba(cr, c[0], c[1], c[2], shape->opacity * c[3]);
       }
 
@@ -202,11 +225,18 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
         double dashes[sizeof(shape->strokeDashArray) /
           sizeof(*shape->strokeDashArray)];
 
-        std::copy(shape->strokeDashArray, shape->strokeDashArray + count,
-          std::begin(dashes));
+        std::copy(
+          shape->strokeDashArray,
+          shape->strokeDashArray + count,
+          std::begin(dashes)
+        );
 
-        cairo_set_dash(cr, dashes, shape->strokeDashCount,
-          shape->strokeDashOffset);
+        cairo_set_dash(
+          cr,
+          dashes,
+          shape->strokeDashCount,
+          shape->strokeDashOffset
+        );
       }
 
       switch (shape->strokeLineCap)
@@ -275,6 +305,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
       .5 * (w - sm * image->width),
       .5 * (h - sm * image->height)
     );
+
     cairo_scale(cr, sm, sm);
   }
 
@@ -299,6 +330,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
       x + .5 * (w - sm * image->width),
       y + .5 * (h - sm * image->height)
     );
+
     cairo_scale(cr, sm, sm);
   }
 

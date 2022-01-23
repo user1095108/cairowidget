@@ -1,6 +1,5 @@
-#include "FL/Fl.h"
-
-#include "Fl/Fl_Box.h"
+#include "FL/Fl.H"
+#include "FL/Fl_Box.H"
 
 #include "cairo/cairo.h"
 
