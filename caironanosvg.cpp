@@ -4,9 +4,10 @@
 #include <cstring>
 
 #include <algorithm> // std::copy
+#include <utility> // std::index_sequence
+
 #include <array>
 #include <string_view>
-#include <utility> // std::index_sequence
 
 #include "cairo/cairo.h"
 
