@@ -3,10 +3,10 @@
 #include <cstdint>
 #include <cstring>
 
+#include <algorithm> // std::copy
 #include <array>
-#include <iterator>
 #include <string_view>
-#include <utility>
+#include <utility> // std::index_sequence
 
 #include "cairo/cairo.h"
 
@@ -221,13 +221,14 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 
       if (auto const count(shape->strokeDashCount); count)
       {
-        double dashes[sizeof(shape->strokeDashArray) /
-          sizeof(*shape->strokeDashArray)];
+        double dashes[
+          sizeof(shape->strokeDashArray) / sizeof(*shape->strokeDashArray)
+        ];
 
         std::copy(
           shape->strokeDashArray,
           shape->strokeDashArray + count,
-          std::begin(dashes)
+          dashes
         );
 
         cairo_set_dash(
