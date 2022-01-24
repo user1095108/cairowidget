@@ -235,7 +235,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
         cairo_set_dash(
           cr,
           dashes,
-          shape->strokeDashCount,
+          count,
           shape->strokeDashOffset
         );
       }
