@@ -34,7 +34,7 @@ inline auto inverse(float const* const t) noexcept
 template <std::size_t N = 4>
 inline auto to_rgba(auto&& c) noexcept
 { // ABGR -> [R, G, B, A]
-  return [c(c)]<auto ...I>(std::index_sequence<I...>) mutable noexcept
+  return []<auto ...I>(auto c, std::index_sequence<I...>) noexcept
     {
       static constinit auto const k{1. / 255.};
 
@@ -43,7 +43,7 @@ inline auto to_rgba(auto&& c) noexcept
       return std::array<double, N>{
         (tmp = c, c >>= CHAR_BIT + I - I, k * tmp)...
       };
-    }(std::make_index_sequence<N>());
+    }(c, std::make_index_sequence<N>());
 }
 
 //////////////////////////////////////////////////////////////////////////////
