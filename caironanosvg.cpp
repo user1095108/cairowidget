@@ -19,6 +19,18 @@
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
+inline auto inverse(float const* const t) noexcept
+{
+  auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
+
+  return std::array<double, 6>{
+    t[3] * invdet, -t[1] * invdet,
+    -t[2] * invdet, t[0] * invdet,
+    (double(t[2]) * t[5] - double(t[3]) * t[4]) * invdet,
+    (double(t[1]) * t[4] - double(t[0]) * t[5]) * invdet
+  };
+}
+
 template <std::size_t N = 4>
 inline auto to_rgba(auto&& c) noexcept
 { // ABGR -> [R, G, B, A]
@@ -32,18 +44,6 @@ inline auto to_rgba(auto&& c) noexcept
         (tmp = c, c >>= CHAR_BIT + I - I, k * tmp)...
       };
     }(std::make_index_sequence<N>());
-}
-
-inline auto inverse(float const* const t) noexcept
-{
-  auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
-
-  return std::array<double, 6>{
-    t[3] * invdet, -t[1] * invdet,
-    -t[2] * invdet, t[0] * invdet,
-    (double(t[2]) * t[5] - double(t[3]) * t[4]) * invdet,
-    (double(t[1]) * t[4] - double(t[0]) * t[5]) * invdet
-  };
 }
 
 //////////////////////////////////////////////////////////////////////////////
