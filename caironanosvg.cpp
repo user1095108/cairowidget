@@ -20,12 +20,14 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t N = 4>
-constexpr auto to_rgba(auto const c) noexcept
+inline auto to_rgba(auto const c) noexcept
 { // ABGR -> [R, G, B, A]
   return [c]<auto ...I>(std::index_sequence<I...>) noexcept
     {
+      static constinit auto const k{1. / 255.};
+
       return std::array<double, N>{
-        (1. / 255) * std::uint8_t(c >> CHAR_BIT * I)...
+        k * std::uint8_t(c >> CHAR_BIT * I)...
       };
     }(std::make_index_sequence<N>());
 }
