@@ -5,6 +5,8 @@
 #include <cstring>
 
 #include <algorithm> // std::copy
+#include <execution>
+#include <ranges>
 #include <utility> // std::index_sequence
 
 #include <array>
@@ -19,16 +21,29 @@
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-template <std::size_t N = 4>
+template <unsigned N = 4>
 inline auto to_rgba(auto const c) noexcept
 { // ABGR -> [R, G, B, A]
-  return [c]<auto ...I>(std::index_sequence<I...>) noexcept
+  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
-      static constinit auto const k{1. / 255.};
+      std::array<double, N> a;
 
-      return std::array<double, N>{
-        k * std::uint8_t(c >> CHAR_BIT * I)...
-      };
+      auto const vi(std::views::iota(0u, N));
+
+      std::transform(
+        std::execution::unseq,
+        vi.begin(),
+        vi.end(),
+        a.begin(),
+        [c](auto const i) noexcept
+        {
+          static constinit auto const k{1. / 255.};
+
+          return k * std::uint8_t(c >> CHAR_BIT * i);
+        }
+      );
+
+      return a;
     }(std::make_index_sequence<N>());
 }
 
