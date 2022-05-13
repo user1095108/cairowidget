@@ -20,7 +20,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t N = 4>
-inline auto to_rgba(auto const c) noexcept
+inline auto to_rgba(auto&& c) noexcept
 { // ABGR -> [R, G, B, A]
   return [c(c)]<auto ...I>(std::index_sequence<I...>) mutable noexcept
     {
