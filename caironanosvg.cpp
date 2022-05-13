@@ -29,7 +29,7 @@ inline auto to_rgba(auto&& c) noexcept
       std::uint8_t tmp;
 
       return std::array<double, N>{
-        (tmp = std::uint8_t(c), c >>= CHAR_BIT + I - I, k * tmp)...
+        (tmp = c, c >>= CHAR_BIT + I - I, k * tmp)...
       };
     }(std::make_index_sequence<N>());
 }
