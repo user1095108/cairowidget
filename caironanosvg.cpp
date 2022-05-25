@@ -36,7 +36,7 @@ inline auto inverse(float const* const f0) noexcept
     f1.begin(),
     f1.end(),
     f1.begin(),
-    [invdet](auto const f) noexcept { return invdet * f; }
+    [invdet](auto const f) noexcept { return f * invdet; }
   );
 
   return f1;
