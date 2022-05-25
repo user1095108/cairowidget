@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include <algorithm> // std::copy
+#include <execution>
 #include <utility> // std::index_sequence
 
 #include <array>
@@ -19,16 +20,26 @@
 #include "caironanosvg.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto inverse(float const* const t) noexcept
+inline auto inverse(float const* const f0) noexcept
 {
-  auto const invdet(1. / (double(t[0]) * t[3] - double(t[2]) * t[1]));
+  auto const invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]));
 
-  return std::array<double, 6>{
-    t[3] * invdet, -t[1] * invdet,
-    -t[2] * invdet, t[0] * invdet,
-    (double(t[2]) * t[5] - double(t[3]) * t[4]) * invdet,
-    (double(t[1]) * t[4] - double(t[0]) * t[5]) * invdet
+  std::array<float, 6> f1{
+    f0[3], -f0[1],
+    -f0[2], f0[0],
+    f0[2] * f0[5] - f0[3] * f0[4],
+    f0[1] * f0[4] - f0[0] * f0[5]
   };
+
+  std::transform(
+    std::execution::unseq,
+    f1.begin(),
+    f1.end(),
+    f1.begin(),
+    [&](auto const f) noexcept { return invdet * f; }
+  );
+
+  return f1;
 }
 
 template <std::size_t N = 4>
@@ -41,8 +52,8 @@ inline auto to_rgba(auto&& c) noexcept
       std::uint8_t tmp;
 
       return std::array<double, N>{
-        (tmp = c, c >>= CHAR_BIT + I - I, k * tmp)...
-      };
+          (tmp = c, c >>= CHAR_BIT + I - I, k * tmp)...
+        };
     }(c, std::make_index_sequence<N>());
 }
 
@@ -199,9 +210,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
       }
 
       cairo_set_source(cr, pat);
-
       cairo_fill_preserve(cr);
-
       cairo_pattern_destroy(pat);
 
       break;
@@ -289,7 +298,6 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
       }
 
       cairo_set_line_width(cr, shape->strokeWidth);
-
       cairo_stroke_preserve(cr);
 
       break;
