@@ -31,9 +31,9 @@ inline auto inverse(float const* const f0) noexcept
   };
 
   [&]<auto ...I>(std::index_sequence<I...>) noexcept
-    {
-      ((f1[I] *= invdet), ...);
-    }(std::make_index_sequence<6>());
+  {
+    ((f1[I] *= invdet), ...);
+  }(std::make_index_sequence<6>());
 
   return f1;
 }
