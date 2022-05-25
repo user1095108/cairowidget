@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include <algorithm> // std::copy
+#include <execution>
 #include <utility> // std::index_sequence
 
 #include <array>
@@ -23,17 +24,22 @@ inline auto inverse(float const* const f0) noexcept
 {
   auto const invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]));
 
-  std::array<float, 6> const f1{
+  std::array<float, 6> f1{
     f0[3], -f0[1],
     -f0[2], f0[0],
     f0[2] * f0[5] - f0[3] * f0[4],
     f0[1] * f0[4] - f0[0] * f0[5]
   };
 
-  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
-    {
-      return std::array<float, sizeof...(I)>{(f1[I] * invdet)...};
-    }(std::make_index_sequence<std::size(f1)>());
+  std::transform(
+    std::execution::unseq,
+    f1.cbegin(),
+    f1.cend(),
+    f1.begin(),
+    [&](auto const f) noexcept { return f * invdet; }
+  );
+
+  return f1;
 }
 
 template <std::size_t N = 4>
