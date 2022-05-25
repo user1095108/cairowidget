@@ -33,7 +33,7 @@ inline auto inverse(float const* const f0) noexcept
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
       return std::array<float, sizeof...(I)>{(f1[I] * invdet)...};
-    }(std::make_index_sequence<6>());
+    }(std::make_index_sequence<std::size(f1)>());
 }
 
 template <std::size_t N = 4>
