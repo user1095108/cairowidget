@@ -6,8 +6,6 @@
 
 #include "FL/Fl_Gl_Window.H"
 
-#include "cairosurfacedevice.hpp"
-
 #include <functional>
 
 class Cairo_Gl_Window: public Fl_Gl_Window
@@ -16,8 +14,6 @@ class Cairo_Gl_Window: public Fl_Gl_Window
 
   cairo_t* cr_{};
   cairo_surface_t* surf_;
-
-  std::unique_ptr<CairoSurfaceDevice> surface_device_{new CairoSurfaceDevice};
 
   using draw_t = std::function<void(cairo_t*, int, int)>;
 
@@ -55,15 +51,9 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto Cairo_Gl_Window::ctx() const noexcept
-{
-  return cr_;
-}
+inline auto Cairo_Gl_Window::ctx() const noexcept { return cr_; }
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto& Cairo_Gl_Window::draw() const noexcept
-{
-  return d_;
-}
+inline auto& Cairo_Gl_Window::draw() const noexcept { return d_; }
 
 #endif // CAIROWINDOW_HPP

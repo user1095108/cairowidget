@@ -26,10 +26,7 @@ Cairo_Gl_Window::Cairo_Gl_Window(int const w, int const h,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-Cairo_Gl_Window::~Cairo_Gl_Window()
-{
-  cairo_destroy(cr_);
-}
+Cairo_Gl_Window::~Cairo_Gl_Window() { cairo_destroy(cr_); }
 
 //////////////////////////////////////////////////////////////////////////////
 void Cairo_Gl_Window::draw()
@@ -72,31 +69,6 @@ void Cairo_Gl_Window::draw()
   d_(cr, w, h);
 
   cairo_restore(cr);
-
-  //
-  if (children())
-  {
-    //
-    cairo_save(cr);
-
-    //
-    cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
-//  cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-
-    cairo_set_line_width(cr, 1.);
-
-    cairo_identity_matrix(cr);
-    cairo_translate(cr, .5, .5);
-
-    surface_device_->set_current();
-
-    Fl_Group::draw_children();
-
-    Fl_Display_Device::display_device()->set_current();
-
-    //
-    cairo_restore(cr);
-  }
 
   //
   cairo_surface_flush(surf);

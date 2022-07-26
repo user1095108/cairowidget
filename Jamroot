@@ -41,9 +41,7 @@ exe example1
   ;
 
 exe example2
-  : cairographicsdriver.cpp
-    cairosurfacedevice.cpp
-    caironanosvg.cpp
+  : caironanosvg.cpp
     cairoglwindow.cpp
     example2.cpp
     ..//cairo//cairo
