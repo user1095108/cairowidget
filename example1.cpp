@@ -6,6 +6,7 @@
 
 #include "FL/Fl_Box.H"
 #include "FL/Fl_Double_Window.H"
+//#include "FL/Fl_Gl_Window.H"
 #include "FL/Fl_Image_Surface.H"
 
 #include "cairo/cairo.h"
@@ -140,6 +141,7 @@ int main()
 {
   image = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
 
+  //auto const win(new Fl_Gl_Window(724, 700, "example1"));
   auto const win(new Fl_Double_Window(724, 700, "example1"));
 
   new Fl_Box(FL_EMBOSSED_BOX, 0, 0, win->w(), 40, "Text from label");
