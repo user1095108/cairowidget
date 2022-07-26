@@ -13,7 +13,6 @@ Cairo_Gl_Window::Cairo_Gl_Window(int const x, int const y,
   Fl_Gl_Window(x, y, w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);
-  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -22,7 +21,6 @@ Cairo_Gl_Window::Cairo_Gl_Window(int const w, int const h,
   Fl_Gl_Window(w, h, l)
 {
   mode(FL_SINGLE | FL_RGB);
-  Fl_Group::current(this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
