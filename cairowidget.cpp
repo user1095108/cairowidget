@@ -1,9 +1,7 @@
 #include "FL/fl_draw.H"
-
 #include "cairo/cairo.h"
 
 #include <execution>
-
 #include <memory>
 
 #include "shuffler.hpp"
