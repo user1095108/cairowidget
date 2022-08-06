@@ -14,24 +14,22 @@ namespace detail
 {
 
 //////////////////////////////////////////////////////////////////////////////
-constexpr bool is_big_endian() noexcept
+constexpr bool compare(auto const c, auto const ... a) noexcept
 {
-  std::uint32_t const c(0x01234567);
-
-  return (std::uint8_t(c) == 0x01) &&
-    (std::uint8_t(c >> 8) == 0x23) &&
-    (std::uint8_t(c >> 16) == 0x45) &&
-    (std::uint8_t(c >> 24) == 0x67);
+  return [&]<auto ...I>(std::index_sequence<I...>) noexcept
+    {
+      return ((std::uint8_t(c >> 8 * I) == std::uint8_t(a)) && ...);
+    }(std::make_index_sequence<sizeof...(a)>());
 }
 
-constexpr bool is_little_endian() noexcept
+constexpr auto is_big_endian() noexcept
 {
-  std::uint32_t const c(0x01234567);
+  return compare(std::uint32_t(0x01234567), 0x01, 0x23, 0x45, 0x67);
+}
 
-  return (std::uint8_t(c) == 0x67) &&
-    (std::uint8_t(c >> 8) == 0x45) &&
-    (std::uint8_t(c >> 16) == 0x23) &&
-    (std::uint8_t(c >> 24) == 0x01);
+constexpr auto is_little_endian() noexcept
+{
+  return compare(std::uint32_t(0x01234567), 0x67, 0x45, 0x23, 0x01);
 }
 
 //////////////////////////////////////////////////////////////////////////////
