@@ -13,7 +13,8 @@ namespace detail
 {
 
 //////////////////////////////////////////////////////////////////////////////
-constexpr bool compare(auto const c, auto const ...a) noexcept
+template <typename C, typename ...A>
+constexpr bool compare(C const c, A const ...a) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
@@ -43,19 +44,19 @@ template <std::size_t I, std::size_t J, typename T>
 constexpr T shuffler(T const i) noexcept
 {
 //return T{std::uint8_t(i >> 8 * I)} << 8 * J;
-  return (T{0xff} << 8 * J) & (I < J ? i << 8 * (J - I) : i >> 8 * (I - J));
+  return (T{0xffu} << 8 * J) & (I < J ? i << 8 * (J - I) : i >> 8 * (I - J));
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
-  requires(is_big_endian_v)
+constexpr auto shuffle(T const i, std::index_sequence<J...>) noexcept ->
+  decltype(std::enable_if_t<is_big_endian_v, T>{}) 
 {
   return (shuffler<I, sizeof(T) - 1 - J>(i) | ...);
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
-  requires(is_little_endian_v)
+constexpr auto shuffle(T const i, std::index_sequence<J...>) noexcept ->
+  decltype(std::enable_if_t<is_little_endian_v, T>{}) 
 {
   return (shuffler<I, J>(i) | ...);
 }
