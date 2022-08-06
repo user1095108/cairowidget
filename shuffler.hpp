@@ -42,6 +42,7 @@ namespace detail
 template <std::size_t I, std::size_t J, typename T>
 constexpr T shuffler(T const i) noexcept
 {
+//return T{std::uint8_t(i >> 8 * I)} << 8 * J;
   return (T{0xff} << 8 * J) & (I < J ? i << 8 * (J - I) : i >> 8 * (I - J));
 }
 
