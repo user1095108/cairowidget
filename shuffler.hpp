@@ -34,32 +34,24 @@ static constexpr auto is_pdp_endian_v{
 };
 
 //////////////////////////////////////////////////////////////////////////////
+template <std::size_t I, std::size_t J, typename T>
+constexpr T shifter(T const i) noexcept
+{
+  return (T{0xff} << 8 * J) & (I < J ? i << 8 * (J - I) : i >> 8 * (I - J));
+}
+
 template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
   requires(is_big_endian_v)
 {
-  return (
-    (
-      (
-        I < sizeof(T) - 1 - J ?
-          (i << 8 * (sizeof(T) - 1 - J - I)) :
-          (i >> 8 * (I + 1 + J - sizeof(T)))
-      ) & (T{0xff} << 8 * (sizeof(T) - 1 - J))
-    ) | ...
-  );
+  return (shifter<I, sizeof(T) - 1 - J>(i) | ...);
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
   requires(is_little_endian_v)
 {
-  return (
-    (
-      (
-        I < J ? (i << 8 * (J - I)) : (i >> 8 * (I - J))
-      ) & (T{0xff} << 8 * J)
-    ) | ...
-  );
+  return (shifter<I, J>(i) | ...);
 }
 
 }
