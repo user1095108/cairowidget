@@ -29,6 +29,10 @@ static constexpr auto is_little_endian_v{
   compare(std::uint32_t(0x01234567), 0x67, 0x45, 0x23, 0x01)
 };
 
+static constexpr auto is_pdp_endian_v{
+  compare(std::uint32_t(0x01234567), 0x23, 0x01, 0x67, 0x45)
+};
+
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
