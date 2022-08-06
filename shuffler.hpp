@@ -46,6 +46,7 @@ constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
 
 }
 
+//////////////////////////////////////////////////////////////////////////////
 template <std::size_t ...I, typename T>
 constexpr T shuffle(T const i) noexcept
 {
