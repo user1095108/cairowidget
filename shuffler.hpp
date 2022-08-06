@@ -13,8 +13,7 @@ namespace detail
 {
 
 //////////////////////////////////////////////////////////////////////////////
-template <typename C, typename ...A>
-constexpr bool compare(C const c, A const ...a) noexcept
+constexpr bool compare(auto const c, auto const ...a) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
@@ -48,15 +47,15 @@ constexpr T shuffler(T const i) noexcept
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr auto shuffle(T const i, std::index_sequence<J...>) noexcept ->
-  decltype(std::enable_if_t<is_big_endian_v, T>{}) 
+constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
+  requires(is_big_endian_v)
 {
   return (shuffler<I, sizeof(T) - 1 - J>(i) | ...);
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr auto shuffle(T const i, std::index_sequence<J...>) noexcept ->
-  decltype(std::enable_if_t<is_little_endian_v, T>{}) 
+constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
+  requires(is_little_endian_v)
 {
   return (shuffler<I, J>(i) | ...);
 }
