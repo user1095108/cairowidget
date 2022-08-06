@@ -18,7 +18,7 @@ constexpr bool compare(auto const c, auto const ... a) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
-      return ((std::uint8_t(c >> 8 * I) == std::uint8_t(a)) && ...);
+      return ((std::uint8_t(c >> 8 * I) == a) && ...);
     }(std::make_index_sequence<sizeof...(a)>());
 }
 
