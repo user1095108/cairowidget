@@ -21,17 +21,22 @@ constexpr bool compare(auto const c, auto const ...a) noexcept
     }(std::make_index_sequence<sizeof...(a)>());
 }
 
+}
+
 static constexpr auto is_big_endian_v{
-  compare(std::uint32_t(0x01234567), 0x01, 0x23, 0x45, 0x67)
+  detail::compare(std::uint32_t(0x01234567), 0x01, 0x23, 0x45, 0x67)
 };
 
 static constexpr auto is_little_endian_v{
-  compare(std::uint32_t(0x01234567), 0x67, 0x45, 0x23, 0x01)
+  detail::compare(std::uint32_t(0x01234567), 0x67, 0x45, 0x23, 0x01)
 };
 
 static constexpr auto is_pdp_endian_v{
-  compare(std::uint32_t(0x01234567), 0x23, 0x01, 0x67, 0x45)
+  detail::compare(std::uint32_t(0x01234567), 0x23, 0x01, 0x67, 0x45)
 };
+
+namespace detail
+{
 
 //////////////////////////////////////////////////////////////////////////////
 template <std::size_t I, std::size_t J, typename T>

@@ -98,11 +98,11 @@ void capture(Fl_Widget* const wi, char const* const filename)
     {
       decltype(make_pixel_iterator<4>(dst))::value_type d;
 
-      if constexpr(shuffler::detail::is_little_endian_v)
+      if constexpr(shuffler::is_little_endian_v)
       {
         d[0] = s[2]; d[1] = s[1]; d[2] = s[0];
       }
-      else if constexpr(shuffler::detail::is_big_endian_v)
+      else if constexpr(shuffler::is_big_endian_v)
       {
         d[1] = s[0]; d[2] = s[1]; d[3] = s[2];
       }
