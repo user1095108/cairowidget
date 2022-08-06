@@ -43,7 +43,7 @@ constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
       (
         I < sizeof(T) - 1 - J ?
           (i << 8 * (sizeof(T) - 1 - J - I)) :
-          (i >> 8 * (I - sizeof(T) + 1 + J))
+          (i >> 8 * (I + 1 + J - sizeof(T)))
       ) & (T{0xff} << 8 * (sizeof(T) - 1 - J))
     ) | ...
   );
