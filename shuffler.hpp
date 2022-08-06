@@ -3,8 +3,9 @@
 # pragma once
 
 #include <cassert>
-#include <cstddef>
+#include <cstddef> // std::size_t
 #include <cstdint>
+#include <utility> // std::index_sequence
 
 namespace shuffler
 {
