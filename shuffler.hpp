@@ -38,14 +38,28 @@ template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
   requires(is_big_endian_v)
 {
-  return ((std::uint8_t(i >> 8 * I) << 8 * (sizeof(T) - 1 - J)) | ...);
+  return (
+    (
+      (
+        I < sizeof(T) - 1 - J ?
+          (i << 8 * (sizeof(T) - 1 - J - I)) :
+          (i >> 8 * (I - sizeof(T) + 1 + J))
+      ) & (T{0xff} << 8 * (sizeof(T) - 1 - J))
+    ) | ...
+  );
 }
 
 template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
   requires(is_little_endian_v)
 {
-  return ((std::uint8_t(i >> 8 * I) << 8 * J) | ...);
+  return (
+    (
+      (
+        I < J ? (i << 8 * (J - I)) : (i >> 8 * (I - J))
+      ) & (T{0xff} << 8 * J)
+    ) | ...
+  );
 }
 
 }
