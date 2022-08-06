@@ -14,7 +14,7 @@ namespace detail
 {
 
 //////////////////////////////////////////////////////////////////////////////
-constexpr bool compare(auto const c, auto const ... a) noexcept
+constexpr bool compare(auto const c, auto const ...a) noexcept
 {
   return [&]<auto ...I>(std::index_sequence<I...>) noexcept
     {
