@@ -18,7 +18,7 @@ class MyWidget final: public CairoWidget
 
 public:
   explicit MyWidget():
-    CairoWidget(nullptr, Qt::FramelessWindowHint)
+    CairoWidget({}, Qt::FramelessWindowHint)
   {
     setAttribute(Qt::WA_TranslucentBackground);
 
