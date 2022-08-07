@@ -50,9 +50,6 @@ private:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-inline auto& CairoWidget::draw() const noexcept
-{
-  return df_;
-}
+inline auto& CairoWidget::draw() const noexcept { return df_; }
 
 #endif // CAIROWIDGET_HPP
