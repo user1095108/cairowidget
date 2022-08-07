@@ -50,7 +50,7 @@ private:
   {
     if (Qt::LeftButton & e->buttons())
     {
-      move(QCursor::pos() + p_);
+      move(p_ + QCursor::pos());
     }
   }
 
