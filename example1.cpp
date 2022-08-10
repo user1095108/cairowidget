@@ -1,3 +1,4 @@
+#include <bit>
 #include <execution>
 
 #include "FL/Fl.H"
@@ -16,7 +17,6 @@
 #include "nanosvg/src/nanosvg.h"
 
 #include "pixeliterator.hpp"
-#include "shuffler.hpp"
 
 #include "caironanosvg.hpp"
 
@@ -98,11 +98,11 @@ void capture(Fl_Widget* const wi, char const* const filename)
     {
       decltype(make_pixel_iterator<4>(dst))::value_type d;
 
-      if constexpr(shuffler::is_little_endian_v)
+      if constexpr(std::endian::native == std::endian::little)
       {
         d[0] = s[2]; d[1] = s[1]; d[2] = s[0];
       }
-      else if constexpr(shuffler::is_big_endian_v)
+      else if constexpr(std::endian::native == std::endian::big)
       {
         d[1] = s[0]; d[2] = s[1]; d[3] = s[2];
       }
