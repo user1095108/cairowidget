@@ -22,8 +22,6 @@
 //////////////////////////////////////////////////////////////////////////////
 inline auto inverse(float const* const f0) noexcept
 {
-  auto const invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]));
-
   std::array<float, 6> f1{
     f0[3], -f0[1],
     -f0[2], f0[0],
@@ -36,7 +34,10 @@ inline auto inverse(float const* const f0) noexcept
     f1.cbegin(),
     f1.cend(),
     f1.begin(),
-    [&](auto const f) noexcept { return f * invdet; }
+    [invdet(1.f / (f0[0] * f0[3] - f0[2] * f0[1]))](auto const f) noexcept
+    {
+      return f * invdet;
+    }
   );
 
   return f1;
