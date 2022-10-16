@@ -31,7 +31,7 @@ public:
     {
       if (auto const sz(f.size()); sz > 0)
       {
-        if (QByteArray ba; ba.resize(sz + 1), ba[sz] = {},
+        if (QByteArray ba; ba.resize(sz + 1), ba.data()[sz] = {},
           f.read(ba.data(), sz) == sz)
         {
           image_ = nsvgParse(ba.data(), "px", 96);
