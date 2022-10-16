@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QBitmap>
 #include <QCursor>
+#include <QFile>
 #include <QMouseEvent>
 
 #include "cairo/cairo.h"
@@ -22,7 +23,21 @@ public:
   {
     setAttribute(Qt::WA_TranslucentBackground);
 
-    image_ = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
+    //image_ = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
+
+    if (QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
+      f.open(QIODevice::ReadOnly))
+    {
+      if (auto const sz(f.size()); sz)
+      {
+        if (char tmp[sz + 1]; f.read(tmp, sz) == sz)
+        {
+          tmp[sz] = {};
+
+          image_ = nsvgParse(tmp, "px", 96);
+        }
+      }
+    }
 
     init([](auto const cr, auto, auto) noexcept
       {
@@ -79,6 +94,7 @@ int main(int argc, char* argv[])
   QApplication app(argc, argv);
 
   MyWidget w;
+  w.resize(700, 700);
   w.show();
 
   return app.exec();
