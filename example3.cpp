@@ -31,11 +31,10 @@ public:
     {
       if (auto const sz(f.size()); sz > 0)
       {
-        if (char tmp[sz + 1]; f.read(tmp, sz) == sz)
+        if (QByteArray ba; ba.resize(sz + 1), ba[sz] = {},
+          f.read(ba.data(), sz) == sz)
         {
-          tmp[sz] = {};
-
-          image_ = nsvgParse(tmp, "px", 96);
+          image_ = nsvgParse(ba.data(), "px", 96);
         }
       }
     }
