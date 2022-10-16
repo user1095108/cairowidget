@@ -29,7 +29,7 @@ public:
     if (QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
       f.open(QIODevice::ReadOnly))
     {
-      if (auto const sz(f.size()); sz)
+      if (auto const sz(f.size()); sz > 0)
       {
         if (char tmp[sz + 1]; f.read(tmp, sz) == sz)
         {
