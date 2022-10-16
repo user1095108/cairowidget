@@ -23,6 +23,7 @@ public:
   {
     setAttribute(Qt::WA_TranslucentBackground);
 
+    //
     //image_ = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
 
     if (QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
@@ -39,6 +40,7 @@ public:
       }
     }
 
+    //
     init([](auto const cr, auto, auto) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
