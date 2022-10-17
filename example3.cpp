@@ -30,9 +30,8 @@ public:
       f.open(QIODevice::ReadOnly))
     {
       if (auto const sz(f.size()); sz > 0)
-      {
-        if (QByteArray ba(sz + 1, Qt::Uninitialized); ba.data()[sz] = {},
-          f.read(ba.data(), sz) == sz)
+      { // QByteArray allocates extra and is zero-terminated
+        if (QByteArray ba(sz, Qt::Uninitialized); f.read(ba.data(), sz) == sz)
         {
           image_ = nsvgParse(ba.data(), "px", 96);
         }
