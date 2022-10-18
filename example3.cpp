@@ -32,8 +32,6 @@ public:
       { // QByteArray allocates extra and is zero-terminated
         if (QByteArray ba(sz, Qt::Uninitialized); f.read(ba.data(), sz) == sz)
         {
-          f.close();
-
           image_ = nsvgParse(ba.data(), "px", 96);
         }
       }
