@@ -29,7 +29,7 @@ class CairoWidget: public Fl_Widget
 
 public:
   CairoWidget(int, int, int, int, const char* = nullptr);
-  ~CairoWidget() noexcept;
+  ~CairoWidget() noexcept override;
 
   //
   template <class U>
