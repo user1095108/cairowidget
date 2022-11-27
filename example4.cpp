@@ -115,6 +115,7 @@ public:
       }
     );
 
+    //
     auto t(new QTimer(this));
     connect(t, &QTimer::timeout, this, QOverload<>::of(&ClockWidget::update));
     t->start(1000);
