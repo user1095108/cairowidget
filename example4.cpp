@@ -11,7 +11,7 @@
 
 class ClockWidget final: public CairoWidget
 {
-  qreal m_radius{.42}, m_line_width{.05};
+  qreal const m_radius{.42}, m_line_width{.05};
 
 public:
   explicit ClockWidget()
