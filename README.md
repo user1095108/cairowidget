@@ -14,5 +14,5 @@ Qt markedly outperforms FLTK in rendering performance.
 or
 
     git submodule update --init
-    qmake
+    qmake examples.pro
     make
