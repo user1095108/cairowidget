@@ -44,7 +44,7 @@ public:
       }
     );
 
-    draw([&](cairo_t* const cr, int const w, int const h)
+    draw([&](auto const cr, int const w, int const h)
       {
         cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
         cairo_paint(cr);
