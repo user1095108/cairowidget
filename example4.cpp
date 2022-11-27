@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
   QApplication app(argc, argv);
 
   ClockWidget w;
-  w.resize(w.width(), w.width());
+  w.resize(w.height(), w.height());
   w.show();
 
   return app.exec();
