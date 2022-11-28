@@ -43,7 +43,7 @@ public:
         cairo_fill(cr);
 
         // Draw a black clock outline
-        cairo_set_source_rgba(cr, 0, 0, 0, 1);
+        cairo_set_source_rgb(cr, 0, 0, 0);
         cairo_arc(cr, 0, 0, .4, 0, 2 * M_PI);
         cairo_stroke(cr);
 
