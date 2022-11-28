@@ -24,11 +24,12 @@ public:
 
     draw([&](auto const cr, int const w, int const h)
       {
-        cairo_save(cr);
         cairo_set_source_rgba(cr, .337, .612, .117, .9);   // green
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
-        cairo_restore(cr);
+
+        cairo_set_source_rgb(cr, .0, .0, .0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
         // scale to unit square and translate (0, 0) to be (.5, .5), i.e.
         // the center of the window
@@ -45,14 +46,14 @@ public:
         cairo_clip(cr);
 
         //clock ticks
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i != 12; ++i)
         {
           qreal inset = .05;
 
           cairo_save(cr);
           cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 
-          if(i % 3 != 0)
+          if (i % 3)
           {
             inset *= .8;
             cairo_set_line_width(cr, .03);
