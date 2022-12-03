@@ -37,11 +37,6 @@ public:
         // Translate to the center of the rendering context
         cairo_translate(cr, .5, .5);
 
-        // Draw the context white
-        //cairo_set_source_rgba(cr, 1., 1., 1., 1.);
-        cairo_arc(cr, 0, 0, .4, 0, 2 * M_PI);
-        cairo_fill(cr);
-
         // Draw a black clock outline
         cairo_set_source_rgb(cr, 0, 0, 0);
         cairo_arc(cr, 0, 0, .4, 0, 2 * M_PI);
