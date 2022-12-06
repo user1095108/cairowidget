@@ -41,7 +41,7 @@ public:
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
         //
-        double const k(2. / qMin(ww, wh));
+        double const k(1. / qMin(ww, wh));
 
         int h, m, s;
 
@@ -63,7 +63,7 @@ public:
 
           double x0, y0;
           cairo_arc(cr, 0., 0., .5, -M_PI, X);
-          cairo_get_current_point (cr, &x0, &y0);
+          cairo_get_current_point(cr, &x0, &y0);
 
           double x1, y1;
           cairo_arc(cr, 0., 0., .5 - k * 10. , -M_PI, X);
