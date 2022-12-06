@@ -59,7 +59,7 @@ public:
 
         for (int i{}; i != 60; i += 5)
         {
-          double const X(-M_PI + (i + 3) * M_PI / 6);
+          double const X((i - 3) * M_PI / 6);
 
           double x0, y0;
           cairo_arc(cr, 0., 0., .5, -M_PI, X);
@@ -94,22 +94,22 @@ public:
 
         cairo_set_source_rgb(cr, .5, 1., .5);
         cairo_set_line_width(cr, k * 3.);
-        draw_needle(.3, -M_PI + (h + 3 + m / 60) * (M_PI / 6));
+        draw_needle(.3, (h - 3 + m / 60) * (M_PI / 6));
 
         cairo_set_source_rgb(cr, 1., 0., 0.);
         cairo_set_line_width(cr, k * 2.);
-        draw_needle(.45, -M_PI + (m + 15) * (M_PI / 30));
+        draw_needle(.45, (m - 15) * (M_PI / 30));
 
         // second needle
         cairo_set_source_rgb(cr, 1., 1., .3);
         cairo_set_line_width(cr, k * 2.5);
 
         {
-          double const pos(-M_PI + (s + 15) * (M_PI / 30));
+          double const pos((s - 15) * (M_PI / 30));
 
           for (int i{}; i != 60; ++i)
           {
-            if (double const X(-M_PI + (i + 15) * (M_PI / 30)); X >= pos)
+            if (double const X((i - 15) * (M_PI / 30)); X >= pos)
             {
               break;
             }
