@@ -22,15 +22,17 @@ public:
 
         if (w >= h)
         {
+          k_ = 1. / h;
+
           cairo_translate(cr, .5 * (w - h), 0.);
           cairo_scale(cr, h, h);
-          k_ = 1. / h;
         }
         else
         {
+          k_ = 1. / w;
+
           cairo_translate(cr, 0., .5 * (h - w));
           cairo_scale(cr, w, w);
-          k_ = 1. / w;
         }
 
         cairo_translate(cr, .5, .5);
