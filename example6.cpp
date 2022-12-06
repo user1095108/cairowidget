@@ -41,7 +41,7 @@ public:
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
         //
-        auto const k(2. / qMin(ww, wh));
+        double const k(2. / qMin(ww, wh));
 
         int h, m, s;
 
@@ -105,7 +105,7 @@ public:
         cairo_set_line_width(cr, k * 2.5);
 
         {
-          auto const pos(-M_PI + (s + 15) * (M_PI / 30));
+          double const pos(-M_PI + (s + 15) * (M_PI / 30));
 
           for (int i{}; i != 60; ++i)
           {
