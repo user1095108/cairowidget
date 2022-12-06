@@ -33,8 +33,10 @@ public:
       }
     );
 
-    draw([&](auto const cr, int, int const wh)
+    draw([&](auto const cr, int const ww, int wh)
       {
+        wh = .5 * qMin(ww, wh);
+
         cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
         cairo_paint(cr);
 
@@ -57,14 +59,14 @@ public:
 
         for (int i{}; i != 60; i += 5)
         {
-          double const X((i + 3) * M_PI / 6);
+          double const X(-M_PI + (i + 3) * M_PI / 6);
 
           double x0, y0;
-          cairo_arc(cr, 0., 0., .5, -M_PI, -M_PI + X);
+          cairo_arc(cr, 0., 0., .5, -M_PI, X);
           cairo_get_current_point (cr, &x0, &y0);
 
           double x1, y1;
-          cairo_arc(cr, 0., 0., .5 - 10. / wh, -M_PI, -M_PI + X);
+          cairo_arc(cr, 0., 0., .5 - 10. / wh, -M_PI, X);
           cairo_get_current_point(cr, &x1, &y1);
 
           cairo_new_path(cr);
@@ -78,7 +80,7 @@ public:
         auto const draw_needle(
           [&](double const len, double const pos) noexcept
           {
-            cairo_arc(cr, 0., 0., len, -M_PI, -M_PI + pos);
+            cairo_arc(cr, 0., 0., len, -M_PI, pos);
 
             double x, y;
             cairo_get_current_point(cr, &x, &y);
@@ -92,33 +94,33 @@ public:
 
         cairo_set_source_rgb(cr, .5, 1., .5);
         cairo_set_line_width(cr, 3. / wh);
-        draw_needle(.3, (h + 3 + m / 60) * (M_PI / 6));
+        draw_needle(.3, -M_PI + (h + 3 + m / 60) * (M_PI / 6));
 
         cairo_set_source_rgb(cr, 1., 0., 0.);
         cairo_set_line_width(cr, 2. / wh);
-        draw_needle(.45, (m + 15) * (M_PI / 30));
+        draw_needle(.45, -M_PI + (m + 15) * (M_PI / 30));
 
         // second needle
         cairo_set_source_rgb(cr, 1., 1., .3);
         cairo_set_line_width(cr, 2.5 / wh);
 
         {
-          auto const pos((s + 15) * (M_PI / 30));
+          auto const pos(-M_PI + (s + 15) * (M_PI / 30));
 
           for (int i{}; i != 60; ++i)
           {
-            if (double const X((i + 15) * (M_PI / 30)); X >= pos)
+            if (double const X(-M_PI + (i + 15) * (M_PI / 30)); X >= pos)
             {
               break;
             }
             else if (i % 5)
             {
               double x0, y0;
-              cairo_arc(cr, 0., 0., .5, -M_PI, -M_PI + X);
+              cairo_arc(cr, 0., 0., .5, -M_PI, X);
               cairo_get_current_point(cr, &x0, &y0);
 
               double x1, y1;
-              cairo_arc(cr, 0., 0., .5 - 3. / wh, -M_PI, -M_PI + X);
+              cairo_arc(cr, 0., 0., .5 - 3. / wh, -M_PI, X);
               cairo_get_current_point(cr, &x1, &y1);
 
               cairo_new_path(cr);
