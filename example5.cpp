@@ -17,7 +17,19 @@ public:
     init([](auto const cr, int const w, int const h) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-        cairo_scale(cr, w, h);
+
+        if (w >= h)
+        {
+          cairo_translate(cr, .5 * (w - h), 0.);
+          cairo_scale(cr, h, h);
+        }
+        else
+        {
+          cairo_translate(cr, 0., .5 * (h - w));
+          cairo_scale(cr, w, w);
+        }
+
+        cairo_translate(cr, .5, .5);
       }
     );
 
@@ -32,9 +44,6 @@ public:
         // Set line properties
         cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
         cairo_set_line_width(cr, .1);
-
-        // Translate to the center of the rendering context
-        cairo_translate(cr, .5, .5);
 
         // Draw a black clock outline
         cairo_set_source_rgb(cr, 0, 0, 0);

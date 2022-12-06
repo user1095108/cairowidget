@@ -17,7 +17,18 @@ public:
     init([](auto const cr, int const w, int const h) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
-        cairo_scale(cr, w, h);
+
+        if (w >= h)
+        {
+          cairo_translate(cr, .5 * (w - h), 0.);
+          cairo_scale(cr, h, h);
+        }
+        else
+        {
+          cairo_translate(cr, 0., .5 * (h - w));
+          cairo_scale(cr, w, w);
+        }
+
         cairo_translate(cr, .5, .5);
       }
     );
