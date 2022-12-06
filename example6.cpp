@@ -11,10 +11,12 @@
 
 class ClockWidget final: public CairoWidget
 {
+  double k_;
+
 public:
   explicit ClockWidget()
   {
-    init([](auto const cr, int const w, int const h) noexcept
+    init([&](auto const cr, int const w, int const h) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
@@ -22,18 +24,20 @@ public:
         {
           cairo_translate(cr, .5 * (w - h), 0.);
           cairo_scale(cr, h, h);
+          k_ = 1. / h;
         }
         else
         {
           cairo_translate(cr, 0., .5 * (h - w));
           cairo_scale(cr, w, w);
+          k_ = 1. / w;
         }
 
         cairo_translate(cr, .5, .5);
       }
     );
 
-    draw([&](auto const cr, int const ww, int const wh)
+    draw([&](auto const cr, auto, auto)
       {
         cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
         cairo_paint(cr);
@@ -41,8 +45,6 @@ public:
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
         //
-        double const k(1. / qMin(ww, wh));
-
         int h, m, s;
 
         {
@@ -55,7 +57,7 @@ public:
 
         // hash marks
         cairo_set_source_rgb(cr, .5, .5, 1.);
-        cairo_set_line_width(cr, k * 2.5);
+        cairo_set_line_width(cr, k_ * 2.5);
 
         for (int i{}; i != 60; i += 5)
         {
@@ -66,7 +68,7 @@ public:
           cairo_get_current_point(cr, &x0, &y0);
 
           double x1, y1;
-          cairo_arc(cr, 0., 0., .5 - k * 10. , -M_PI, X);
+          cairo_arc(cr, 0., 0., .5 - k_ * 10. , -M_PI, X);
           cairo_get_current_point(cr, &x1, &y1);
 
           cairo_new_path(cr);
@@ -93,16 +95,16 @@ public:
         );
 
         cairo_set_source_rgb(cr, .5, 1., .5);
-        cairo_set_line_width(cr, k * 3.);
+        cairo_set_line_width(cr, k_ * 3.);
         draw_needle(.3, (h - 3 + m / 60) * (M_PI / 6));
 
         cairo_set_source_rgb(cr, 1., 0., 0.);
-        cairo_set_line_width(cr, k * 2.);
+        cairo_set_line_width(cr, k_ * 2.);
         draw_needle(.45, (m - 15) * (M_PI / 30));
 
         // second needle
         cairo_set_source_rgb(cr, 1., 1., .3);
-        cairo_set_line_width(cr, k * 2.5);
+        cairo_set_line_width(cr, k_ * 2.5);
 
         {
           double const pos((s - 15) * (M_PI / 30));
@@ -120,7 +122,7 @@ public:
               cairo_get_current_point(cr, &x0, &y0);
 
               double x1, y1;
-              cairo_arc(cr, 0., 0., .5 - k * 3., -M_PI, X);
+              cairo_arc(cr, 0., 0., .5 - k_ * 3., -M_PI, X);
               cairo_get_current_point(cr, &x1, &y1);
 
               cairo_new_path(cr);
@@ -131,12 +133,12 @@ public:
             }
           }
 
-          cairo_set_line_width(cr, k * 1.);
+          cairo_set_line_width(cr, k_ * 1.);
           draw_needle(.5, pos);
         }
 
         // spindle
-        cairo_arc(cr, 0., 0., k * 4., -M_PI, M_PI);
+        cairo_arc(cr, 0., 0., k_ * 4., -M_PI, M_PI);
         cairo_fill(cr);
       }
     );
