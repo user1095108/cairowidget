@@ -14,21 +14,20 @@ class ClockWidget final: public CairoWidget
 public:
   explicit ClockWidget()
   {
-    init([](auto const cr, auto, auto) noexcept
+    init([](auto const cr, int const w, int const h) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+        cairo_scale(cr, w, h);
       }
     );
 
-    draw([&](auto const cr, int const ww, int const wh)
+    draw([&](auto const cr, int, int)
       {
         cairo_set_source_rgb(cr, 1., 1., 1.);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
 
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-
-        cairo_scale(cr, ww, wh);
 
         // Set line properties
         cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);

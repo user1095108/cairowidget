@@ -16,25 +16,25 @@ class ClockWidget final: public CairoWidget
 public:
   explicit ClockWidget()
   {
-    init([](auto const cr, auto, auto) noexcept
+    init([](auto const cr, int const w, int const h) noexcept
       {
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
+        cairo_scale(cr, w, h);
+        cairo_translate(cr, .5, .5);
       }
     );
 
-    draw([&](auto const cr, int const w, int const h)
+    draw([&](auto const cr, int, int)
       {
         cairo_set_source_rgba(cr, .337, .612, .117, .9);   // green
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
 
-        cairo_set_source_rgb(cr, .0, .0, .0);
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+        cairo_set_source_rgb(cr, .0, .0, .0);
 
         // scale to unit square and translate (0, 0) to be (.5, .5), i.e.
         // the center of the window
-        cairo_scale(cr, w, h);
-        cairo_translate(cr, .5, .5);
         cairo_set_line_width(cr, m_line_width);
 
         cairo_arc(cr, 0, 0, m_radius, 0, 2 * M_PI);
