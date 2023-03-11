@@ -49,12 +49,12 @@ public:
   }
 
   // comparison
-  auto operator==(pixel_iterator const other) const noexcept
+  bool operator==(pixel_iterator const other) const noexcept
   {
     return std::addressof(*ptr_ ) == std::addressof(*other.ptr_);
   }
 
-  auto operator<(pixel_iterator const other) const noexcept
+  bool operator<(pixel_iterator const other) const noexcept
   {
     return std::addressof(*ptr_ ) < std::addressof(*other.ptr_);
   }
