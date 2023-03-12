@@ -33,36 +33,36 @@ public:
   auto operator--(int) const noexcept { return pixel_iterator(ptr_ - N); }
 
   // arithmetic
-  auto operator-(pixel_iterator const other) const noexcept
+  difference_type operator-(pixel_iterator const& o) const noexcept
   {
-    return difference_type(ptr_ - other.ptr_) / N;
+    return (ptr_ - o.ptr_) / N;
   }
 
-  auto operator+(std::size_t const M) const noexcept
+  auto operator+(difference_type const M) const noexcept
   {
     return pixel_iterator(ptr_ + N * M);
   }
 
-  auto operator-(std::size_t const M) const noexcept
+  auto operator-(difference_type const M) const noexcept
   {
     return pixel_iterator(ptr_ - N * M);
   }
 
   // comparison
-  bool operator==(pixel_iterator const other) const noexcept
+  bool operator==(pixel_iterator const& o) const noexcept
   {
-    return std::addressof(*ptr_ ) == std::addressof(*other.ptr_);
+    return std::addressof(*ptr_ ) == std::addressof(*o.ptr_);
   }
 
-  bool operator<(pixel_iterator const other) const noexcept
+  bool operator<(pixel_iterator const& o) const noexcept
   {
-    return std::addressof(*ptr_ ) < std::addressof(*other.ptr_);
+    return std::addressof(*ptr_ ) < std::addressof(*o.ptr_);
   }
 
   // member access
-  auto& operator[](std::size_t const I) const noexcept
+  auto& operator[](difference_type const i) const noexcept
   {
-    return *(*this + I);
+    return *(*this + i);
   }
 
   auto& operator*() const noexcept
