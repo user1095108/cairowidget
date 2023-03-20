@@ -1,7 +1,8 @@
 #include <QtQml>
 #include <QtQuick>
+#include <QtQuickWidgets>
+
 #include <QApplication>
-#include <QQuickWidget>
 
 #include "cairo/cairo.h"
 
