@@ -68,11 +68,10 @@ void CairoWidget::paintEvent(QPaintEvent*)
     cairo_save(cr);
 
     df_(cr, w, h);
+    //cairo_surface_flush(surf);
 
     cairo_restore(cr);
   }
-
-  //cairo_surface_flush(surf);
 
   //
   QPainter painter(this);
