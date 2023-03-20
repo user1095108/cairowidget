@@ -4,7 +4,7 @@
 
 #include "CairoWidget.hpp"
 
-//an unreliable, but fast, alternative implementation/////////////////////////
+//a fast but unreliable alternative implementation////////////////////////////
 CairoWidget::CairoWidget(QWidget* const p, Qt::WindowFlags const wf):
   QWidget(p, wf),
   df_{[](auto, auto, auto) noexcept {}},
