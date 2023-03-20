@@ -1,7 +1,6 @@
-import QtQuick
-import QtQuick.Controls
+import QtQml 2.15
 
-import cairowidget
+import cairowidget 0.0
 
 SampleItem {
   Timer {
