@@ -39,13 +39,16 @@ void CairoWidget::paintEvent(QPaintEvent*)
       //
       cairo_destroy(cr);
 
-      auto const surf(cairo_image_surface_create_for_data(
-        static_cast<QImage*>(backingStore()->paintDevice())->bits(),
-        CAIRO_FORMAT_ARGB32,
-        w,
-        h,
-        stride)
+      auto const surf(
+        cairo_image_surface_create_for_data(
+          static_cast<QImage*>(backingStore()->paintDevice())->bits(),
+          CAIRO_FORMAT_ARGB32,
+          w,
+          h,
+          stride
+        )
       );
+
       cr_ = cr = cairo_create(surf);
       cairo_surface_destroy(surf);
 
