@@ -12,7 +12,8 @@ class QuickWidget final: public QQuickWidget
   QPoint p_;
 
 public:
-  explicit QuickWidget(QString const& s): QQuickWidget(s, {})
+  explicit QuickWidget(QString const& s):
+    QQuickWidget(s, {})
   {
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
