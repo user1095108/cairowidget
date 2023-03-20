@@ -1,9 +1,42 @@
 #include <QtQml>
 #include <QtQuick>
+#include <QApplication>
+#include <QQuickWidget>
 
 #include "cairo/cairo.h"
 
 #include "CairoPaintedItem.hpp"
+
+class QuickWidget final: public QQuickWidget
+{
+  QPoint p_;
+
+public:
+  explicit QuickWidget(QString const& s): QQuickWidget(s, {})
+  {
+    setWindowFlags(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setClearColor(Qt::transparent);
+    setResizeMode(QQuickWidget::SizeRootObjectToView);
+  }
+
+private:
+  void mouseMoveEvent(QMouseEvent* const e) final
+  {
+    if (Qt::LeftButton & e->buttons())
+    {
+      move(p_ + QCursor::pos());
+    }
+  }
+
+  void mousePressEvent(QMouseEvent* const e) final
+  {
+    if (Qt::LeftButton == e->button())
+    {
+      p_ = -e->pos();
+    }
+  }
+};
 
 class SampleItem: public CairoPaintedItem
 {
@@ -32,7 +65,8 @@ public:
 
   void paint(cairo_t* const cr, int, int)
   {
-    cairo_set_source_rgba(cr, .337, .612, .117, .9);   // green
+    //cairo_set_source_rgba(cr, .337, .612, .117, .9);   // green
+    cairo_set_source_rgba(cr, .0, .0, .0, .0);   // green
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_paint(cr);
 
@@ -125,14 +159,15 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
-  QGuiApplication app(argc, argv);
+  QApplication app(argc, argv);
 
   //
   qmlRegisterType<SampleItem>("cairowidget", {}, {}, "SampleItem");
 
   //
-  QQmlApplicationEngine engine;
-  engine.load(QStringLiteral("qrc:///Main.qml"));
+  auto const qw(new QuickWidget(QStringLiteral("qrc:///Main.qml")));
+  qw->resize(250, 250);
+  qw->show();
 
   //
   return app.exec();

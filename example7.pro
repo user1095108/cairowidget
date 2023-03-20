@@ -3,7 +3,7 @@ TARGET = example7
 
 CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++
 
-QT += qml quick
+QT += qml quick quickwidgets
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 DEFINES +=                 \
