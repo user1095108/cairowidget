@@ -33,19 +33,17 @@ void CairoWidget::paintEvent(QPaintEvent*)
       w_ = w; h_ = h;
 
       //
-      auto const stride(stride_ =
-        cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, w));
-
-      //
       cairo_destroy(cr);
+
+      auto const image(static_cast<QImage*>(backingStore()->paintDevice()));
 
       auto const surf(
         cairo_image_surface_create_for_data(
-          static_cast<QImage*>(backingStore()->paintDevice())->bits(),
+          image->bits(),
           CAIRO_FORMAT_ARGB32,
           w,
           h,
-          stride
+          image->bytesPerLine()
         )
       );
 
