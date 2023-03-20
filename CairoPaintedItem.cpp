@@ -25,27 +25,29 @@ void CairoPaintedItem::paint(QPainter* const p)
 
   auto const w(width()), h(height());
 
-  auto const img(static_cast<QImage*>(p->device()));
-  auto const d(img->bits());
-
-  if ((w != w_) || (h != h_) || (d != d_))
   {
-    w_ = w; h_ = h; d_ = d;
+    auto const img(static_cast<QImage*>(p->device()));
+    auto const d(img->bits());
 
-    auto const srf(
-      cairo_image_surface_create_for_data(
-        d,
-        CAIRO_FORMAT_ARGB32,
-        w,
-        h,
-        img->bytesPerLine()
-      )
-    );
+    if ((w != w_) || (h != h_) || (d != d_))
+    {
+      w_ = w; h_ = h; d_ = d;
 
-    cr_ = cr = cairo_create(srf);
-    cairo_surface_destroy(srf);
+      auto const srf(
+        cairo_image_surface_create_for_data(
+          d,
+          CAIRO_FORMAT_ARGB32,
+          w,
+          h,
+          img->bytesPerLine()
+        )
+      );
 
-    init(cr, w, h);
+      cr_ = cr = cairo_create(srf);
+      cairo_surface_destroy(srf);
+
+      init(cr, w, h);
+    }
   }
 
   //
