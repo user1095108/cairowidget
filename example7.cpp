@@ -2,8 +2,6 @@
 #include <QtQuick>
 #include <QtQuickWidgets>
 
-#include <QApplication>
-
 #include "cairo/cairo.h"
 
 #include "CairoPaintedItem.hpp"
