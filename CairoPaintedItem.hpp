@@ -12,8 +12,8 @@ class CairoPaintedItem: public QQuickPaintedItem
 public:
   explicit CairoPaintedItem(QQuickItem* = {});
 
-  virtual void init(_cairo*, int, int) = 0;
-  virtual void paint(_cairo*, int, int) = 0;
+  virtual void init(_cairo*, int, int);
+  virtual void paint(_cairo*, int, int);
 
 private:
   void paint(QPainter*) final;
