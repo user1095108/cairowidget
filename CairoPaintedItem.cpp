@@ -29,9 +29,9 @@ void CairoPaintedItem::paint(QPainter* const p)
     auto const img(static_cast<QImage*>(p->device()));
     auto const d(img->bits());
 
-    if ((w != w_) || (h != h_) || (d != d_))
+    if ((d != d_) || (w != w_) || (h != h_))
     {
-      w_ = w; h_ = h; d_ = d;
+      d_ = d; w_ = w; h_ = h;
 
       auto const srf(
         cairo_image_surface_create_for_data(

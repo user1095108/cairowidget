@@ -6,8 +6,8 @@ class CairoPaintedItem: public QQuickPaintedItem
 {
   _cairo* cr_{};
 
-  int w_{}, h_;
-  uchar* d_;
+  uchar* d_{};
+  int w_, h_;
 
 public:
   explicit CairoPaintedItem(QQuickItem* = {});
