@@ -30,9 +30,8 @@ void CairoPaintedItem::paint(QPainter* const p)
 
   {
     auto const img(static_cast<QImage*>(p->device()));
-    auto const d(img->bits());
 
-    if ((d != d_) || (w != w_) || (h != h_))
+    if (auto const d(img->bits()); (d != d_) || (w != w_) || (h != h_))
     {
       d_ = d; w_ = w; h_ = h;
 
