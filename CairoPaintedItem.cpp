@@ -12,6 +12,9 @@ CairoPaintedItem::CairoPaintedItem(QQuickItem* const p):
 }
 
 //////////////////////////////////////////////////////////////////////////////
+CairoPaintedItem::~CairoPaintedItem() noexcept { cairo_destroy(cr_); }
+
+//////////////////////////////////////////////////////////////////////////////
 void CairoPaintedItem::init(cairo_t* const cr, int, int)
 {
   cairo_set_line_width(cr, 1.);
@@ -32,6 +35,9 @@ void CairoPaintedItem::paint(QPainter* const p)
     if ((d != d_) || (w != w_) || (h != h_))
     {
       d_ = d; w_ = w; h_ = h;
+
+      //
+      cairo_destroy(cr);
 
       auto const srf(
         cairo_image_surface_create_for_data(
