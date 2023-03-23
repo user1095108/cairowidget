@@ -45,6 +45,7 @@ class SampleItem: public CairoPaintedItem
 public:
   using CairoPaintedItem::CairoPaintedItem;
 
+private:
   void init(cairo_t* const cr, int const w, int const h)
   {
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
@@ -63,7 +64,7 @@ public:
     cairo_translate(cr, .5, .5);
   }
 
-  void paint(cairo_t* const cr, int, int)
+  void draw(cairo_t* const cr, int, int)
   {
     //cairo_set_source_rgba(cr, .337, .612, .117, .9);   // green
     cairo_set_source_rgba(cr, .0, .0, .0, .0);   // green

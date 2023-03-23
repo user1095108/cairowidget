@@ -58,7 +58,8 @@ void CairoPaintedItem::paint(QPainter* const p)
   //
   cairo_save(cr);
 
-  paint(cr, w, h);
+  draw(cr, w, h);
+  //cairo_surface_flush(surf);
 
   cairo_restore(cr);
 }

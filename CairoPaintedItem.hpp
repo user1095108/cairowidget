@@ -13,8 +13,9 @@ public:
   explicit CairoPaintedItem(QQuickItem* = {});
   ~CairoPaintedItem() noexcept override;
 
+protected:
   virtual void init(_cairo*, int, int);
-  virtual void paint(_cairo*, int, int) = 0;
+  virtual void draw(_cairo*, int, int) = 0;
 
 private:
   void paint(QPainter*) final;
