@@ -3,6 +3,7 @@
 # pragma once
 
 #include <cstddef> // std::size_t
+#include <cstdint> // std::uint8_t
 #include <bit> // std::endian
 #include <utility> // std::index_sequence
 
