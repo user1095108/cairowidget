@@ -11,7 +11,7 @@ class CairoPaintedItem: public QQuickPaintedItem
 
 public:
   explicit CairoPaintedItem(QQuickItem* = {});
-  ~CairoPaintedItem() noexcept override;
+  ~CairoPaintedItem() override;
 
 protected:
   virtual void init(_cairo*, int, int);

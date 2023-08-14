@@ -1,4 +1,5 @@
 #include <QBackingStore>
+#include <QTimer>
 
 #include "cairo/cairo.h"
 
@@ -15,10 +16,11 @@ CairoWidget::CairoWidget(QWidget* const p, Qt::WindowFlags const wf):
     }
   }
 {
+  QTimer::singleShot(0, this, [&](){ winId(); });
 }
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWidget::~CairoWidget() noexcept { cairo_destroy(cr_); }
+CairoWidget::~CairoWidget() { cairo_destroy(cr_); }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::paintEvent(QPaintEvent*)

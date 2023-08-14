@@ -27,7 +27,7 @@ class CairoWidget: public QWidget
 
 public:
   explicit CairoWidget(QWidget* = {}, Qt::WindowFlags = Qt::WindowFlags());
-  ~CairoWidget() noexcept override;
+  ~CairoWidget() override;
 
   //
   template <class U>

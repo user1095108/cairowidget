@@ -12,7 +12,7 @@ CairoPaintedItem::CairoPaintedItem(QQuickItem* const p):
 }
 
 //////////////////////////////////////////////////////////////////////////////
-CairoPaintedItem::~CairoPaintedItem() noexcept { cairo_destroy(cr_); }
+CairoPaintedItem::~CairoPaintedItem() { cairo_destroy(cr_); }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoPaintedItem::init(cairo_t* const cr, int, int)

@@ -25,7 +25,7 @@ CairoWidget::CairoWidget(QWidget* const p, Qt::WindowFlags const wf):
 }
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWidget::~CairoWidget() noexcept { cairo_destroy(cr_); }
+CairoWidget::~CairoWidget() { cairo_destroy(cr_); }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::paintEvent(QPaintEvent*)

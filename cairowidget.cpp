@@ -29,7 +29,7 @@ CairoWidget::CairoWidget(int const x, int const y, int const w, int const h,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-CairoWidget::~CairoWidget() noexcept { cairo_destroy(cr_); }
+CairoWidget::~CairoWidget() { cairo_destroy(cr_); }
 
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
