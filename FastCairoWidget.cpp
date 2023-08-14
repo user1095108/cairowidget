@@ -36,20 +36,20 @@ void CairoWidget::paintEvent(QPaintEvent*)
     //
     cairo_destroy(cr);
 
-    auto const image(static_cast<QImage*>(backingStore()->paintDevice()));
+    auto const img(static_cast<QImage*>(backingStore()->paintDevice()));
 
-    auto const surf(
+    auto const srf(
       cairo_image_surface_create_for_data(
-        image->bits(),
+        img->bits(),
         CAIRO_FORMAT_ARGB32,
         w,
         h,
-        image->bytesPerLine()
+        img->bytesPerLine()
       )
     );
 
-    cr_ = cr = cairo_create(surf);
-    cairo_surface_destroy(surf);
+    cr_ = cr = cairo_create(srf);
+    cairo_surface_destroy(srf);
 
     //
     if_(cr, w, h);
@@ -59,7 +59,7 @@ void CairoWidget::paintEvent(QPaintEvent*)
   cairo_save(cr);
 
   df_(cr, w, h);
-  //cairo_surface_flush(surf);
+  //cairo_surface_flush(srf);
 
   cairo_restore(cr);
 }
