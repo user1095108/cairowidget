@@ -1,5 +1,4 @@
 #include <QBackingStore>
-#include <QTimer>
 
 #include "cairo/cairo.h"
 
@@ -16,7 +15,8 @@ CairoWidget::CairoWidget(QWidget* const p, Qt::WindowFlags const wf):
     }
   }
 {
-  QTimer::singleShot(0, this, [&](){ winId(); });
+  setAttribute(Qt::WA_DontCreateNativeAncestors);
+  setAttribute(Qt::WA_NativeWindow);
 }
 
 //////////////////////////////////////////////////////////////////////////////
