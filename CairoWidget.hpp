@@ -44,6 +44,8 @@ public:
     df_ = std::forward<U>(u);
   }
 
+  void reinit() { if (cr_ && if_) if_(cr_, w_, h_); }
+
 private:
   void paintEvent(QPaintEvent*) final;
 };
