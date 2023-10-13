@@ -15,7 +15,6 @@ class CairoWidget: public Fl_Widget
   _cairo* cr_{};
 
   int w_{}, h_;
-
   unsigned char* d_;
 
   unsigned pixels_;

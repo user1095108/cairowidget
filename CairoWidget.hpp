@@ -24,7 +24,7 @@ class CairoWidget: public QWidget
   draw_t if_;
 
 public:
-  explicit CairoWidget(QWidget* = {}, Qt::WindowFlags = Qt::WindowFlags());
+  explicit CairoWidget(QWidget* = {}, Qt::WindowFlags = {});
   ~CairoWidget() override;
 
   //
