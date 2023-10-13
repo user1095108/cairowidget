@@ -4,10 +4,13 @@ struct _cairo;
 
 class CairoPaintedItem: public QQuickPaintedItem
 {
+  struct S;
+
   _cairo* cr_{};
 
   uchar* d_{};
   int w_, h_;
+  int stride_;
 
 public:
   explicit CairoPaintedItem(QQuickItem* = {});

@@ -55,8 +55,8 @@ void CairoWidget::paintEvent(QPaintEvent*)
       //
       cairo_destroy(cr);
 
-      auto const srf(cairo_image_surface_create_for_data(d,
-        CAIRO_FORMAT_ARGB32, w, h, stride));
+      auto const srf(cairo_image_surface_create_for_data(
+        d, CAIRO_FORMAT_ARGB32, w, h, stride));
       cr_ = cr = cairo_create(srf);
       cairo_surface_destroy(srf);
 

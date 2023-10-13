@@ -15,9 +15,7 @@ class CairoWidget: public QWidget
   _cairo* cr_{};
 
   int w_{}, h_;
-
   unsigned char* d_;
-
   int stride_;
 
   using draw_t = std::function<void(_cairo*, int, int)>;
