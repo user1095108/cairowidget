@@ -18,7 +18,7 @@ public:
 
   void reinit() { if (cr_) init(cr_, w_, h_); }
 
-  virtual void init(_cairo*, int, int);
+  virtual void init(_cairo*, int, int); // for capture
   virtual void draw(_cairo*, int, int) = 0; // for capture
 
 private:
