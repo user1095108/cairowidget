@@ -8,8 +8,8 @@ class CairoPaintedItem: public QQuickPaintedItem
 
   _cairo* cr_{};
 
-  uchar* d_{};
-  int w_, h_;
+  int w_{}, h_;
+  unsigned char* d_;
   int stride_;
 
 public:

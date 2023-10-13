@@ -38,7 +38,7 @@ void CairoPaintedItem::paint(QPainter* const p)
   {
     auto cr(cr_);
 
-    if ((d != d_) || (w != w_) || (h != h_))
+    if ((w != w_) || (h != h_) || (d != d_))
     {
       w_ = w; h_ = h;
 
