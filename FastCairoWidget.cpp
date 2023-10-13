@@ -36,15 +36,15 @@ void CairoWidget::paintEvent(QPaintEvent*)
     //
     cairo_destroy(cr);
 
-    auto const img(static_cast<QImage*>(backingStore()->paintDevice()));
+    auto& img(*static_cast<QImage*>(backingStore()->paintDevice()));
 
     auto const srf(
       cairo_image_surface_create_for_data(
-        img->bits(),
+        img.bits(),
         CAIRO_FORMAT_ARGB32,
         w,
         h,
-        img->bytesPerLine()
+        img.bytesPerLine()
       )
     );
 
