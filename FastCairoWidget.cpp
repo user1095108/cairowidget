@@ -59,7 +59,6 @@ void CairoWidget::paintEvent(QPaintEvent*)
   cairo_save(cr);
 
   df_(cr, w, h);
-  //cairo_surface_flush(srf);
 
   cairo_restore(cr);
 }

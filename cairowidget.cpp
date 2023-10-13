@@ -79,8 +79,6 @@ void CairoWidget::draw()
     cairo_restore(cr);
   }
 
-  //cairo_surface_flush(surf);
-
   //
   auto const src(reinterpret_cast<std::uint32_t*>(d));
 
@@ -88,8 +86,6 @@ void CairoWidget::draw()
   // le: (2, 1, 0) -> (0, 1, 2); be: (2, 1, 0) -> (3, 2, 1)
   std::transform(std::execution::unseq, src, src + pixels_, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
-
-  //cairo_surface_mark_dirty(surf);
 
   fl_draw_image(d, x(), y(), w, h, 4);
 }
