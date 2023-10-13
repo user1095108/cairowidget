@@ -26,7 +26,7 @@ void CairoPaintedItem::paint(QPainter* const p)
 {
   auto cr(cr_);
 
-  auto const w(width()), h(height());
+  int const w(width()), h(height());
 
   auto const img(static_cast<QImage*>(p->device()));
 
