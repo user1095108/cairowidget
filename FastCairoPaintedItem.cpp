@@ -28,9 +28,9 @@ void CairoPaintedItem::paint(QPainter* const p)
 
   auto const w(width()), h(height());
 
-  {
-    auto const img(static_cast<QImage*>(p->device()));
+  auto const img(static_cast<QImage*>(p->device()));
 
+  {
     if (auto const d(img->bits()); (w != w_) || (h != h_) || (d != d_))
     {
       w_ = w; h_ = h; d_ = d;
@@ -62,4 +62,7 @@ void CairoPaintedItem::paint(QPainter* const p)
   //cairo_surface_flush(surf);
 
   cairo_restore(cr);
+
+  //
+  if (QImage::Format_RGBA8888_Premultiplied == img->format()) img->rgbSwap();
 }
