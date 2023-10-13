@@ -16,11 +16,10 @@ public:
   explicit CairoPaintedItem(QQuickItem* = {});
   ~CairoPaintedItem() override;
 
-protected:
-  virtual void init(_cairo*, int, int);
-  virtual void draw(_cairo*, int, int) = 0;
-
   void reinit() { if (cr_) init(cr_, w_, h_); }
+
+  virtual void init(_cairo*, int, int);
+  virtual void draw(_cairo*, int, int) = 0; // for capture
 
 private:
   void paint(QPainter*) final;
