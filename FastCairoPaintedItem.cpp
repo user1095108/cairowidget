@@ -61,5 +61,7 @@ void CairoPaintedItem::paint(QPainter* const p)
   cairo_restore(cr);
 
   //
+  #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
   if (QImage::Format_RGBA8888_Premultiplied == img.format()) img.rgbSwap();
+  #endif
 }
