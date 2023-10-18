@@ -15,7 +15,6 @@ struct CairoPaintedItem::S
 CairoPaintedItem::CairoPaintedItem(QQuickItem* const p):
   QQuickPaintedItem(p)
 {
-  setRenderTarget(QQuickPaintedItem::Image);
 }
 
 //////////////////////////////////////////////////////////////////////////////
