@@ -1,6 +1,11 @@
 #include <QPainter>
 
+#include <cstdint>
+#include <execution>
+
 #include "cairo/cairo.h"
+
+#include "shuffler.hpp"
 
 #include "CairoPaintedItem.hpp"
 
@@ -29,8 +34,9 @@ void CairoPaintedItem::paint(QPainter* const p)
   int const w(width()), h(height());
 
   auto& img(*static_cast<QImage*>(p->device()));
+  auto const d(img.bits());
 
-  if (auto const d(img.bits()); (w != w_) || (h != h_) || (d != d_))
+  if ((w != w_) || (h != h_) || (d != d_))
   {
     w_ = w; h_ = h; d_ = d;
 
@@ -61,7 +67,13 @@ void CairoPaintedItem::paint(QPainter* const p)
   cairo_restore(cr);
 
   //
-  #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-  if (QImage::Format_RGBA8888_Premultiplied == img.format()) img.rgbSwap();
-  #endif
+  if (QImage::Format_RGBA8888_Premultiplied == img.format())
+  {
+    // img.rgbSwap(); // but the shuffler is faster
+    auto const src(reinterpret_cast<std::uint32_t*>(d));
+
+    std::transform(std::execution::unseq, src,
+      src + (h * img.bytesPerLine()) / 4, src,
+      (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
+  }
 }

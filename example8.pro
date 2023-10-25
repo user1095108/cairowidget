@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = example8
 
-CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++
+CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++ no_keywords
 
 QT += qml quick quickwidgets
 
