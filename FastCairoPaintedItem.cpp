@@ -73,6 +73,6 @@ void CairoPaintedItem::paint(QPainter* const p)
     auto const src(reinterpret_cast<std::uint32_t*>(d));
 
     std::transform(std::execution::unseq, src, src + img.sizeInBytes() / 4,
-      src, (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
+      src, (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0, 3>));
   }
 }
