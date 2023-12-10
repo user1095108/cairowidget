@@ -70,7 +70,8 @@ inline auto to_rgba(std::uint32_t c) noexcept
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
+inline void draw_svg_shape(cairo_t* const cr,
+  struct NSVGshape const* const shape)
 {
   cairo_new_path(cr);
 
@@ -90,10 +91,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
       }
     }
 
-    if (path->closed)
-    {
-      cairo_close_path(cr);
-    }
+    if (path->closed) cairo_close_path(cr);
   }
 
   // fill
@@ -319,7 +317,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
+void draw_svg_image(cairo_t* const cr, struct NSVGimage const* const image,
   double const w, double const h)
 {
   {
@@ -342,7 +340,7 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
+void draw_svg_image(cairo_t* const cr, struct NSVGimage const* const image,
   double const x, double const y, double const w, double const h)
 {
   cairo_save(cr);
@@ -372,15 +370,13 @@ void draw_svg_image(cairo_t* const cr, struct NSVGimage* const image,
 }
 
 //////////////////////////////////////////////////////////////////////////////
-inline struct NSVGshape* find_svg_shape(struct NSVGimage* const image,
+inline struct NSVGshape const* find_svg_shape(
+  struct NSVGimage const* const image,
   std::string_view const& name) noexcept
 {
   for (auto shape(image->shapes); shape; shape = shape->next)
   {
-    if (!std::strncmp(shape->id, name.data(), name.size()))
-    {
-      return shape;
-    }
+    if (!std::strncmp(shape->id, name.data(), name.size())) return shape;
   }
 
   return {};
