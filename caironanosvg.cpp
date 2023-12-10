@@ -383,7 +383,7 @@ inline struct NSVGshape const* find_svg_shape(
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void draw_svg_shape(cairo_t* const cr, struct NSVGimage* const image, 
+void draw_svg_shape(cairo_t* const cr, struct NSVGimage const* const image, 
   std::string_view const& name) noexcept
 {
   if (auto const shape(find_svg_shape(image, name)); shape)
