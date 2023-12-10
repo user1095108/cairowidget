@@ -46,13 +46,27 @@ inline auto inverse(float const* const f0) noexcept
 template <std::size_t N = 4>
 inline auto to_rgba(std::uint32_t c) noexcept
 { // ABGR -> [R, G, B, A]
-  return [&]<auto ...I>(std::index_sequence<I...>) noexcept ->
-    std::array<double, N>
+  std::array<double, N> r{
+      [&]<auto ...I>(std::index_sequence<I...>) noexcept ->
+        std::array<double, N>
+        {
+          return {double(std::uint8_t(c >> (I * CHAR_BIT)))...};
+        }(std::make_index_sequence<N>())
+    };
+
+  std::transform(
+    std::execution::unseq,
+    r.cbegin(),
+    r.cend(),
+    r.begin(),
+    [](auto const d) noexcept
     {
       static constexpr auto k{1. / 255.};
+      return k * d;
+    }
+  );
 
-      return {(k * std::uint8_t(c >> (I * CHAR_BIT)))...};
-    }(std::make_index_sequence<N>());
+  return r;
 }
 
 //////////////////////////////////////////////////////////////////////////////
