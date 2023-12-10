@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = example3
 
-CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++latest strict_c++
+CONFIG += no_lflags_merge exceptions_off rtti_off stl thread warn_on c++17 strict_c++
 
 QT += widgets
 
