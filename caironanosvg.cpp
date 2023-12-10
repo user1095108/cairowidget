@@ -157,7 +157,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 
         case NSVG_PAINT_RADIAL_GRADIENT:
           {
-            auto& g(*shape->fill.gradient);
+            auto const& g(*shape->fill.gradient);
 
             auto const t(inverse(g.xform));
             auto const r(-t[0]);
@@ -180,9 +180,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 
       assert(pat);
 
-      auto& g(*shape->fill.gradient);
-
-      switch (g.spread)
+      switch (auto const& g(*shape->fill.gradient); g.spread)
       {
         case NSVG_SPREAD_PAD:
           cairo_pattern_set_extend(pat, CAIRO_EXTEND_PAD);
@@ -208,7 +206,7 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
 
         for (decltype(g.nstops) i{}; ns != i; ++i)
         {
-          auto& stop(g.stops[i]);
+          auto const& stop(g.stops[i]);
 
           auto const c(to_rgba(stop.color));
 
