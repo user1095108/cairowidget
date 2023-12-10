@@ -9,7 +9,7 @@ Qt markedly outperforms FLTK in rendering performance.
 # build instructions
 
     git submodule update --init
-    g++ -std=c++20 -Ofast -I./nanosvg/src example1.cpp cairowidget.cpp caironanosvg.cpp -o example1 -lfltk -lcairo
+    g++ -std=c++17 -Ofast -I./nanosvg/src example1.cpp cairowidget.cpp caironanosvg.cpp -o example1 -lfltk -lcairo
 
 or
 
