@@ -47,12 +47,12 @@ template <std::size_t N = 4>
 inline auto to_rgba(std::uint32_t c) noexcept
 { // ABGR -> [R, G, B, A]
   std::array<double, N> r{
-      [&]<auto ...I>(std::index_sequence<I...>) noexcept ->
-        std::array<double, N>
-        {
-          return {double(std::uint8_t(c >> (I * CHAR_BIT)))...};
-        }(std::make_index_sequence<N>())
-    };
+    [&]<auto ...I>(std::index_sequence<I...>) noexcept ->
+      std::array<double, N>
+      {
+        return {double(std::uint8_t(c >> (I * CHAR_BIT)))...};
+      }(std::make_index_sequence<N>())
+  };
 
   std::transform(
     std::execution::unseq,
