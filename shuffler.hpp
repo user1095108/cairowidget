@@ -20,24 +20,24 @@ constexpr T shuffler(T const i) noexcept
   return (T{0xffu} << 8 * J) & (I < J ? i << 8 * (J - I) : i >> 8 * (I - J));
 }
 
-#if defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN || \
-    defined(__LITTLE_ENDIAN__) || \
-    defined(__ARMEL__) || \
-    defined(__THUMBEL__) || \
-    defined(__AARCH64EL__) || \
-    defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
-template <std::size_t ...I, std::size_t ...J, typename T>
-constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
-//requires(std::endian::native == std::endian::little)
-{
-  return (shuffler<I, J>(i) | ...);
-}
-#else
+#if defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN || \
+    defined(__BIG_ENDIAN__) || \
+    defined(__ARMEB__) || \
+    defined(__THUMBEB__) || \
+    defined(__AARCH64EB__) || \
+    defined(_MIBSEB) || defined(__MIBSEB) || defined(__MIBSEB__)
 template <std::size_t ...I, std::size_t ...J, typename T>
 constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
 //requires(std::endian::native == std::endian::big)
 {
   return (shuffler<I, sizeof(T) - 1 - J>(i) | ...);
+}
+#else
+template <std::size_t ...I, std::size_t ...J, typename T>
+constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
+//requires(std::endian::native == std::endian::little)
+{
+  return (shuffler<I, J>(i) | ...);
 }
 #endif
 

@@ -97,15 +97,15 @@ void capture(Fl_Widget* const wi, char const* const filename)
     {
       decltype(make_pixel_iterator<4>(dst))::value_type d;
 
-#if defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN || \
-    defined(__LITTLE_ENDIAN__) || \
-    defined(__ARMEL__) || \
-    defined(__THUMBEL__) || \
-    defined(__AARCH64EL__) || \
-    defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
-      d[0] = s[2]; d[1] = s[1]; d[2] = s[0];
-#else
+#if defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN || \
+    defined(__BIG_ENDIAN__) || \
+    defined(__ARMEB__) || \
+    defined(__THUMBEB__) || \
+    defined(__AARCH64EB__) || \
+    defined(_MIBSEB) || defined(__MIBSEB) || defined(__MIBSEB__)
       d[1] = s[0]; d[2] = s[1]; d[3] = s[2];
+#else
+      d[0] = s[2]; d[1] = s[1]; d[2] = s[0];
 #endif
 
       return d;
