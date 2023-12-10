@@ -179,8 +179,9 @@ inline void draw_svg_shape(cairo_t* const cr, struct NSVGshape* const shape)
       }
 
       assert(pat);
+      auto const& g(*shape->fill.gradient);
 
-      switch (auto const& g(*shape->fill.gradient); g.spread)
+      switch (g.spread)
       {
         case NSVG_SPREAD_PAD:
           cairo_pattern_set_extend(pat, CAIRO_EXTEND_PAD);
