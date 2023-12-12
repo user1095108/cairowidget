@@ -43,17 +43,14 @@ inline auto inverse(float const* const f0) noexcept
   return f1;
 }
 
-template <std::size_t ...I>
-inline std::array<double, sizeof...(I)> to_array(std::uint32_t const c,
-  std::index_sequence<I...>) noexcept
-{
-  return {double(std::uint8_t(c >> I * CHAR_BIT))...};
-}
-
-template <std::size_t N = 4>
 inline auto to_rgba(std::uint32_t const c) noexcept
 {
-  auto r(to_array(c, std::make_index_sequence<N>()));
+  std::array<double, 4> r{
+    double(std::uint8_t(c)),
+    double(std::uint8_t(c >> 8)),
+    double(std::uint8_t(c >> 16)),
+    double(std::uint8_t(c >> 24))
+  };
 
   std::transform(
     std::execution::unseq,
