@@ -13,7 +13,7 @@ class CairoPaintedItem: public QQuickPaintedItem
   int stride_;
 
 public:
-  explicit CairoPaintedItem(QQuickItem* = {});
+  using QQuickPaintedItem::QQuickPaintedItem;
   ~CairoPaintedItem() override;
 
   void reinit() { if (cr_) init(cr_, w_, h_); }
