@@ -52,6 +52,8 @@ inline auto to_rgba(std::uint32_t const c) noexcept
     double(std::uint8_t(c >> 24))
   };
 
+  constexpr auto k{1. / 255.};
+
   std::transform(
     std::execution::unseq,
     r.cbegin(),
@@ -59,7 +61,6 @@ inline auto to_rgba(std::uint32_t const c) noexcept
     r.begin(),
     [](auto const d) noexcept
     {
-      static constexpr auto k{1. / 255.};
       return k * d;
     }
   );
