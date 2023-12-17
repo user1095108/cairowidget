@@ -2,8 +2,7 @@
 # define SHUFFLER_HPP
 # pragma once
 
-#include <cstddef> // std::size_t
-#include <utility> // std::index_sequence
+#include <utility> // std::size_t, std::index_sequence
 
 namespace shuffler
 {
