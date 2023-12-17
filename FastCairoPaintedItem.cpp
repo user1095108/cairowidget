@@ -1,9 +1,8 @@
+#include "cairo/cairo.h"
+
 #include <QPainter>
 
-#include <cstdint>
 #include <execution>
-
-#include "cairo/cairo.h"
 
 #include "shuffler.hpp"
 
