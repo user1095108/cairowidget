@@ -59,10 +59,7 @@ inline auto to_rgba(std::uint32_t const c) noexcept
     r.cbegin(),
     r.cend(),
     r.begin(),
-    [](auto const d) noexcept
-    {
-      return k * d;
-    }
+    [](auto const d) noexcept { return k * d; }
   );
 
   return r;
