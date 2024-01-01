@@ -1,5 +1,7 @@
 TEMPLATE = subdirs
 
+CONFIG += ordered
+
 SUBDIRS = example3 example4 example5 example6 example7 example8
 
 example3.file = example3.pro
