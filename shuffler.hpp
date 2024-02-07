@@ -26,7 +26,8 @@ constexpr T shuffle(T const i, std::index_sequence<J...>) noexcept
     defined(__ARMEB__) || \
     defined(__THUMBEB__) || \
     defined(__AARCH64EB__) || \
-    defined(_MIBSEB) || defined(__MIBSEB) || defined(__MIBSEB__)
+    defined(_MIBSEB) || defined(__MIBSEB) || defined(__MIBSEB__) || \
+    defined(Q_BYTE_ORDER) && Q_BYTE_ORDER == Q_BIG_ENDIAN
   return (shuffler<I, sizeof(T) - 1 - J>(i) | ...);
 #else
   return (shuffler<I, J>(i) | ...);
