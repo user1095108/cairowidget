@@ -24,17 +24,16 @@ public:
     setAttribute(Qt::WA_TranslucentBackground);
 
     //
-    {
-      //image_ = nsvgParseFromFile("nanosvg/example/23.svg", "px", 96);
-      QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
+    QByteArray dat;
 
-      if (auto const sz(f.size()); (sz > 0) && f.open(QIODevice::ReadOnly))
-      { // QByteArray allocates extra and is zero-terminated
-        if (QByteArray ba(sz, Qt::Uninitialized); f.read(ba.data(), sz) == sz)
-        {
-          image_ = nsvgParse(ba.data(), "px", 96);
-        }
-      }
+    {
+      QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
+      if (f.open(QIODevice::ReadOnly)) dat = f.readAll();
+    }
+
+    if (!dat.isEmpty())
+    {
+      image_ = nsvgParse(dat.data(), "px", 96);
     }
 
     //
