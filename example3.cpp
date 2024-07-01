@@ -26,15 +26,14 @@ public:
     //
     QByteArray dat;
 
+    do
     {
-      QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
-      if (f.open(QIODevice::ReadOnly)) dat = f.readAll();
-    }
+      if (QFile f(QStringLiteral(":/nanosvg/example/23.svg"));
+        f.open(QIODevice::ReadOnly))
+        { if ((dat = f.readAll()).isEmpty()) break; } else break;
 
-    if (!dat.isEmpty())
-    {
       image_ = nsvgParse(dat.data(), "px", 96);
-    }
+    } while (false);
 
     //
     init([](auto const cr, auto, auto) noexcept
