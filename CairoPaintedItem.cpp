@@ -1,14 +1,15 @@
-#include <QPainter>
-#include <QScopedArrayPointer>
-
 #include "cairo/cairo.h"
+
+#include <QPainter>
+
+#include <memory>
 
 #include "CairoPaintedItem.hpp"
 
 struct CairoPaintedItem::S
 {
   static inline std::size_t size_;
-  static inline QScopedArrayPointer<unsigned char> data_;
+  static inline std::unique_ptr<unsigned char[]> data_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +70,5 @@ void CairoPaintedItem::paint(QPainter* const p)
   //
   p->setCompositionMode(QPainter::CompositionMode_Source);
   p->drawPixmap(QPoint{}, QPixmap::fromImage(
-      {d, w, h, stride_, QImage::Format_ARGB32_Premultiplied}
-    )
-  );
+    {d, w, h, stride_, QImage::Format_ARGB32_Premultiplied}));
 }
