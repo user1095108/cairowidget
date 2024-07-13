@@ -77,7 +77,5 @@ void CairoWidget::paintEvent(QPaintEvent*)
 
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.drawPixmap(QPoint{}, QPixmap::fromImage(
-      {d, w, h, stride_, QImage::Format_ARGB32_Premultiplied}
-    )
-  );
+    {d, w, h, stride_, QImage::Format_ARGB32_Premultiplied}));
 }
