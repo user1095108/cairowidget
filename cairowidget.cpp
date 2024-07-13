@@ -62,10 +62,10 @@ void CairoWidget::draw()
       //
       cairo_destroy(cr);
 
-      auto const surf(cairo_image_surface_create_for_data(d,
-        CAIRO_FORMAT_RGB24, w, h, stride));
-      cr_ = cr = cairo_create(surf);
-      cairo_surface_destroy(surf);
+      auto const srf(cairo_image_surface_create_for_data(
+        d, CAIRO_FORMAT_RGB24, w, h, stride));
+      cr_ = cr = cairo_create(srf);
+      cairo_surface_destroy(srf);
 
       //
       if_(cr, w, h);
