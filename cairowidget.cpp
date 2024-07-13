@@ -1,9 +1,8 @@
-#include "FL/fl_draw.H"
 #include "cairo/cairo.h"
+#include "FL/fl_draw.H"
 
 #include <cstdint>
 #include <execution>
-#include <memory>
 
 #include "shuffler.hpp"
 
@@ -12,7 +11,7 @@
 struct CairoWidget::S
 {
   static inline std::size_t size_;
-  static inline std::unique_ptr<unsigned char[]> data_;
+  static inline unsigned char* data_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@ CairoWidget::~CairoWidget() { cairo_destroy(cr_); }
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::draw()
 {
-  auto d(S::data_.get());
+  auto d(S::data_);
 
   auto const w(this->w()), h(this->h());
 
@@ -54,7 +53,7 @@ void CairoWidget::draw()
 
         if (pixels_ = size / 4; S::size_ < size)
         {
-          S::data_.reset(d = new unsigned char[S::size_ = size]);
+          delete [] d; S::data_ = d = new unsigned char[S::size_ = size];
         }
       }
 

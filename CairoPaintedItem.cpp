@@ -2,14 +2,12 @@
 
 #include <QPainter>
 
-#include <memory>
-
 #include "CairoPaintedItem.hpp"
 
 struct CairoPaintedItem::S
 {
   static inline std::size_t size_;
-  static inline std::unique_ptr<unsigned char[]> data_;
+  static inline unsigned char* data_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -25,7 +23,7 @@ void CairoPaintedItem::init(cairo_t* const cr, int, int)
 //////////////////////////////////////////////////////////////////////////////
 void CairoPaintedItem::paint(QPainter* const p)
 {
-  auto d(S::data_.get());
+  auto d(S::data_);
 
   int const w(width()), h(height());
 
@@ -42,7 +40,7 @@ void CairoPaintedItem::paint(QPainter* const p)
 
       if (auto const size(h * std::size_t(stride)); S::size_ < size)
       {
-        S::data_.reset(d = new unsigned char[S::size_ = size]);
+        delete [] d; S::data_ = d = new unsigned char[S::size_ = size];
       }
 
       d_ = d; // multiple instances

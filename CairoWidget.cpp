@@ -8,7 +8,7 @@
 struct CairoWidget::S
 {
   static inline std::size_t size_;
-  static inline QScopedArrayPointer<unsigned char> data_;
+  static inline unsigned char* data_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ CairoWidget::~CairoWidget() { cairo_destroy(cr_); }
 //////////////////////////////////////////////////////////////////////////////
 void CairoWidget::paintEvent(QPaintEvent*)
 {
-  auto d(S::data_.get());
+  auto d(S::data_);
 
   auto const w(width()), h(height());
 
@@ -47,7 +47,7 @@ void CairoWidget::paintEvent(QPaintEvent*)
 
       if (auto const size(h * std::size_t(stride)); S::size_ < size)
       {
-        S::data_.reset(d = new unsigned char[S::size_ = size]);
+        delete [] d; S::data_ = d = new unsigned char[S::size_ = size];
       }
 
       d_ = d; // multiple instances
