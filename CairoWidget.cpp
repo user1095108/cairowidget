@@ -1,5 +1,4 @@
 #include <QPainter>
-#include <QScopedArrayPointer>
 
 #include "cairo/cairo.h"
 
