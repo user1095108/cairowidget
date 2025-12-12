@@ -119,11 +119,11 @@ void capture(Fl_Widget* const wi, char const* const filename)
   //cairo_surface_mark_dirty(surf);
 
   // save and cleanup
+  delete fis.image();
+
   cairo_surface_write_to_png(surf, filename);
 
   cairo_surface_destroy(surf);
-
-  delete fis.image();
 
   //Fl_Display_Device::display_device()->set_current();
 }
