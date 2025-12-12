@@ -41,7 +41,8 @@ public:
 
     draw([&](auto const cr, auto, auto)
       {
-        cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
+        cairo_set_source_rgb(cr, 0., 0., 0.);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
         cairo_paint(cr);
 
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
