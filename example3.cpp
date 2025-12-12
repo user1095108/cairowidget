@@ -3,6 +3,7 @@
 #include <QCursor>
 #include <QFile>
 #include <QMouseEvent>
+#include <QWindow>
 
 #include "cairo/cairo.h"
 
@@ -71,6 +72,7 @@ private:
     if (Qt::LeftButton == e->button())
     {
       p_ = -e->pos();
+      windowHandle()->startSystemMove();
     }
   }
 

@@ -16,6 +16,6 @@ DEFINES +=                 \
 # Input
 HEADERS += CairoWidget.hpp \
            example5.cpp
-SOURCES += FastCairoWidget.cpp \
+SOURCES += CairoWidget.cpp \
            example5.cpp
 LIBS += -lcairo

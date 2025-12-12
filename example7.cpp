@@ -34,6 +34,7 @@ private:
     if (Qt::LeftButton == e->button())
     {
       p_ = -e->pos();
+      windowHandle()->startSystemMove();
     }
   }
 };
