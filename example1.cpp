@@ -75,13 +75,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
 
   // capture
   Fl_Image_Surface fis(w, h);
-
-  {
-    auto const s(Fl_Surface_Device::surface());
-    fis.set_current();
-    fis.draw(wi);
-    s->set_current();
-  }
+  fis.draw(wi);
 
   //
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
@@ -124,8 +118,6 @@ void capture(Fl_Widget* const wi, char const* const filename)
   cairo_surface_write_to_png(surf, filename);
 
   cairo_surface_destroy(surf);
-
-  //Fl_Display_Device::display_device()->set_current();
 }
 
 struct NSVGimage* image{};
