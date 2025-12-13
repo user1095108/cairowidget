@@ -74,8 +74,13 @@ void capture(Fl_Widget* const wi, char const* const filename)
   auto const w(wi->w()), h(wi->h());
 
   // capture
-  Fl_Image_Surface fis(w, h);
-  fis.draw(wi);
+  decltype(std::declval<Fl_Image_Surface>().image()) img;
+
+  {
+    Fl_Image_Surface fis(w, h);
+    fis.draw(wi);
+    img = fis.image();
+  }
 
   //
   auto const surf(cairo_image_surface_create(CAIRO_FORMAT_RGB24, w, h));
@@ -83,7 +88,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   //cairo_surface_flush(surf);
 
   // convert
-  auto src(fis.image()->data()[0]);
+  auto src(img->data()[0]);
   auto dst(cairo_image_surface_get_data(surf));
 
   // RGB (fltk) -> xRGB (cairo)
@@ -113,7 +118,7 @@ void capture(Fl_Widget* const wi, char const* const filename)
   //cairo_surface_mark_dirty(surf);
 
   // save and cleanup
-  delete fis.image();
+  delete img;
 
   cairo_surface_write_to_png(surf, filename);
 
