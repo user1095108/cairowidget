@@ -82,8 +82,8 @@ void CairoWidget::draw()
   //
   auto const src(reinterpret_cast<std::uint32_t*>(d));
 
-  // ARGB (native), RGB are at indices (2, 1, 0) -> RGBx conversion
-  // le: (2, 1, 0) -> (0, 1, 2); be: (2, 1, 0) -> (3, 2, 1)
+  // ARGB (native), RGB are always at indices (2, 1, 0)
+  // RGBx conversion: le: (2, 1, 0) -> (0, 1, 2); be: (2, 1, 0) -> (3, 2, 1)
   std::transform(std::execution::unseq, src, src + pixels_, src,
     (std::uint32_t(&)(std::uint32_t))(shuffler::shuffle<2, 1, 0>));
 
